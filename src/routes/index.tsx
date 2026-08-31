@@ -77,7 +77,7 @@ function Home() {
   return (
     <div className="min-h-screen">
       {/* HERO */}
-      <header className="surface-dark grain vignette relative flex min-h-[92svh] flex-col justify-between overflow-hidden">
+      <header className="surface-dark grain vignette relative flex min-h-[80svh] flex-col justify-between overflow-hidden">
         <img
           src={heroImage}
           alt={t("hero.alt")}
@@ -112,7 +112,7 @@ function Home() {
           </div>
         </nav>
 
-        <div className="relative px-5 pb-16 sm:px-10 sm:pb-14">
+        <div className="relative px-5 pb-10 sm:px-10 sm:pb-10">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-end">
             <div className="rise">
               <h1 className="display text-[13vw] leading-[0.86] [text-shadow:0_2px_24px_color-mix(in_oklab,var(--black)_55%,transparent)] sm:text-[9vw] lg:text-[6.6vw]">
@@ -161,7 +161,7 @@ function Home() {
       </header>
 
       {/* POSIZIONAMENTO */}
-      <section className="px-5 pt-10 sm:px-10">
+      <section className="px-5 pt-6 sm:px-10">
         <Reveal className="surface-ink panel-raised p-6 sm:p-8">
           <span className="badge badge-outline">{t("nav.experience")}</span>
           <p className="lead-strong mt-4 max-w-3xl">{t("nonCompetitive")}</p>
@@ -169,7 +169,7 @@ function Home() {
       </section>
 
       {/* ESPERIENZA */}
-      <section id="esperienza" className="band mt-10">
+      <section id="esperienza" className="band mt-6">
         <SectionLabel index="01">{t("exp.title")}</SectionLabel>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -178,7 +178,7 @@ function Home() {
               as="article"
               delay={i * 90}
               key={n}
-              className="panel panel-hover p-6 sm:p-7"
+              className="panel panel-hover p-5 sm:p-6"
             >
               <span className="index-chip">{n}</span>
               <h3 className="display mt-5 text-2xl">{t(`exp.${n}.t` as const)}</h3>
@@ -199,7 +199,7 @@ function Home() {
         <TopoLines />
         <div className="relative">
           <SectionLabel index="02">{t("route.title")}</SectionLabel>
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <div className="grid sm:grid-cols-2 lg:grid-cols-1">
               {isPlaceholder(data.event.distanceKm) ? null : (
                 <Spec label={t("route.distance")} value={data.event.distanceKm} mono />
@@ -231,7 +231,7 @@ function Home() {
         </SectionLabel>
 
         {finalDate ? (
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             <div className="surface-ink panel-raised p-6 sm:p-8">
               <span className="badge badge-outline mb-5">{t("dates.confirmed")}</span>
               <div className="display text-5xl sm:text-7xl">{formatDate(finalDate.date, lang).long}</div>
@@ -304,7 +304,7 @@ function Home() {
       <section id="richiesta" className="band band-soft band-depth">
 
         <SectionLabel index="04">{t("req.title")}</SectionLabel>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div className="lg:sticky lg:top-8 lg:self-start">
             <p className="lead-strong max-w-sm">{t("req.body")}</p>
             <div className="mt-6 flex flex-wrap gap-2">
@@ -330,7 +330,7 @@ function Home() {
         </a>
       </div>
 
-      <footer className="surface-ink grain grid gap-6 px-5 pb-28 pt-14 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-12 sm:pt-16">
+      <footer className="surface-ink grain grid gap-6 px-5 pb-28 pt-10 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-12 sm:pt-12">
         <div className="prose-note">
           ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
         </div>
