@@ -297,10 +297,12 @@ function Home() {
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:hidden">
         <a
           href="#richiesta"
-          className="action tech pointer-events-auto flex items-center justify-center gap-3 border border-jade bg-jade px-6 py-4 text-primary-foreground jade-glow"
+          className="cta cta-solid pointer-events-auto w-full shadow-[0_18px_40px_-24px_var(--color-foreground)]"
         >
-          <span className="action-sweep" aria-hidden />
           RICHIEDI DI PARTECIPARE
+          <span className="cta-arrow" aria-hidden>
+            →
+          </span>
         </a>
       </div>
 
