@@ -61,17 +61,23 @@ export function Field({
   children: ReactNode;
   required?: boolean;
 }) {
+  const { t } = useI18n();
   return (
     <label className="block border-t border-border pt-4">
       <span className="tech-sm flex items-center gap-2">
         {label}
-        {required ? <span className="text-jade-soft">*</span> : <span>FACOLTATIVO</span>}
+        {required ? (
+          <span className="text-jade-soft">*</span>
+        ) : (
+          <span>{t("form.optionalTag")}</span>
+        )}
       </span>
       <div className="mt-3">{children}</div>
       {hint ? <span className="tech-sm mt-2 block normal-case tracking-normal">{hint}</span> : null}
     </label>
   );
 }
+
 
 export const inputClass =
   "w-full min-h-11 border-0 border-b border-border bg-transparent px-0 pb-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-jade-soft";
