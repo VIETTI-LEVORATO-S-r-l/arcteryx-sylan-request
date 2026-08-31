@@ -278,14 +278,10 @@ function Home() {
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               {t("req.body")}
             </p>
-            <div className="mt-8 space-y-2">
+            <div className="mt-6 space-y-2">
               <div className="tech-sm">{t("req.tag1")}</div>
-              <div className="tech-sm">{t("req.tag2")}</div>
               <div className="tech-sm text-jade-soft">{t("req.tag3")}</div>
             </div>
-            <p className="mt-8 max-w-sm text-xs leading-relaxed text-muted-foreground">
-              {t("nonCompetitive")}
-            </p>
           </div>
           <ApplicationForm data={data} />
         </div>
