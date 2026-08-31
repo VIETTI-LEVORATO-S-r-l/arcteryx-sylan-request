@@ -197,5 +197,5 @@ function Confirm() {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  return <main className="mx-auto min-h-screen w-full max-w-3xl px-6 py-24">{children}</main>;
+  return <main className="mx-auto min-h-screen w-full max-w-3xl px-6 py-14">{children}</main>;
 }

@@ -52,7 +52,7 @@ function RequestReceived() {
   }
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-24">
+    <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-14">
       <Link to="/" className="tech-sm hover:text-jade-soft">
         ← {t("rr.back")}
       </Link>

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export function LegalPage({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <main className="mx-auto min-h-screen w-full max-w-3xl px-6 py-24">
+    <main className="mx-auto min-h-screen w-full max-w-3xl px-6 py-14">
       <Link to="/" className="tech-sm hover:text-jade-soft">
         ← ARC&rsquo;TERYX × VIETTI / SYLAN 2 COMMUNITY TRAIL RUN
       </Link>

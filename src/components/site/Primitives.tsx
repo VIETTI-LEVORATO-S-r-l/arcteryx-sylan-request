@@ -5,7 +5,7 @@ import { useI18n } from "@/lib/i18n";
 
 export function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
   return (
-    <div className="section-sticky -mx-5 mb-8 border-b border-border px-5 py-3 sm:mx-0 sm:mb-12 sm:border-b-0 sm:border-t-2 sm:border-t-foreground sm:px-0 sm:pb-0 sm:pt-4">
+    <div className="section-sticky -mx-5 mb-6 border-b border-border px-5 py-3 sm:mx-0 sm:mb-8 sm:border-b-0 sm:border-t-2 sm:border-t-foreground sm:px-0 sm:pb-0 sm:pt-4">
       <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
         <span className="index-chip">{index}</span>
         <h2 className="tech truncate font-semibold tracking-technical text-foreground sm:whitespace-normal">
