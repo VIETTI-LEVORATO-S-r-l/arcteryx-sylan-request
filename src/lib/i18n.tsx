@@ -355,8 +355,15 @@ const DICTS: Record<Lang, Record<TKey, string>> = { it, en };
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (k: TKey) => string };
 const LangContext = createContext<Ctx>({ lang: "it", setLang: () => {}, t: (k) => it[k] });
 
-export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("it");
+export function LangProvider({
+  children,
+  initialLang = "it",
+}: {
+  children: ReactNode;
+  initialLang?: Lang;
+}) {
+  const [lang, setLangState] = useState<Lang>(initialLang);
+
 
   useEffect(() => {
     let next: Lang | null = null;
