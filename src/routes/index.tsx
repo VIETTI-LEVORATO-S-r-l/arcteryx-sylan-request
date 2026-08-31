@@ -7,6 +7,7 @@ import { EventWeatherPanel } from "@/components/site/Weather";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
 import { SectionLabel, Spec, TopoLines, Reveal } from "@/components/site/Primitives";
 import { useI18n, LangSwitch } from "@/lib/i18n";
+import { SITE_URL } from "@/routes/__root";
 
 const DESCRIPTION =
   "Un'esperienza guidata di trail running non competitiva, dedicata alla community e al test della Arc'teryx Sylan 2.";
@@ -23,10 +24,10 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: `${SITE_URL}/` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
     scripts: [
       {
         type: "application/ld+json",
@@ -128,7 +129,7 @@ function Home() {
                 [t("hero.k.place"), t("hero.v.place")],
                 [t("hero.k.format"), t("hero.v.format")],
                 [t("hero.k.access"), t("hero.v.access")],
-                [t("hero.k.dates"), t("hero.v.dates")],
+                [t("hero.k.dates"), datesLabel],
               ].map(([k, v]) => (
                 <div key={k} className="border-t border-border pt-3">
                   <dt className="tech-sm">{k}</dt>
@@ -181,8 +182,12 @@ function Home() {
           <SectionLabel index="02">{t("route.title")}</SectionLabel>
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <div className="grid sm:grid-cols-2 lg:grid-cols-1">
-              <Spec label={t("route.distance")} value={data.event.distanceKm} mono />
-              <Spec label={t("route.elevation")} value={data.event.elevationM} mono />
+              {isPlaceholder(data.event.distanceKm) ? null : (
+                <Spec label={t("route.distance")} value={data.event.distanceKm} mono />
+              )}
+              {isPlaceholder(data.event.elevationM) ? null : (
+                <Spec label={t("route.elevation")} value={data.event.elevationM} mono />
+              )}
               <Spec label={t("route.surface")} value={data.event.surface} />
               <Spec label={t("route.place")} value={data.event.location} />
             </div>
@@ -191,7 +196,7 @@ function Home() {
                 <TopoLines className="opacity-30" />
                 <span className="tech-sm relative">{t("route.map")}</span>
                 <span className="tech-sm absolute bottom-4 left-4 tabular-nums">
-                  45.7597° N / 8.5556° E
+                  {coords}
                 </span>
               </div>
               <p className="tech-sm mt-4 normal-case tracking-normal">{data.event.routeNotes}</p>
@@ -309,7 +314,6 @@ function Home() {
       <footer className="surface-ink grain grid gap-6 px-5 pb-28 pt-14 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-12 sm:pt-16">
         <div className="tech-sm">
           ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
-          <span className="mt-2 block opacity-60">{t("footer.logo")}</span>
         </div>
         <div className="flex flex-wrap gap-5">
           <Link to="/regolamento" className="tech-sm hover:text-jade-soft">
