@@ -17,7 +17,7 @@ export function SectionLabel({ index, children }: { index: string; children: Rea
 
 export function Spec({ label, value, mono }: { label: string; value: ReactNode; mono?: boolean }) {
   return (
-    <div className="border-t border-border py-5">
+    <div className="spec-row border-t border-border py-5">
       <div className="badge border-0 p-0">{label}</div>
       <div className={cn("display mt-3 text-3xl sm:text-4xl", mono && "tabular-nums")}>{value}</div>
     </div>
