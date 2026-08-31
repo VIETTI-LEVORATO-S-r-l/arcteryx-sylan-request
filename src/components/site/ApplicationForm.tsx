@@ -2,7 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { submitApplication } from "@/lib/event.functions";
-import { PACE_RANGES, RUNNING_LEVELS, TRAIL_LEVELS, type EventPayload } from "@/lib/types";
+import {
+  DIETARY_PROFILES,
+  LONGEST_RUN,
+  MONTHLY_ELEVATION,
+  PACE_RANGES,
+  RUNNING_LEVELS,
+  TRAIL_LEVELS,
+  WEEKLY_VOLUME,
+  type EventPayload,
+} from "@/lib/types";
 import { CheckRow, Field, inputClass, selectClass } from "./Primitives";
 
 function Step({ n, title, hint }: { n: string; title: string; hint?: string }) {
@@ -90,6 +99,12 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           runningLevel: v("runningLevel"),
           trailExperience: v("trailExperience"),
           pace: v("pace"),
+          weeklyVolume: v("weeklyVolume"),
+          longestRun: v("longestRun"),
+          monthlyElevation: v("monthlyElevation"),
+          recentActivity: v("recentActivity"),
+          dietaryProfile: v("dietaryProfile"),
+          foodAllergies: v("foodAllergies"),
           shoeSizeSystem: v("shoeSizeSystem") as "EU" | "UK",
           shoeSize: v("shoeSize"),
           footwearFit: v("footwearFit") as "MEN'S" | "WOMEN'S",
@@ -235,6 +250,48 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               ))}
             </select>
           </Field>
+          <Field label="Volume settimanale medio" required>
+            <select name="weeklyVolume" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                Seleziona
+              </option>
+              {WEEKLY_VOLUME.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Uscita più lunga negli ultimi 3 mesi" required>
+            <select name="longestRun" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                Seleziona
+              </option>
+              {LONGEST_RUN.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Dislivello positivo mensile" required>
+            <select name="monthlyElevation" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                Seleziona
+              </option>
+              {MONTHLY_ELEVATION.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field
+            label="Attività recenti significative"
+            hint="Es. percorsi, dislivelli o uscite lunghe degli ultimi mesi."
+          >
+            <input name="recentActivity" maxLength={300} className={inputClass} />
+          </Field>
           <Field label="Sistema taglie" required>
             <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
               <option value="EU">EU</option>
@@ -273,7 +330,35 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       />
 
       <div>
-        <Step n="05" title="DICHIARAZIONI OBBLIGATORIE" />
+        <Step
+          n="05"
+          title="LUNCH BOX ED ESIGENZE ALIMENTARI"
+          hint="Al termine dell'esperienza è previsto un lunch box. Indica eventuali esigenze per permetterci di prepararlo correttamente."
+        />
+        <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+          <Field label="Profilo alimentare" required>
+            <select name="dietaryProfile" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                Seleziona
+              </option>
+              {DIETARY_PROFILES.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field
+            label="Allergie o intolleranze alimentari"
+            hint="Indica solo le informazioni necessarie alla preparazione del lunch box."
+          >
+            <input name="foodAllergies" maxLength={300} className={inputClass} />
+          </Field>
+        </div>
+      </div>
+
+      <div>
+        <Step n="06" title="DICHIARAZIONI OBBLIGATORIE" />
         <CheckRow checked={consents.isAdult} onChange={setConsent("isAdult")}>
           Dichiaro di avere 18 anni compiuti.
         </CheckRow>
