@@ -47,8 +47,10 @@
   --color-fogstone: var(--fogstone);
   --color-solitude: var(--kasumi);
   --color-graphite: var(--graphite);
-  --font-sans: "Söhne", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --tracking-technical: 0.18em;
+  --font-sans: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --tracking-technical: 0.16em;
 }
 
 :root {
@@ -111,8 +113,19 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-weight: 450;
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "ss01", "tnum";
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "tnum", "cv05";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
   }
 
   ::selection {
@@ -134,26 +147,49 @@
 }
 
 @utility tech {
-  font-size: 0.625rem;
-  line-height: 1.2;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.15;
   letter-spacing: var(--tracking-technical);
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted-foreground);
 }
 
 @utility tech-sm {
-  font-size: 0.5625rem;
-  line-height: 1.2;
-  letter-spacing: 0.22em;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted-foreground);
 }
 
 @utility display {
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 0.88;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.86;
   text-transform: uppercase;
+  font-feature-settings: "ss01";
+}
+
+/* Editorial subheads and body lead-ins. */
+@utility lede {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--color-muted-foreground);
+}
+
+/* Thin technical rule + label row used across dense spec grids. */
+@utility rule-top {
+  border-top: 1px solid color-mix(in oklab, var(--color-border) 90%, transparent);
 }
 
 @utility jade-glow {
