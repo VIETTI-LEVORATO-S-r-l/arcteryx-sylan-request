@@ -142,8 +142,9 @@ function Home() {
 
       {/* POSIZIONAMENTO */}
       <section className="px-5 pt-10 sm:px-10">
-        <Reveal className="border-l-2 border-jade bg-card p-6 text-sm leading-relaxed text-foreground sm:p-8">
-          {t("nonCompetitive")}
+        <Reveal className="surface-ink panel-raised p-6 sm:p-8">
+          <span className="badge badge-outline">{t("nav.experience")}</span>
+          <p className="lead-strong mt-4 max-w-3xl">{t("nonCompetitive")}</p>
         </Reveal>
       </section>
 
@@ -151,21 +152,27 @@ function Home() {
       <section id="esperienza" className="band mt-10">
         <SectionLabel index="01">{t("exp.title")}</SectionLabel>
 
-        <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEP_NUMBERS.map((n, i) => (
-            <Reveal as="article" delay={i * 90} key={n} className="bg-background p-6 sm:p-8">
-              <span className="tech-sm text-jade-soft">{n}</span>
-              <h3 className="display mt-6 text-2xl">{t(`exp.${n}.t` as const)}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            <Reveal
+              as="article"
+              delay={i * 90}
+              key={n}
+              className="panel panel-hover p-6 sm:p-7"
+            >
+              <span className="index-chip">{n}</span>
+              <h3 className="display mt-5 text-2xl">{t(`exp.${n}.t` as const)}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {t(`exp.${n}.d` as const)}
               </p>
             </Reveal>
           ))}
         </div>
-        <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        <p className="callout mt-8 max-w-2xl p-4 text-sm leading-relaxed text-muted-foreground sm:p-5">
           {t("exp.note")}
         </p>
       </section>
+
 
       {/* PERCORSO */}
       <section className="band band-soft overflow-hidden">
