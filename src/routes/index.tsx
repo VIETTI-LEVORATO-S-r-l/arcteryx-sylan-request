@@ -98,8 +98,7 @@ function Home() {
           <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-end">
             <div className="rise">
               <h1 className="display text-[15vw] leading-[0.86] sm:text-[9vw] lg:text-[6.6vw]">
-                SYLAN 2
-                <span className="block text-jade-soft">COMMUNITY TRAIL RUN</span>
+                SYLAN 2<span className="block text-jade-soft">COMMUNITY TRAIL RUN</span>
                 <span className="block text-[0.42em] tracking-technical text-foreground">
                   LAGO MAGGIORE
                 </span>
@@ -234,9 +233,7 @@ function Home() {
           <>
             <div className="mb-8 flex flex-wrap items-center gap-x-8 gap-y-2">
               <span className="tech-sm border border-border px-3 py-1">DATE PROVVISORIE</span>
-              <span className="tech-sm">
-                PREFERENZA DELLA COMMUNITY — {data.total} RICHIESTE
-              </span>
+              <span className="tech-sm">PREFERENZA DELLA COMMUNITY — {data.total} RICHIESTE</span>
               {data.leadingDateId ? (
                 <span className="tech-sm text-jade-soft">
                   DATA ATTUALMENTE PIÙ RICHIESTA —{" "}
@@ -284,9 +281,7 @@ function Home() {
             <div className="mt-8 space-y-2">
               <div className="tech-sm">POSTI LIMITATI</div>
               <div className="tech-sm">RICHIESTA DI PARTECIPAZIONE</div>
-              <div className="tech-sm text-jade-soft">
-                PARTECIPAZIONE SOGGETTA A CONFERMA
-              </div>
+              <div className="tech-sm text-jade-soft">PARTECIPAZIONE SOGGETTA A CONFERMA</div>
             </div>
             <p className="mt-8 max-w-sm text-xs leading-relaxed text-muted-foreground">
               {NON_COMPETITIVE}

@@ -68,7 +68,7 @@ export function Field({
 }
 
 export const inputClass =
-  "w-full border-0 border-b border-border bg-transparent px-0 pb-2 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-jade-soft";
+  "w-full min-h-11 border-0 border-b border-border bg-transparent px-0 pb-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-jade-soft";
 
 export const selectClass = `${inputClass} appearance-none cursor-pointer`;
 
@@ -82,7 +82,7 @@ export function CheckRow({
   children: ReactNode;
 }) {
   return (
-    <label className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4">
+    <label className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60">
       <span
         className={cn(
           "mt-0.5 grid h-4 w-4 shrink-0 place-items-center border transition-all",

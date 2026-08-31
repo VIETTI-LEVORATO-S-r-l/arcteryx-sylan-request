@@ -34,7 +34,11 @@ export function DateBoard({
             <Tag
               key={d.id}
               {...(selectable
-                ? { type: "button" as const, onClick: () => onSelect?.(d.id), "aria-pressed": selected }
+                ? {
+                    type: "button" as const,
+                    onClick: () => onSelect?.(d.id),
+                    "aria-pressed": selected,
+                  }
                 : {})}
               className={cn(
                 "relative w-full bg-background p-5 text-left transition-all duration-300 sm:p-8",

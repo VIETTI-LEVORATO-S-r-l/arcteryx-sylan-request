@@ -4,6 +4,18 @@ import { useServerFn } from "@tanstack/react-start";
 import { submitApplication } from "@/lib/event.functions";
 import { PACE_RANGES, RUNNING_LEVELS, TRAIL_LEVELS, type EventPayload } from "@/lib/types";
 import { CheckRow, Field, inputClass, selectClass } from "./Primitives";
+
+function Step({ n, title, hint }: { n: string; title: string; hint?: string }) {
+  return (
+    <div className="mb-5 grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-3 border-t border-border pt-4">
+      <span className="tech-sm text-jade-soft">{n}</span>
+      <div className="min-w-0">
+        <div className="tech text-foreground">{title}</div>
+        {hint ? <div className="tech-sm mt-1 normal-case tracking-normal">{hint}</div> : null}
+      </div>
+    </div>
+  );
+}
 import { DateBoard } from "./DateBoard";
 import { formatDate } from "@/lib/queries";
 import { cn } from "@/lib/utils";
@@ -127,29 +139,32 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         </p>
       ) : null}
 
-      <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-        <Field label="Nome" required>
-          <input name="firstName" required maxLength={80} className={inputClass} />
-        </Field>
-        <Field label="Cognome" required>
-          <input name="lastName" required maxLength={80} className={inputClass} />
-        </Field>
-        <Field label="Email" required>
-          <input name="email" type="email" required maxLength={255} className={inputClass} />
-        </Field>
-        <Field label="Telefono" required>
-          <input name="phone" required maxLength={40} className={inputClass} />
-        </Field>
-        <Field label="Città" required>
-          <input name="city" required maxLength={120} className={inputClass} />
-        </Field>
-        <Field label="Instagram">
-          <input name="instagramHandle" maxLength={60} placeholder="@" className={inputClass} />
-        </Field>
+      <div>
+        <Step n="01" title="I TUOI DATI" hint="Servono per contattarti in caso di conferma." />
+        <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+          <Field label="Nome" required>
+            <input name="firstName" required maxLength={80} className={inputClass} />
+          </Field>
+          <Field label="Cognome" required>
+            <input name="lastName" required maxLength={80} className={inputClass} />
+          </Field>
+          <Field label="Email" required>
+            <input name="email" type="email" required maxLength={255} className={inputClass} />
+          </Field>
+          <Field label="Telefono" required>
+            <input name="phone" required maxLength={40} className={inputClass} />
+          </Field>
+          <Field label="Città" required>
+            <input name="city" required maxLength={120} className={inputClass} />
+          </Field>
+          <Field label="Instagram">
+            <input name="instagramHandle" maxLength={60} placeholder="@" className={inputClass} />
+          </Field>
+        </div>
       </div>
 
       <div>
-        <div className="tech-sm mb-4">DATA PREFERITA — SELEZIONANE UNA (OBBLIGATORIO)</div>
+        <Step n="02" title="LA TUA DATA PREFERITA" hint="Tocca una delle tre date. Obbligatorio." />
         <DateBoard
           dates={data.dates}
           leadingDateId={data.leadingDateId}
@@ -163,7 +178,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       </div>
 
       <div>
-        <div className="tech-sm mb-2">ALTRE DATE IN CUI SEI DISPONIBILE — FACOLTATIVO</div>
+        <Step n="03" title="ALTRE DATE DISPONIBILI" hint="Facoltativo — aiuta l'organizzazione." />
         <div className="grid sm:grid-cols-3">
           {data.dates.map((d) => {
             const f = formatDate(d.date);
@@ -183,56 +198,59 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         </div>
       </div>
 
-      <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-        <Field label="Esperienza di running" required>
-          <select name="runningLevel" required className={selectClass} defaultValue="">
-            <option value="" disabled>
-              Seleziona
-            </option>
-            {RUNNING_LEVELS.map((o) => (
-              <option key={o} value={o}>
-                {o}
+      <div>
+        <Step n="04" title="PROFILO RUNNING E FITTING SYLAN 2" />
+        <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+          <Field label="Esperienza di running" required>
+            <select name="runningLevel" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                Seleziona
               </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Esperienza di trail running" required>
-          <select name="trailExperience" required className={selectClass} defaultValue="">
-            <option value="" disabled>
-              Seleziona
-            </option>
-            {TRAIL_LEVELS.map((o) => (
-              <option key={o} value={o}>
-                {o}
+              {RUNNING_LEVELS.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Esperienza di trail running" required>
+            <select name="trailExperience" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                Seleziona
               </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Passo indicativo">
-          <select name="pace" className={selectClass} defaultValue="">
-            <option value="">Seleziona un intervallo</option>
-            {PACE_RANGES.map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Sistema taglie" required>
-          <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
-            <option value="EU">EU</option>
-            <option value="UK">UK</option>
-          </select>
-        </Field>
-        <Field label="Taglia scarpa" required>
-          <input name="shoeSize" required maxLength={10} className={inputClass} />
-        </Field>
-        <Field label="Fitting Sylan 2" required>
-          <select name="footwearFit" required className={selectClass} defaultValue="MEN'S">
-            <option value="MEN'S">UOMO</option>
-            <option value="WOMEN'S">DONNA</option>
-          </select>
-        </Field>
+              {TRAIL_LEVELS.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Passo indicativo">
+            <select name="pace" className={selectClass} defaultValue="">
+              <option value="">Seleziona un intervallo</option>
+              {PACE_RANGES.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Sistema taglie" required>
+            <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
+              <option value="EU">EU</option>
+              <option value="UK">UK</option>
+            </select>
+          </Field>
+          <Field label="Taglia scarpa" required>
+            <input name="shoeSize" required maxLength={10} className={inputClass} />
+          </Field>
+          <Field label="Fitting Sylan 2" required>
+            <select name="footwearFit" required className={selectClass} defaultValue="MEN'S">
+              <option value="MEN'S">UOMO</option>
+              <option value="WOMEN'S">DONNA</option>
+            </select>
+          </Field>
+        </div>
       </div>
 
       <Field label="Breve descrizione della tua esperienza" hint={`${description.length}/300`}>
@@ -255,13 +273,13 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       />
 
       <div>
-        <div className="tech-sm mb-2">DICHIARAZIONI OBBLIGATORIE</div>
+        <Step n="05" title="DICHIARAZIONI OBBLIGATORIE" />
         <CheckRow checked={consents.isAdult} onChange={setConsent("isAdult")}>
           Dichiaro di avere 18 anni compiuti.
         </CheckRow>
         <CheckRow checked={consents.terrainAck} onChange={setConsent("terrainAck")}>
-          Sono consapevole che si tratta di una Community Trail Run guidata e non competitiva, che si
-          svolge su terreno naturale e sconnesso e richiede un adeguato livello di preparazione
+          Sono consapevole che si tratta di una Community Trail Run guidata e non competitiva, che
+          si svolge su terreno naturale e sconnesso e richiede un adeguato livello di preparazione
           fisica.
         </CheckRow>
         <CheckRow checked={consents.fitnessAck} onChange={setConsent("fitnessAck")}>
@@ -305,7 +323,14 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         </CheckRow>
       </div>
 
-      {error ? <p className="text-xs text-destructive">{error}</p> : null}
+      {error ? (
+        <p
+          role="alert"
+          className="border-l-2 border-destructive bg-card p-4 text-xs leading-relaxed text-destructive"
+        >
+          {error}
+        </p>
+      ) : null}
 
       <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="tech-sm max-w-md normal-case tracking-normal">
@@ -314,8 +339,9 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         <button
           type="submit"
           disabled={pending}
-          className="tech border border-jade bg-jade px-8 py-4 text-primary-foreground transition-all hover:jade-glow disabled:opacity-50"
+          className="action tech w-full border border-jade bg-jade px-8 py-4 text-primary-foreground hover:jade-glow disabled:opacity-50 sm:w-auto"
         >
+          <span className="action-sweep" aria-hidden />
           {pending ? "INVIO IN CORSO…" : "RICHIEDI DI PARTECIPARE"}
         </button>
       </div>
