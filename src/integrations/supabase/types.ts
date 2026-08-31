@@ -358,9 +358,12 @@ export type Database = {
           attendance_confirmed: boolean
           confirmed_at: string | null
           created_at: string
+          dietary_consent: boolean
+          dietary_profile: string | null
           emergency_contact_name: string | null
           emergency_contact_phone: string | null
           final_shoe_size: string | null
+          food_allergies: string | null
           id: string
           image_release_accepted: boolean
           medical_note: string | null
@@ -371,9 +374,12 @@ export type Database = {
           attendance_confirmed?: boolean
           confirmed_at?: string | null
           created_at?: string
+          dietary_consent?: boolean
+          dietary_profile?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
           final_shoe_size?: string | null
+          food_allergies?: string | null
           id?: string
           image_release_accepted?: boolean
           medical_note?: string | null
@@ -384,9 +390,12 @@ export type Database = {
           attendance_confirmed?: boolean
           confirmed_at?: string | null
           created_at?: string
+          dietary_consent?: boolean
+          dietary_profile?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
           final_shoe_size?: string | null
+          food_allergies?: string | null
           id?: string
           image_release_accepted?: boolean
           medical_note?: string | null
