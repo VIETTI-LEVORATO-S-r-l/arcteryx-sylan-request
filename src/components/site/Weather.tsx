@@ -302,9 +302,7 @@ export function WeatherFooter({ updatedAt }: { updatedAt: string | null }) {
           {l.updated} — {formatRomeDateTime(updatedAt, lang)} ({lang === "en" ? "ROME" : "ROMA"})
         </div>
       ) : null}
-      <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-        {t("w.disclaimer")}
-      </p>
+      <p className="prose-note mt-2 max-w-2xl">{t("w.disclaimer")}</p>
       <p className="tech-sm mt-2">{l.source}</p>
     </div>
   );

@@ -17,11 +17,29 @@ export function SectionLabel({ index, children }: { index: string; children: Rea
 }
 
 
-export function Spec({ label, value, mono }: { label: string; value: ReactNode; mono?: boolean }) {
+export function Spec({
+  label,
+  value,
+  mono,
+  size = "lg",
+}: {
+  label: string;
+  value: ReactNode;
+  mono?: boolean;
+  size?: "lg" | "sm";
+}) {
   return (
     <div className="spec-row border-t border-border py-5">
       <div className="badge border-0 p-0">{label}</div>
-      <div className={cn("display mt-3 text-3xl sm:text-4xl", mono && "tabular-nums")}>{value}</div>
+      <div
+        className={cn(
+          "display mt-3",
+          size === "lg" ? "text-3xl sm:text-4xl" : "text-xl sm:text-2xl",
+          mono && "tabular-nums",
+        )}
+      >
+        {value}
+      </div>
     </div>
   );
 }
@@ -75,7 +93,7 @@ export function Field({
         )}
       </span>
       <div className="mt-3">{children}</div>
-      {hint ? <span className="tech-sm mt-2 block normal-case tracking-normal">{hint}</span> : null}
+      {hint ? <span className="prose-note mt-2 block">{hint}</span> : null}
     </label>
   );
 }
@@ -97,9 +115,10 @@ export function CheckRow({
 }) {
   // Non usiamo <label>: i link interni (Regolamento, Privacy) non devono attivare la spunta.
   const textId = useId();
+  const [focused, setFocused] = useState(false);
   return (
     <div
-      className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60"
+      className="grid min-h-11 cursor-pointer grid-cols-[auto_minmax(0,1fr)] items-center gap-4 border-t border-border py-3.5 transition-colors hover:bg-card/60"
       onClick={(e) => {
         if ((e.target as HTMLElement).closest("a")) return;
         onChange(!checked);
@@ -107,8 +126,9 @@ export function CheckRow({
     >
       <span
         className={cn(
-          "mt-0.5 grid h-4 w-4 shrink-0 place-items-center border transition-all",
+          "grid h-5 w-5 shrink-0 place-items-center border transition-all",
           checked ? "border-jade bg-jade jade-glow" : "border-border",
+          focused && "outline outline-2 outline-offset-2 outline-foreground",
         )}
         aria-hidden
       >
@@ -120,6 +140,8 @@ export function CheckRow({
           className="sr-only"
           aria-labelledby={textId}
           checked={checked}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           onClick={(e) => e.stopPropagation()}
           onChange={(e) => onChange(e.target.checked)}
         />

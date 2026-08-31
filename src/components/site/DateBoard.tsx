@@ -13,6 +13,7 @@ export function DateBoard({
   selectable,
   selectedId,
   onSelect,
+  compact,
 }: {
   dates: DateStat[];
   leadingDateId: string | null;
@@ -22,6 +23,7 @@ export function DateBoard({
   selectable?: boolean;
   selectedId?: string | null;
   onSelect?: (id: string) => void;
+  compact?: boolean;
 }) {
   const { t, lang } = useI18n();
   return (
@@ -48,17 +50,26 @@ export function DateBoard({
                   "panel-hover cursor-pointer active:scale-[0.99] focus:outline-none focus-visible:border-foreground",
                 leading && "border-foreground/40",
                 selected && "panel-raised border-2 border-foreground",
+                compact && "p-4 sm:p-5",
               )}
             >
 
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="display text-5xl tabular-nums sm:text-6xl">{f.day}</div>
+                  <div
+                    className={cn(
+                      "display tabular-nums",
+                      compact ? "text-4xl" : "text-5xl sm:text-6xl",
+                    )}
+                  >
+                    {f.day}
+                  </div>
                   <div className="tech mt-2">
                     {f.month} {f.year}
                   </div>
                   <div className="tech-sm mt-1">{f.weekday}</div>
                 </div>
+                {compact ? null : (
                 <div className="text-right">
                   <div
                     className={cn(
@@ -73,8 +84,10 @@ export function DateBoard({
                     {d.count} {t("dates.requests")}
                   </div>
                 </div>
+                )}
               </div>
 
+              {compact ? null : (
               <div className="mt-6 h-1.5 w-full bg-muted">
                 <div
                   className={cn(
@@ -84,9 +97,12 @@ export function DateBoard({
                   style={{ width: `${Math.max(d.pct, 1)}%` }}
                 />
               </div>
+              )}
 
               <div className="mt-4 flex min-h-4 flex-wrap items-center gap-2">
-                {leading ? <span className="badge badge-solid">{t("dates.leading")}</span> : null}
+                {leading && !compact ? (
+                  <span className="badge badge-solid">{t("dates.leading")}</span>
+                ) : null}
 
                 {selectable ? (
                   <span
@@ -97,11 +113,11 @@ export function DateBoard({
                   >
                     <span
                       className={cn(
-                        "grid h-3.5 w-3.5 shrink-0 place-items-center border transition-all",
+                        "grid h-5 w-5 shrink-0 place-items-center border transition-all",
                         selected ? "border-jade bg-jade" : "border-border",
                       )}
                     >
-                      {selected ? <span className="block h-1 w-1 bg-primary-foreground" /> : null}
+                      {selected ? <span className="block h-2 w-2 bg-primary-foreground" /> : null}
                     </span>
                     {selected ? t("dates.selected") : t("dates.select")}
                   </span>

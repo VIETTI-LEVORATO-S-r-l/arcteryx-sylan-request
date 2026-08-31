@@ -61,8 +61,13 @@ function Home() {
   const datesLabel = (() => {
     if (data.dates.length === 0) return "—";
     const parts = data.dates.map((d) => formatDate(d.date, lang));
-    const days = parts.map((p) => p.day).join("—");
+    const nums = data.dates.map((d) => new Date(d.date).getUTCDate());
+    const consecutive =
+      nums.length > 1 && nums.every((n, i) => i === 0 || n === nums[i - 1]! + 1);
     const last = parts[parts.length - 1]!;
+    const days = consecutive
+      ? `${parts[0]!.day}\u2013${last.day}`
+      : parts.map((p) => p.day).join(" \u00b7 ");
     return `${days} ${last.month} ${last.year}`;
   })();
   const coords = `${Math.abs(data.event.latitude).toFixed(4)}° ${data.event.latitude >= 0 ? "N" : "S"} / ${Math.abs(data.event.longitude).toFixed(4)}° ${data.event.longitude >= 0 ? "E" : "W"}`;
@@ -78,9 +83,9 @@ function Home() {
           alt={t("hero.alt")}
           width={1920}
           height={1280}
-          className="slow-zoom absolute inset-0 h-full w-full object-cover opacity-70"
+          className="slow-zoom absolute inset-0 h-full w-full object-cover opacity-95"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/45 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/20 to-background" />
 
         <nav className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-5 sm:px-10 sm:py-6">
           <span className="tech-sm truncate text-foreground">ARC&rsquo;TERYX × VIETTI</span>
@@ -110,7 +115,7 @@ function Home() {
         <div className="relative px-5 pb-16 sm:px-10 sm:pb-14">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-end">
             <div className="rise">
-              <h1 className="display text-[15vw] leading-[0.86] sm:text-[9vw] lg:text-[6.6vw]">
+              <h1 className="display text-[13vw] leading-[0.86] [text-shadow:0_2px_24px_color-mix(in_oklab,var(--black)_55%,transparent)] sm:text-[9vw] lg:text-[6.6vw]">
                 SYLAN 2<span className="block text-jade-soft">COMMUNITY TRAIL RUN</span>
                 <span className="block text-[0.42em] tracking-technical text-foreground">
                   LAGO MAGGIORE
@@ -202,18 +207,18 @@ function Home() {
               {isPlaceholder(data.event.elevationM) ? null : (
                 <Spec label={t("route.elevation")} value={data.event.elevationM} mono />
               )}
-              <Spec label={t("route.surface")} value={data.event.surface} />
-              <Spec label={t("route.place")} value={data.event.location} />
+              <Spec label={t("route.surface")} value={data.event.surface} size="sm" />
+              <Spec label={t("route.place")} value={data.event.location} size="sm" />
             </div>
             <div>
-              <div className="corner-ticks panel panel-raised relative grid aspect-[4/3] place-items-center">
+              <div className="corner-ticks panel panel-raised relative grid aspect-[2/1] place-items-center px-5 sm:aspect-[3/1]">
                 <TopoLines className="opacity-30" />
-                <span className="tech-sm relative">{t("route.map")}</span>
-                <span className="tech-sm absolute bottom-4 left-4 tabular-nums">
+                <span className="tech-sm relative text-center">{t("route.map")}</span>
+                <span className="tech-sm absolute bottom-3 left-4 tabular-nums">
                   {coords}
                 </span>
               </div>
-              <p className="tech-sm mt-4 normal-case tracking-normal">{data.event.routeNotes}</p>
+              <p className="prose-note mt-4">{data.event.routeNotes}</p>
             </div>
           </div>
         </div>
@@ -326,7 +331,7 @@ function Home() {
       </div>
 
       <footer className="surface-ink grain grid gap-6 px-5 pb-28 pt-14 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-12 sm:pt-16">
-        <div className="tech-sm">
+        <div className="prose-note">
           ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
         </div>
         <div className="flex flex-wrap gap-5">

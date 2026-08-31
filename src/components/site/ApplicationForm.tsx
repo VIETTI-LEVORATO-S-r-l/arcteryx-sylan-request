@@ -19,7 +19,7 @@ function Step({ n, title, hint }: { n: string; title: string; hint?: string }) {
       <span className="tech-sm text-jade-soft">{n}</span>
       <div className="min-w-0">
         <div className="tech text-foreground">{title}</div>
-        {hint ? <div className="tech-sm mt-1 normal-case tracking-normal">{hint}</div> : null}
+        {hint ? <div className="prose-note mt-1">{hint}</div> : null}
       </div>
     </div>
   );
@@ -186,6 +186,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           total={data.total}
           weatherEnabled={false}
           weatherUpdatedAt={null}
+          compact
           selectable
           selectedId={preferredDateId}
           onSelect={setPreferredDateId}
@@ -291,7 +292,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           onChange={(e) => setDescription(e.target.value.slice(0, 300))}
           rows={4}
           maxLength={300}
-          className={cn(inputClass, "resize-none")}
+          className={cn(inputClass, "resize-none border border-border px-3 pt-3 pb-3")}
         />
       </Field>
 
@@ -359,9 +360,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       ) : null}
 
       <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="tech-sm max-w-md normal-case tracking-normal">
-          {t("form.disclaimer")}
-        </p>
+        <p className="prose-note max-w-md">{t("form.disclaimer")}</p>
         <button
           type="submit"
           disabled={pending}
