@@ -95,25 +95,37 @@ export function CheckRow({
   onChange: (v: boolean) => void;
   children: ReactNode;
 }) {
+  // Non usiamo <label>: i link interni (Regolamento, Privacy) non devono attivare la spunta.
   return (
-    <label className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60">
+    <div
+      className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60"
+      onClick={(e) => {
+        if ((e.target as HTMLElement).closest("a")) return;
+        onChange(!checked);
+      }}
+    >
       <span
         className={cn(
           "mt-0.5 grid h-4 w-4 shrink-0 place-items-center border transition-all",
           checked ? "border-jade bg-jade jade-glow" : "border-border",
         )}
+        aria-hidden
       >
         {checked ? <span className="block h-1.5 w-1.5 bg-primary-foreground" /> : null}
       </span>
-      <span className="text-xs leading-relaxed text-muted-foreground">{children}</span>
-      <input
-        type="checkbox"
-        className="sr-only"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-    </label>
+      <span className="text-xs leading-relaxed text-muted-foreground">
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={checked}
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        {children}
+      </span>
+    </div>
   );
+
 }
 
 export function Reveal({
