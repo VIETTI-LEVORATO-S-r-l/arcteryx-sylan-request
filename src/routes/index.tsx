@@ -86,11 +86,11 @@ function Home() {
               RICHIESTA
             </a>
           </div>
-          <a
-            href="#richiesta"
-            className="action tech-sm shrink-0 border border-jade-soft px-3 py-2 text-jade-soft sm:hidden"
-          >
+          <a href="#richiesta" className="cta cta-sm cta-ghost shrink-0 sm:hidden">
             RICHIEDI
+            <span className="cta-arrow" aria-hidden>
+              →
+            </span>
           </a>
         </nav>
 
@@ -106,22 +106,24 @@ function Home() {
               <p className="mt-8 max-w-lg text-sm leading-relaxed text-muted-foreground">
                 {DESCRIPTION}
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href="#richiesta"
-                  className="action tech w-full border border-jade bg-jade px-7 py-4 text-center text-primary-foreground hover:jade-glow sm:w-auto"
-                >
-                  <span className="action-sweep" aria-hidden />
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <a href="#richiesta" className="cta cta-solid w-full sm:w-auto sm:min-w-[19rem]">
                   RICHIEDI DI PARTECIPARE
+                  <span className="cta-arrow" aria-hidden>
+                    →
+                  </span>
                 </a>
-                <a
-                  href="#esperienza"
-                  className="action tech w-full border border-border px-7 py-4 text-center text-foreground hover:border-jade-soft sm:w-auto"
-                >
+                <a href="#esperienza" className="cta cta-ghost w-full sm:w-auto sm:min-w-[15rem]">
                   SCOPRI L&rsquo;ESPERIENZA
+                  <span className="cta-arrow" aria-hidden>
+                    ↓
+                  </span>
                 </a>
               </div>
-              <p className="tech-sm mt-6 text-jade-soft">POSTI LIMITATI</p>
+              <p className="tech-sm mt-6 flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 bg-foreground" aria-hidden />
+                POSTI LIMITATI
+              </p>
             </div>
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4 lg:grid-cols-1">
               {[
@@ -295,10 +297,12 @@ function Home() {
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:hidden">
         <a
           href="#richiesta"
-          className="action tech pointer-events-auto flex items-center justify-center gap-3 border border-jade bg-jade px-6 py-4 text-primary-foreground jade-glow"
+          className="cta cta-solid pointer-events-auto w-full shadow-[0_18px_40px_-24px_var(--color-foreground)]"
         >
-          <span className="action-sweep" aria-hidden />
           RICHIEDI DI PARTECIPARE
+          <span className="cta-arrow" aria-hidden>
+            →
+          </span>
         </a>
       </div>
 

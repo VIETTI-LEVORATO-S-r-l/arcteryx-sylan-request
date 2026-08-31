@@ -424,10 +424,12 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         <button
           type="submit"
           disabled={pending}
-          className="action tech w-full border border-jade bg-jade px-8 py-4 text-primary-foreground hover:jade-glow disabled:opacity-50 sm:w-auto"
+          className="cta cta-solid w-full disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:min-w-[19rem]"
         >
-          <span className="action-sweep" aria-hidden />
           {pending ? "INVIO IN CORSO…" : "RICHIEDI DI PARTECIPARE"}
+          <span className="cta-arrow" aria-hidden>
+            →
+          </span>
         </button>
       </div>
     </form>
