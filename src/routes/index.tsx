@@ -194,7 +194,7 @@ function Home() {
       </section>
 
       {/* DATE */}
-      <section id="date" className="px-5 py-16 sm:px-10 sm:py-24">
+      <section id="date" className="band">
         <SectionLabel index="03">
           {finalDate ? t("dates.titleConfirmed") : t("dates.titleChoose")}
         </SectionLabel>
