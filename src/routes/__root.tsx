@@ -11,7 +11,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { LangProvider } from "../lib/i18n";
+import { getInitialLang } from "../lib/lang.functions";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
+export const SITE_URL = "https://arcteryx-sylan-request.lovable.app";
+
 
 function NotFoundComponent() {
   return (
