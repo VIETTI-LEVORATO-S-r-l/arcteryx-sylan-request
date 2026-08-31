@@ -424,7 +424,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         <button
           type="submit"
           disabled={pending}
-          className="cta cta-solid w-full disabled:pointer-events-none disabled:opacity-50 sm:w-auto sm:min-w-[19rem]"
+          className="cta cta-solid w-full disabled:pointer-events-none disabled:opacity-50 sm:w-auto"
         >
           {pending ? "INVIO IN CORSO…" : "RICHIEDI DI PARTECIPARE"}
           <span className="cta-arrow" aria-hidden>
