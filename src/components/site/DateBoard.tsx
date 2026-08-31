@@ -26,7 +26,7 @@ export function DateBoard({
   const { t, lang } = useI18n();
   return (
     <div>
-      <div className="grid gap-px bg-border md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         {dates.map((d) => {
           const f = formatDate(d.date, lang);
           const leading = leadingDateId === d.id;
@@ -43,12 +43,14 @@ export function DateBoard({
                   }
                 : {})}
               className={cn(
-                "relative w-full bg-background p-5 text-left transition-all duration-300 sm:p-8",
+                "panel relative w-full p-5 text-left transition-all duration-300 sm:p-7",
                 selectable &&
-                  "cursor-pointer active:scale-[0.99] hover:bg-card focus:outline-none focus-visible:bg-card",
-                selected && "jade-glow bg-card",
+                  "panel-hover cursor-pointer active:scale-[0.99] focus:outline-none focus-visible:border-foreground",
+                leading && "border-foreground/40",
+                selected && "panel-raised border-2 border-foreground",
               )}
             >
+
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="display text-5xl tabular-nums sm:text-6xl">{f.day}</div>
@@ -60,34 +62,32 @@ export function DateBoard({
                 <div className="text-right">
                   <div
                     className={cn(
-                      "display text-3xl tabular-nums",
-                      leading ? "text-jade-soft" : "text-foreground",
+                      "display tabular-nums",
+                      leading ? "text-4xl text-foreground" : "text-3xl text-muted-foreground",
                     )}
                   >
                     {d.pct}%
                   </div>
+
                   <div className="tech-sm mt-1">
                     {d.count} {t("dates.requests")}
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 h-px w-full bg-border">
+              <div className="mt-6 h-1.5 w-full bg-muted">
                 <div
                   className={cn(
-                    "bar-grow h-px transition-all duration-700",
-                    leading ? "bg-jade-soft" : "bg-muted-foreground",
+                    "bar-grow h-1.5 transition-all duration-700",
+                    leading ? "bg-foreground" : "bg-muted-foreground/60",
                   )}
                   style={{ width: `${Math.max(d.pct, 1)}%` }}
                 />
               </div>
 
-              <div className="mt-4 flex min-h-4 items-center gap-3">
-                {leading ? (
-                  <span className="tech-sm border border-jade px-2 py-1 text-jade-soft">
-                    {t("dates.leading")}
-                  </span>
-                ) : null}
+              <div className="mt-4 flex min-h-4 flex-wrap items-center gap-2">
+                {leading ? <span className="badge badge-solid">{t("dates.leading")}</span> : null}
+
                 {selectable ? (
                   <span
                     className={cn(

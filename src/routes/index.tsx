@@ -142,8 +142,9 @@ function Home() {
 
       {/* POSIZIONAMENTO */}
       <section className="px-5 pt-10 sm:px-10">
-        <Reveal className="border-l-2 border-jade bg-card p-6 text-sm leading-relaxed text-foreground sm:p-8">
-          {t("nonCompetitive")}
+        <Reveal className="surface-ink panel-raised p-6 sm:p-8">
+          <span className="badge badge-outline">{t("nav.experience")}</span>
+          <p className="lead-strong mt-4 max-w-3xl">{t("nonCompetitive")}</p>
         </Reveal>
       </section>
 
@@ -151,21 +152,27 @@ function Home() {
       <section id="esperienza" className="band mt-10">
         <SectionLabel index="01">{t("exp.title")}</SectionLabel>
 
-        <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEP_NUMBERS.map((n, i) => (
-            <Reveal as="article" delay={i * 90} key={n} className="bg-background p-6 sm:p-8">
-              <span className="tech-sm text-jade-soft">{n}</span>
-              <h3 className="display mt-6 text-2xl">{t(`exp.${n}.t` as const)}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            <Reveal
+              as="article"
+              delay={i * 90}
+              key={n}
+              className="panel panel-hover p-6 sm:p-7"
+            >
+              <span className="index-chip">{n}</span>
+              <h3 className="display mt-5 text-2xl">{t(`exp.${n}.t` as const)}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {t(`exp.${n}.d` as const)}
               </p>
             </Reveal>
           ))}
         </div>
-        <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        <p className="callout mt-8 max-w-2xl p-4 text-sm leading-relaxed text-muted-foreground sm:p-5">
           {t("exp.note")}
         </p>
       </section>
+
 
       {/* PERCORSO */}
       <section className="band band-soft overflow-hidden">
@@ -201,8 +208,8 @@ function Home() {
 
         {finalDate ? (
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
-            <div className="jade-glow bg-card p-8">
-              <div className="tech-sm mb-4 text-jade-soft">{t("dates.confirmed")}</div>
+            <div className="surface-ink panel-raised p-6 sm:p-8">
+              <span className="badge badge-outline mb-5">{t("dates.confirmed")}</span>
               <div className="display text-5xl sm:text-7xl">{formatDate(finalDate.date, lang).long}</div>
               <div className="mt-10 grid gap-6 sm:grid-cols-2">
                 <div className="border-t border-border pt-3">
@@ -221,7 +228,7 @@ function Home() {
               ) : null}
             </div>
             <div>
-              <div className="tech-sm mb-4">{t("dates.communityPreference")}</div>
+              <div className="badge mb-4 border-0 p-0">{t("dates.communityPreference")}</div>
               <DateBoard
                 dates={data.dates}
                 leadingDateId={data.leadingDateId}
@@ -233,13 +240,13 @@ function Home() {
           </div>
         ) : (
           <>
-            <div className="mb-8 flex flex-wrap items-center gap-x-8 gap-y-2">
-              <span className="tech-sm border border-border px-3 py-1">{t("dates.provisional")}</span>
-              <span className="tech-sm">
+            <div className="mb-8 flex flex-wrap items-center gap-2">
+              <span className="badge">{t("dates.provisional")}</span>
+              <span className="badge">
                 {t("dates.communityPreference")} — {data.total} {t("dates.requests")}
               </span>
               {data.leadingDateId ? (
-                <span className="tech-sm text-jade-soft">
+                <span className="badge badge-solid">
                   {t("dates.leading")} —{" "}
                   {formatDate(data.dates.find((d) => d.id === data.leadingDateId)!.date, lang).long}
                 </span>
@@ -261,9 +268,9 @@ function Home() {
 
       {/* FOTO / VIDEO */}
       <section className="px-5 pb-4 sm:px-10">
-        <div className="border border-border p-6 sm:p-8">
-          <div className="tech-sm mb-3 text-jade-soft">{t("media.title")}</div>
-          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        <div className="callout p-6 sm:p-8">
+          <span className="badge badge-outline mb-3">{t("media.title")}</span>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {t("media.body")}
           </p>
         </div>
@@ -274,18 +281,17 @@ function Home() {
 
         <SectionLabel index="04">{t("req.title")}</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-          <div>
-            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              {t("req.body")}
-            </p>
-            <div className="mt-6 space-y-2">
-              <div className="tech-sm">{t("req.tag1")}</div>
-              <div className="tech-sm text-jade-soft">{t("req.tag3")}</div>
+          <div className="lg:sticky lg:top-8 lg:self-start">
+            <p className="lead-strong max-w-sm">{t("req.body")}</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <span className="badge">{t("req.tag1")}</span>
+              <span className="badge badge-solid">{t("req.tag3")}</span>
             </div>
           </div>
           <ApplicationForm data={data} />
         </div>
       </section>
+
 
       {/* CTA persistente su mobile */}
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:hidden">
