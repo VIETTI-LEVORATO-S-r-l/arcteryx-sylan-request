@@ -260,7 +260,7 @@ function Home() {
       </section>
 
       {/* FOTO / VIDEO */}
-      <section className="px-5 sm:px-10">
+      <section className="px-5 pb-4 sm:px-10">
         <div className="border border-border p-6 sm:p-8">
           <div className="tech-sm mb-3 text-jade-soft">{t("media.title")}</div>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -270,7 +270,8 @@ function Home() {
       </section>
 
       {/* RICHIESTA */}
-      <section id="richiesta" className="px-5 py-16 sm:px-10 sm:py-24">
+      <section id="richiesta" className="band band-soft">
+
         <SectionLabel index="04">{t("req.title")}</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
