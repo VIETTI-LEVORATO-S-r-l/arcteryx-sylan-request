@@ -163,7 +163,7 @@
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
-  line-height: 1.15;
+  line-height: 1.4;
   letter-spacing: var(--tracking-technical);
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
@@ -174,7 +174,7 @@
   font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 500;
-  line-height: 1.15;
+  line-height: 1.4;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
@@ -185,7 +185,8 @@
   font-family: var(--font-display);
   font-weight: 700;
   letter-spacing: -0.04em;
-  line-height: 0.86;
+  line-height: 0.94;
+  text-wrap: balance;
   text-transform: uppercase;
   font-feature-settings: "ss01";
 }
@@ -195,8 +196,9 @@
   font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 500;
-  line-height: 1.55;
+  line-height: 1.6;
   letter-spacing: -0.01em;
+  text-wrap: pretty;
   color: var(--color-muted-foreground);
 }
 
