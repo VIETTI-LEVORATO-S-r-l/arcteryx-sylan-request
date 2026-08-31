@@ -62,12 +62,13 @@ export function DateBoard({
                 <div className="text-right">
                   <div
                     className={cn(
-                      "display text-3xl tabular-nums",
-                      leading ? "text-jade-soft" : "text-foreground",
+                      "display tabular-nums",
+                      leading ? "text-4xl text-foreground" : "text-3xl text-muted-foreground",
                     )}
                   >
                     {d.pct}%
                   </div>
+
                   <div className="tech-sm mt-1">
                     {d.count} {t("dates.requests")}
                   </div>
