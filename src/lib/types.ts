@@ -1,5 +1,13 @@
+export type WeatherConfidence = "LOW" | "MEDIUM" | "HIGHER";
+
 export type DayWeather = {
   available: boolean;
+  confidence?: WeatherConfidence | undefined;
+  apparentMin?: number | undefined;
+  apparentMax?: number | undefined;
+  precipitationSum?: number | undefined;
+  windGusts?: number | undefined;
+  cloudCover?: number | undefined;
   tempMin?: number | undefined;
   tempMax?: number | undefined;
   precipitationProbability?: number | undefined;

@@ -5,7 +5,27 @@ export const eventQueryOptions = queryOptions({
   queryKey: ["event"],
   queryFn: () => getEventData(),
   staleTime: 60_000,
+  // Weather refresh cadence: at least every 3 hours, plus on tab focus.
+  refetchInterval: 3 * 60 * 60 * 1000,
+  refetchIntervalInBackground: false,
+  refetchOnWindowFocus: true,
 });
+
+export const ROME_TZ = "Europe/Rome";
+
+export function formatRomeDateTime(iso: string) {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: ROME_TZ,
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .format(new Date(iso))
+    .toUpperCase();
+}
 
 export const DAY_NAMES = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 export const MONTHS = [
