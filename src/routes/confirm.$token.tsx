@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getConfirmationContext, submitConfirmation } from "@/lib/confirm.functions";
-import { CheckRow, Field, inputClass } from "@/components/site/Primitives";
+import { CheckRow, Field, inputClass, selectClass } from "@/components/site/Primitives";
+import { DIETARY_PROFILES, optionLabel } from "@/lib/types";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/confirm/$token")({
   ssr: false,
@@ -15,7 +17,10 @@ export const Route = createFileRoute("/confirm/$token")({
           "Conferma il tuo posto alla Community Trail Run Arc'teryx × VIETTI Sylan 2 sul Lago Maggiore.",
       },
       { property: "og:title", content: "Conferma partecipazione — Sylan 2 Community Trail Run" },
-      { property: "og:description", content: "Conferma il tuo posto alla Sylan 2 Community Trail Run." },
+      {
+        property: "og:description",
+        content: "Conferma il tuo posto alla Sylan 2 Community Trail Run.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -26,33 +31,44 @@ export const Route = createFileRoute("/confirm/$token")({
 
 function Confirm() {
   const { token } = Route.useParams();
+  const { t, lang } = useI18n();
   const getCtx = useServerFn(getConfirmationContext);
   const submit = useServerFn(submitConfirmation);
   const [ctx, setCtx] = useState<Awaited<ReturnType<typeof getConfirmationContext>> | null>(null);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [acks, setAcks] = useState({ attending: false, rules: false, image: false });
+  const [acks, setAcks] = useState({ attending: false, rules: false, image: false, dietary: false });
 
   useEffect(() => {
     getCtx({ data: { token } })
       .then(setCtx)
-      .catch(() => setError("Questo link non è valido."));
+      .catch(() => setError(t("cf.invalid")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  if (error) return <Shell><p className="text-sm text-muted-foreground">{error}</p></Shell>;
-  if (!ctx) return <Shell><p className="tech-sm">CARICAMENTO…</p></Shell>;
+  if (error && !ctx)
+    return (
+      <Shell>
+        <p className="text-sm text-muted-foreground">{error}</p>
+      </Shell>
+    );
+  if (!ctx)
+    return (
+      <Shell>
+        <p className="tech-sm">{t("cf.loading")}</p>
+      </Shell>
+    );
   if (!ctx.found)
     return (
       <Shell>
-        <p className="text-sm text-muted-foreground">Questo link di conferma non è valido.</p>
+        <p className="text-sm text-muted-foreground">{t("cf.invalid")}</p>
       </Shell>
     );
   if (!ctx.eligible)
     return (
       <Shell>
         <p className="text-sm text-muted-foreground">
-          Questa richiesta non è al momento idonea alla conferma. Stato attuale: {ctx.status}.
+          {t("cf.notEligible")} {ctx.status}.
         </p>
       </Shell>
     );
@@ -60,25 +76,22 @@ function Confirm() {
     return (
       <Shell>
         <h1 className="display text-4xl sm:text-6xl">
-          PARTECIPAZIONE
-          <span className="block text-jade-soft">CONFERMATA</span>
+          {t("cf.doneTitle1")}
+          <span className="block text-jade-soft">{t("cf.doneTitle2")}</span>
         </h1>
-        <p className="mt-6 text-sm text-muted-foreground">
-          Grazie. I dettagli finali verranno inviati prima dell&rsquo;evento.
-        </p>
+        <p className="mt-6 text-sm text-muted-foreground">{t("cf.doneBody")}</p>
       </Shell>
     );
 
   return (
     <Shell>
-      <div className="tech-sm">FASE DUE — PARTECIPANTI ACCETTATI</div>
+      <div className="tech-sm">{t("cf.stage")}</div>
       <h1 className="display mt-6 text-4xl sm:text-6xl">
-        CONFERMA IL TUO
-        <span className="block text-jade-soft">POSTO</span>
+        {t("cf.title1")}
+        <span className="block text-jade-soft">{t("cf.title2")}</span>
       </h1>
       <p className="mt-6 max-w-lg text-sm text-muted-foreground">
-        Benvenuto/a {ctx.firstName}. La tua richiesta è stata accettata. Completa i dati qui sotto
-        per confermare la partecipazione. Taglia registrata: {ctx.shoeSize}.
+        {t("cf.welcome")} {ctx.firstName}. {t("cf.intro")} {t("cf.registeredSize")} {ctx.shoeSize}.
       </p>
 
       <form
@@ -86,10 +99,11 @@ function Confirm() {
         onSubmit={async (e) => {
           e.preventDefault();
           const fd = new FormData(e.currentTarget);
-          if (!acks.attending || !acks.rules || !acks.image) {
-            setError("Tutte le conferme sono obbligatorie.");
+          if (!acks.attending || !acks.rules || !acks.image || !acks.dietary) {
+            setError(t("cf.required"));
             return;
           }
+          setError(null);
           const res = await submit({
             data: {
               token,
@@ -97,24 +111,50 @@ function Confirm() {
               emergencyName: String(fd.get("emergencyName") ?? ""),
               emergencyPhone: String(fd.get("emergencyPhone") ?? ""),
               finalShoeSize: String(fd.get("finalShoeSize") ?? ""),
+              dietaryProfile: String(fd.get("dietaryProfile") ?? ""),
+              foodAllergies: String(fd.get("foodAllergies") ?? ""),
+              dietaryConsent: true,
               rulesAck: true,
               imageRelease: true,
             },
           });
           if (res.ok) setDone(true);
-          else setError("Non è stato possibile salvare la conferma.");
+          else setError(t("cf.saveFailed"));
         }}
       >
         <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label="Nome contatto di emergenza" required>
+          <Field label={t("cf.emName")} required>
             <input name="emergencyName" required maxLength={120} className={inputClass} />
           </Field>
-          <Field label="Telefono contatto di emergenza" required>
+          <Field label={t("cf.emPhone")} required>
             <input name="emergencyPhone" required maxLength={40} className={inputClass} />
           </Field>
-          <Field label="Taglia scarpa definitiva" required>
+          <Field label={t("cf.finalSize")} required>
             <input name="finalShoeSize" required maxLength={20} className={inputClass} />
           </Field>
+        </div>
+
+        <div>
+          <div className="tech mb-4 border-t border-border pt-4 text-foreground">
+            {t("cf.lunchTitle")}
+          </div>
+          <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+            <Field label={t("cf.dietary")} required>
+              <select name="dietaryProfile" required className={selectClass} defaultValue="">
+                <option value="" disabled>
+                  {t("form.select")}
+                </option>
+                {DIETARY_PROFILES.map((o) => (
+                  <option key={o} value={o}>
+                    {optionLabel(o, lang)}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field label={t("cf.allergies")} hint={t("cf.allergiesHint")}>
+              <input name="foodAllergies" maxLength={300} className={inputClass} />
+            </Field>
+          </div>
         </div>
 
         <div>
@@ -122,23 +162,25 @@ function Confirm() {
             checked={acks.attending}
             onChange={(v) => setAcks((a) => ({ ...a, attending: v }))}
           >
-            Confermo la mia presenza all&rsquo;evento.
+            {t("cf.attending")}
           </CheckRow>
           <CheckRow checked={acks.rules} onChange={(v) => setAcks((a) => ({ ...a, rules: v }))}>
-            Dichiaro di aver letto e accettato il{" "}
+            {t("cf.rulesA")}{" "}
             <a
               href="/regolamento"
               target="_blank"
               rel="noreferrer"
               className="text-jade-soft underline"
             >
-              Regolamento della Community Trail Run
+              {t("cf.rulesLink")}
             </a>{" "}
-            e di partecipare al briefing di sicurezza.
+            {t("cf.rulesB")}
+          </CheckRow>
+          <CheckRow checked={acks.dietary} onChange={(v) => setAcks((a) => ({ ...a, dietary: v }))}>
+            {t("cf.dietaryConsent")}
           </CheckRow>
           <CheckRow checked={acks.image} onChange={(v) => setAcks((a) => ({ ...a, image: v }))}>
-            Accetto la liberatoria per immagini e video ai fini dello storytelling Arc&rsquo;teryx ×
-            VIETTI. [PLACEHOLDER — TESTO DEFINITIVO, RICHIEDE REVISIONE LEGALE]
+            {t("cf.image")}
           </CheckRow>
         </div>
 
@@ -147,7 +189,7 @@ function Confirm() {
           type="submit"
           className="tech w-fit border border-jade bg-jade px-8 py-4 text-primary-foreground hover:jade-glow"
         >
-          CONFERMA PARTECIPAZIONE
+          {t("cf.submit")}
         </button>
       </form>
     </Shell>
