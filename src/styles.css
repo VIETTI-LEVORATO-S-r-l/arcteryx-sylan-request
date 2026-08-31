@@ -113,8 +113,11 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-weight: 450;
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "ss01", "tnum";
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "tnum", "cv05";
   }
 
   ::selection {
@@ -136,26 +139,49 @@
 }
 
 @utility tech {
-  font-size: 0.625rem;
-  line-height: 1.2;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.15;
   letter-spacing: var(--tracking-technical);
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted-foreground);
 }
 
 @utility tech-sm {
-  font-size: 0.5625rem;
-  line-height: 1.2;
-  letter-spacing: 0.22em;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted-foreground);
 }
 
 @utility display {
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 0.88;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.86;
   text-transform: uppercase;
+  font-feature-settings: "ss01";
+}
+
+/* Editorial subheads and body lead-ins. */
+@utility lede {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  color: var(--color-muted-foreground);
+}
+
+/* Thin technical rule + label row used across dense spec grids. */
+@utility rule-top {
+  border-top: 1px solid color-mix(in oklab, var(--color-border) 90%, transparent);
 }
 
 @utility jade-glow {
