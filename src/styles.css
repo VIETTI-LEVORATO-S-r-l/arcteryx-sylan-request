@@ -279,3 +279,13 @@
     transform: none !important;
   }
 }
+
+.action:hover {
+  transform: translateY(-2px);
+}
+.action:active {
+  transform: translateY(0) scale(0.985);
+}
+.action:hover .action-sweep {
+  animation: sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
