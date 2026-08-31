@@ -96,6 +96,7 @@ export function CheckRow({
   children: ReactNode;
 }) {
   // Non usiamo <label>: i link interni (Regolamento, Privacy) non devono attivare la spunta.
+  const textId = useId();
   return (
     <div
       className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60"
@@ -113,10 +114,11 @@ export function CheckRow({
       >
         {checked ? <span className="block h-1.5 w-1.5 bg-primary-foreground" /> : null}
       </span>
-      <span className="text-xs leading-relaxed text-muted-foreground">
+      <span id={textId} className="text-xs leading-relaxed text-muted-foreground">
         <input
           type="checkbox"
           className="sr-only"
+          aria-labelledby={textId}
           checked={checked}
           onClick={(e) => e.stopPropagation()}
           onChange={(e) => onChange(e.target.checked)}
@@ -125,6 +127,7 @@ export function CheckRow({
       </span>
     </div>
   );
+
 
 }
 
