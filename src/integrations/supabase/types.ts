@@ -53,72 +53,90 @@ export type Database = {
           confirmation_token: string
           country: string
           created_at: string
+          dietary_profile: string | null
           email: string
           event_id: string
           first_name: string
+          food_allergies: string | null
           footwear_fit: string
           id: string
           instagram_handle: string | null
           ip_hash: string | null
           is_adult: boolean
           last_name: string
+          longest_run: string | null
+          monthly_elevation: string | null
           pace: string | null
           phone: string
           preferred_date_id: string
+          recent_activity: string | null
           runner_description: string | null
           running_level: string
           shoe_size: string
           shoe_size_system: string
           status: Database["public"]["Enums"]["application_status"]
           trail_experience: string
+          weekly_volume: string | null
         }
         Insert: {
           city: string
           confirmation_token?: string
           country?: string
           created_at?: string
+          dietary_profile?: string | null
           email: string
           event_id: string
           first_name: string
+          food_allergies?: string | null
           footwear_fit: string
           id?: string
           instagram_handle?: string | null
           ip_hash?: string | null
           is_adult?: boolean
           last_name: string
+          longest_run?: string | null
+          monthly_elevation?: string | null
           pace?: string | null
           phone: string
           preferred_date_id: string
+          recent_activity?: string | null
           runner_description?: string | null
           running_level: string
           shoe_size: string
           shoe_size_system: string
           status?: Database["public"]["Enums"]["application_status"]
           trail_experience: string
+          weekly_volume?: string | null
         }
         Update: {
           city?: string
           confirmation_token?: string
           country?: string
           created_at?: string
+          dietary_profile?: string | null
           email?: string
           event_id?: string
           first_name?: string
+          food_allergies?: string | null
           footwear_fit?: string
           id?: string
           instagram_handle?: string | null
           ip_hash?: string | null
           is_adult?: boolean
           last_name?: string
+          longest_run?: string | null
+          monthly_elevation?: string | null
           pace?: string | null
           phone?: string
           preferred_date_id?: string
+          recent_activity?: string | null
           runner_description?: string | null
           running_level?: string
           shoe_size?: string
           shoe_size_system?: string
           status?: Database["public"]["Enums"]["application_status"]
           trail_experience?: string
+          weekly_volume?: string | null
         }
         Relationships: [
           {

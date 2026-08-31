@@ -15,6 +15,13 @@
       "when": 1788165332364,
       "tag": "0001_italian_positioning_and_compliance",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788166765666,
+      "tag": "0002_add_training_profile_and_dietary_fields",
+      "breakpoints": true
     }
   ]
 }
