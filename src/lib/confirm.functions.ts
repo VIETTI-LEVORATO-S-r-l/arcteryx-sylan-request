@@ -32,8 +32,12 @@ export const submitConfirmation = createServerFn({ method: "POST" })
         emergencyName: z.string().trim().min(1).max(120),
         emergencyPhone: z.string().trim().min(6).max(40),
         finalShoeSize: z.string().trim().min(1).max(20),
+        dietaryProfile: z.string().trim().min(1).max(80),
+        foodAllergies: z.string().trim().max(300).optional().or(z.literal("")),
+        dietaryConsent: z.literal(true),
         rulesAck: z.literal(true),
         imageRelease: z.literal(true),
+
       })
       .parse(input),
   )
