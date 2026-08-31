@@ -128,6 +128,11 @@ function Admin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const partMap = useMemo(
+    () => new Map((data?.participants ?? []).map((p) => [p.application_id, p])),
+    [data],
+  );
+
   const filtered = useMemo(() => {
     if (!data) return [];
     const needle = q.trim().toLowerCase();
@@ -135,7 +140,7 @@ function Admin() {
       const hay = `${a.first_name} ${a.last_name} ${a.email} ${a.city} ${a.country}`.toLowerCase();
       return (
         (!needle || hay.includes(needle)) &&
-        (!fLevel || a.running_level === fLevel) &&
+        (!fLevel || a.trail_experience === fLevel) &&
         (!fDate || a.preferred_date_id === fDate) &&
         (!fShoe || `${a.shoe_size_system} ${a.shoe_size}` === fShoe)
       );
@@ -372,8 +377,8 @@ function Admin() {
               className={inputClass}
             />
             <select value={fLevel} onChange={(e) => setFLevel(e.target.value)} className={selectClass}>
-              <option value="">Tutti i livelli di running</option>
-              {Array.from(new Set(data.applications.map((a) => a.running_level))).map((l) => (
+              <option value="">Tutti i livelli di trail</option>
+              {Array.from(new Set(data.applications.map((a) => a.trail_experience))).map((l) => (
                 <option key={l} value={l}>
                   {l}
                 </option>
@@ -469,8 +474,6 @@ function Admin() {
                   </td>
                   <td className="p-3 tabular-nums">{dateMap.get(a.preferred_date_id)}</td>
                   <td className="p-3 text-muted-foreground">
-                    {a.running_level}
-                    <br />
                     {a.trail_experience}
                     <br />
                     <span className="tech-sm">
@@ -484,11 +487,17 @@ function Admin() {
                         {a.recent_activity}
                       </>
                     ) : null}
-                    <br />
-                    <span className="tech-sm text-foreground">
-                      LUNCH BOX: {a.dietary_profile ?? "—"}
-                      {a.food_allergies ? ` · ALLERGIE: ${a.food_allergies}` : ""}
-                    </span>
+                    {partMap.get(a.id) ? (
+                      <>
+                        <br />
+                        <span className="tech-sm text-foreground">
+                          LUNCH BOX: {partMap.get(a.id)!.dietary_profile ?? "—"}
+                          {partMap.get(a.id)!.food_allergies
+                            ? ` · ALLERGIE: ${partMap.get(a.id)!.food_allergies}`
+                            : ""}
+                        </span>
+                      </>
+                    ) : null}
                   </td>
                   <td className="p-3 tabular-nums">
                     {a.shoe_size_system} {a.shoe_size} {a.footwear_fit}
