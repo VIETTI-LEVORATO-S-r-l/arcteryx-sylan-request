@@ -5,7 +5,7 @@ import { eventQueryOptions, formatDate } from "@/lib/queries";
 import { DateBoard } from "@/components/site/DateBoard";
 import { EventWeatherPanel } from "@/components/site/Weather";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
-import { SectionLabel, Spec, TopoLines } from "@/components/site/Primitives";
+import { SectionLabel, Spec, TopoLines, Reveal } from "@/components/site/Primitives";
 
 const DESCRIPTION =
   "Un'esperienza guidata di trail running non competitiva, dedicata alla community e al test della Arc'teryx Sylan 2.";
@@ -69,31 +69,36 @@ function Home() {
           alt="Trail runner su un crinale sopra il Lago Maggiore"
           width={1920}
           height={1280}
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          className="slow-zoom absolute inset-0 h-full w-full object-cover opacity-70"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/45 to-background" />
 
-        <nav className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-6 py-6 sm:px-10">
+        <nav className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 py-5 sm:px-10 sm:py-6">
           <span className="tech-sm truncate text-foreground">ARC&rsquo;TERYX × VIETTI</span>
-          <div className="flex shrink-0 items-center gap-5">
-            <a href="#esperienza" className="tech-sm hover:text-jade-soft">
+          <div className="hidden shrink-0 items-center gap-5 sm:flex">
+            <a href="#esperienza" className="tech-sm transition-colors hover:text-jade-soft">
               ESPERIENZA
             </a>
-            <a href="#date" className="tech-sm hover:text-jade-soft">
+            <a href="#date" className="tech-sm transition-colors hover:text-jade-soft">
               DATE
             </a>
-            <a href="#richiesta" className="tech-sm hover:text-jade-soft">
+            <a href="#richiesta" className="tech-sm transition-colors hover:text-jade-soft">
               RICHIESTA
             </a>
           </div>
+          <a
+            href="#richiesta"
+            className="action tech-sm shrink-0 border border-jade-soft px-3 py-2 text-jade-soft sm:hidden"
+          >
+            RICHIEDI
+          </a>
         </nav>
 
-        <div className="relative px-6 pb-14 sm:px-10">
+        <div className="relative px-5 pb-16 sm:px-10 sm:pb-14">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-end">
             <div className="rise">
-              <h1 className="display text-[13vw] leading-[0.84] sm:text-[9vw] lg:text-[6.6vw]">
-                SYLAN 2
-                <span className="block text-jade-soft">COMMUNITY TRAIL RUN</span>
+              <h1 className="display text-[15vw] leading-[0.86] sm:text-[9vw] lg:text-[6.6vw]">
+                SYLAN 2<span className="block text-jade-soft">COMMUNITY TRAIL RUN</span>
                 <span className="block text-[0.42em] tracking-technical text-foreground">
                   LAGO MAGGIORE
                 </span>
@@ -104,13 +109,14 @@ function Home() {
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
                   href="#richiesta"
-                  className="tech border border-jade bg-jade px-7 py-4 text-primary-foreground transition-all hover:jade-glow"
+                  className="action tech w-full border border-jade bg-jade px-7 py-4 text-center text-primary-foreground hover:jade-glow sm:w-auto"
                 >
+                  <span className="action-sweep" aria-hidden />
                   RICHIEDI DI PARTECIPARE
                 </a>
                 <a
                   href="#esperienza"
-                  className="tech border border-border px-7 py-4 text-foreground transition-colors hover:border-jade-soft"
+                  className="action tech w-full border border-border px-7 py-4 text-center text-foreground hover:border-jade-soft sm:w-auto"
                 >
                   SCOPRI L&rsquo;ESPERIENZA
                 </a>
@@ -135,22 +141,22 @@ function Home() {
       </header>
 
       {/* POSIZIONAMENTO */}
-      <section className="px-6 pt-10 sm:px-10">
-        <p className="border-l-2 border-jade bg-card p-6 text-sm leading-relaxed text-foreground sm:p-8">
+      <section className="px-5 pt-10 sm:px-10">
+        <Reveal className="border-l-2 border-jade bg-card p-6 text-sm leading-relaxed text-foreground sm:p-8">
           {NON_COMPETITIVE}
-        </p>
+        </Reveal>
       </section>
 
       {/* ESPERIENZA */}
-      <section id="esperienza" className="px-6 py-24 sm:px-10">
+      <section id="esperienza" className="px-5 py-16 sm:px-10 sm:py-24">
         <SectionLabel index="01">L&rsquo;ESPERIENZA</SectionLabel>
         <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((s) => (
-            <article key={s.n} className="bg-background p-6 sm:p-8">
+          {STEPS.map((s, i) => (
+            <Reveal as="article" delay={i * 90} key={s.n} className="bg-background p-6 sm:p-8">
               <span className="tech-sm text-jade-soft">{s.n}</span>
               <h3 className="display mt-6 text-2xl">{s.t}</h3>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
-            </article>
+            </Reveal>
           ))}
         </div>
         <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -160,7 +166,7 @@ function Home() {
       </section>
 
       {/* PERCORSO */}
-      <section className="relative overflow-hidden px-6 py-24 sm:px-10">
+      <section className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-24">
         <TopoLines />
         <div className="relative">
           <SectionLabel index="02">IL PERCORSO</SectionLabel>
@@ -186,7 +192,7 @@ function Home() {
       </section>
 
       {/* DATE */}
-      <section id="date" className="px-6 py-24 sm:px-10">
+      <section id="date" className="px-5 py-16 sm:px-10 sm:py-24">
         <SectionLabel index="03">
           {finalDate ? "DATA DELL’EVENTO CONFERMATA" : "SCEGLI LA TUA DATA PREFERITA"}
         </SectionLabel>
@@ -227,9 +233,7 @@ function Home() {
           <>
             <div className="mb-8 flex flex-wrap items-center gap-x-8 gap-y-2">
               <span className="tech-sm border border-border px-3 py-1">DATE PROVVISORIE</span>
-              <span className="tech-sm">
-                PREFERENZA DELLA COMMUNITY — {data.total} RICHIESTE
-              </span>
+              <span className="tech-sm">PREFERENZA DELLA COMMUNITY — {data.total} RICHIESTE</span>
               {data.leadingDateId ? (
                 <span className="tech-sm text-jade-soft">
                   DATA ATTUALMENTE PIÙ RICHIESTA —{" "}
@@ -254,7 +258,7 @@ function Home() {
       </section>
 
       {/* FOTO / VIDEO */}
-      <section className="px-6 sm:px-10">
+      <section className="px-5 sm:px-10">
         <div className="border border-border p-6 sm:p-8">
           <div className="tech-sm mb-3 text-jade-soft">PRODUZIONE FOTO E VIDEO</div>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -266,7 +270,7 @@ function Home() {
       </section>
 
       {/* RICHIESTA */}
-      <section id="richiesta" className="px-6 py-24 sm:px-10">
+      <section id="richiesta" className="px-5 py-16 sm:px-10 sm:py-24">
         <SectionLabel index="04">RICHIEDI DI PARTECIPARE</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
@@ -277,9 +281,7 @@ function Home() {
             <div className="mt-8 space-y-2">
               <div className="tech-sm">POSTI LIMITATI</div>
               <div className="tech-sm">RICHIESTA DI PARTECIPAZIONE</div>
-              <div className="tech-sm text-jade-soft">
-                PARTECIPAZIONE SOGGETTA A CONFERMA
-              </div>
+              <div className="tech-sm text-jade-soft">PARTECIPAZIONE SOGGETTA A CONFERMA</div>
             </div>
             <p className="mt-8 max-w-sm text-xs leading-relaxed text-muted-foreground">
               {NON_COMPETITIVE}
@@ -289,7 +291,18 @@ function Home() {
         </div>
       </section>
 
-      <footer className="grid gap-6 border-t border-border px-6 py-10 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10">
+      {/* CTA persistente su mobile */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:hidden">
+        <a
+          href="#richiesta"
+          className="action tech pointer-events-auto flex items-center justify-center gap-3 border border-jade bg-jade px-6 py-4 text-primary-foreground jade-glow"
+        >
+          <span className="action-sweep" aria-hidden />
+          RICHIEDI DI PARTECIPARE
+        </a>
+      </div>
+
+      <footer className="grid gap-6 border-t border-border px-5 pb-28 pt-10 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-10">
         <div className="tech-sm">
           ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
           <span className="mt-2 block opacity-60">[PLACEHOLDER LOGO — CARICARE ASSET FINALI]</span>

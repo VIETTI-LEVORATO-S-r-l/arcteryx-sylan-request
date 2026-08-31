@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
@@ -68,7 +68,7 @@ export function Field({
 }
 
 export const inputClass =
-  "w-full border-0 border-b border-border bg-transparent px-0 pb-2 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-jade-soft";
+  "w-full min-h-11 border-0 border-b border-border bg-transparent px-0 pb-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-jade-soft";
 
 export const selectClass = `${inputClass} appearance-none cursor-pointer`;
 
@@ -82,7 +82,7 @@ export function CheckRow({
   children: ReactNode;
 }) {
   return (
-    <label className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4">
+    <label className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60">
       <span
         className={cn(
           "mt-0.5 grid h-4 w-4 shrink-0 place-items-center border transition-all",
@@ -99,5 +99,56 @@ export function CheckRow({
         onChange={(e) => onChange(e.target.checked)}
       />
     </label>
+  );
+}
+
+export function Reveal({
+  children,
+  delay = 0,
+  as: Tag = "div",
+  className,
+  ...rest
+}: {
+  children: ReactNode;
+  delay?: number;
+  as?: "div" | "section" | "article" | "header" | "footer";
+  className?: string;
+  [key: string]: unknown;
+}) {
+  const ref = useRef<HTMLElement | null>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setShown(true);
+            io.disconnect();
+          }
+        }
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <Tag
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ref={ref as any}
+      className={cn("reveal", shown && "reveal-in", className)}
+      style={{ transitionDelay: `${delay}ms` }}
+      {...rest}
+    >
+      {children}
+    </Tag>
   );
 }
