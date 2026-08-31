@@ -54,36 +54,36 @@
 :root {
   --radius: 0px;
 
-  /* Sylan 2 base palette */
-  --fogstone: oklch(0.95 0.005 100);
-  --forage: oklch(0.42 0.045 122);
-  --oakmoss: oklch(0.74 0.055 118);
-  --kasumi: oklch(0.74 0.035 262);
-  --larch: oklch(0.84 0.115 104);
-  --jade: oklch(0.4 0.062 176);
-  --jade-soft: oklch(0.34 0.055 176);
-  --graphite: oklch(0.32 0.006 250);
-  --black: oklch(0.16 0.004 250);
+  /* Palette monocromatica — solo scala di grigi */
+  --fogstone: oklch(0.95 0 0);
+  --forage: oklch(0.42 0 0);
+  --oakmoss: oklch(0.74 0 0);
+  --kasumi: oklch(0.74 0 0);
+  --larch: oklch(0.84 0 0);
+  --jade: oklch(0.32 0 0);
+  --jade-soft: oklch(0.26 0 0);
+  --graphite: oklch(0.32 0 0);
+  --black: oklch(0.16 0 0);
 
   /* Semantic — light Swiss editorial surface */
   --background: var(--fogstone);
-  --foreground: oklch(0.19 0.005 250);
-  --card: oklch(0.985 0.003 100);
-  --card-foreground: oklch(0.19 0.005 250);
-  --popover: oklch(0.985 0.003 100);
-  --popover-foreground: oklch(0.19 0.005 250);
+  --foreground: oklch(0.19 0 0);
+  --card: oklch(0.985 0 0);
+  --card-foreground: oklch(0.19 0 0);
+  --popover: oklch(0.985 0 0);
+  --popover-foreground: oklch(0.19 0 0);
   --primary: var(--jade);
-  --primary-foreground: oklch(0.97 0.004 100);
-  --secondary: oklch(0.91 0.008 110);
-  --secondary-foreground: oklch(0.22 0.005 250);
-  --muted: oklch(0.92 0.006 110);
-  --muted-foreground: oklch(0.46 0.012 125);
+  --primary-foreground: oklch(0.97 0 0);
+  --secondary: oklch(0.91 0 0);
+  --secondary-foreground: oklch(0.22 0 0);
+  --muted: oklch(0.92 0 0);
+  --muted-foreground: oklch(0.46 0 0);
   --accent: var(--jade);
-  --accent-foreground: oklch(0.97 0.004 100);
-  --destructive: oklch(0.5 0.16 27);
-  --destructive-foreground: oklch(0.97 0.004 100);
-  --border: oklch(0.85 0.007 110);
-  --input: oklch(0.85 0.007 110);
+  --accent-foreground: oklch(0.97 0 0);
+  --destructive: oklch(0.38 0 0);
+  --destructive-foreground: oklch(0.97 0 0);
+  --border: oklch(0.85 0 0);
+  --input: oklch(0.85 0 0);
   --ring: var(--jade);
 
   --glow-jade:
@@ -91,6 +91,7 @@
     0 14px 40px -22px color-mix(in oklab, var(--jade) 70%, transparent);
   --rule: 1px solid var(--border);
 }
+
 
 .dark {
   --background: var(--black);
