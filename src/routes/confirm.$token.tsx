@@ -8,13 +8,14 @@ export const Route = createFileRoute("/confirm/$token")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Participant Confirmation — Sylan 2 Trail Run" },
+      { title: "Conferma partecipazione — Sylan 2 Community Trail Run" },
       {
         name: "description",
-        content: "Confirm your place in the Arc'teryx × VIETTI Sylan 2 Trail Run.",
+        content:
+          "Conferma il tuo posto alla Community Trail Run Arc'teryx × VIETTI Sylan 2 sul Lago Maggiore.",
       },
-      { property: "og:title", content: "Participant Confirmation — Sylan 2 Trail Run" },
-      { property: "og:description", content: "Confirm your place in the Sylan 2 Trail Run." },
+      { property: "og:title", content: "Conferma partecipazione — Sylan 2 Community Trail Run" },
+      { property: "og:description", content: "Conferma il tuo posto alla Sylan 2 Community Trail Run." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -35,18 +36,23 @@ function Confirm() {
   useEffect(() => {
     getCtx({ data: { token } })
       .then(setCtx)
-      .catch(() => setError("This link is not valid."));
+      .catch(() => setError("Questo link non è valido."));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   if (error) return <Shell><p className="text-sm text-muted-foreground">{error}</p></Shell>;
-  if (!ctx) return <Shell><p className="tech-sm">LOADING…</p></Shell>;
-  if (!ctx.found) return <Shell><p className="text-sm text-muted-foreground">This confirmation link is not valid.</p></Shell>;
+  if (!ctx) return <Shell><p className="tech-sm">CARICAMENTO…</p></Shell>;
+  if (!ctx.found)
+    return (
+      <Shell>
+        <p className="text-sm text-muted-foreground">Questo link di conferma non è valido.</p>
+      </Shell>
+    );
   if (!ctx.eligible)
     return (
       <Shell>
         <p className="text-sm text-muted-foreground">
-          This request is not currently eligible for confirmation. Current status: {ctx.status}.
+          Questa richiesta non è al momento idonea alla conferma. Stato attuale: {ctx.status}.
         </p>
       </Shell>
     );
@@ -54,25 +60,25 @@ function Confirm() {
     return (
       <Shell>
         <h1 className="display text-4xl sm:text-6xl">
-          PARTICIPATION
-          <span className="block text-jade-soft">CONFIRMED</span>
+          PARTECIPAZIONE
+          <span className="block text-jade-soft">CONFERMATA</span>
         </h1>
         <p className="mt-6 text-sm text-muted-foreground">
-          Thank you. Final details will be sent before the event.
+          Grazie. I dettagli finali verranno inviati prima dell&rsquo;evento.
         </p>
       </Shell>
     );
 
   return (
     <Shell>
-      <div className="tech-sm">STEP TWO — CONFIRMED PARTICIPANTS</div>
+      <div className="tech-sm">FASE DUE — PARTECIPANTI ACCETTATI</div>
       <h1 className="display mt-6 text-4xl sm:text-6xl">
-        CONFIRM YOUR
-        <span className="block text-jade-soft">PLACE</span>
+        CONFERMA IL TUO
+        <span className="block text-jade-soft">POSTO</span>
       </h1>
       <p className="mt-6 max-w-lg text-sm text-muted-foreground">
-        Welcome {ctx.firstName}. Your request has been accepted. Complete the details below to
-        confirm your participation. Registered sizing: {ctx.shoeSize}.
+        Benvenuto/a {ctx.firstName}. La tua richiesta è stata accettata. Completa i dati qui sotto
+        per confermare la partecipazione. Taglia registrata: {ctx.shoeSize}.
       </p>
 
       <form
@@ -81,7 +87,7 @@ function Confirm() {
           e.preventDefault();
           const fd = new FormData(e.currentTarget);
           if (!acks.attending || !acks.rules || !acks.image) {
-            setError("All confirmations are required.");
+            setError("Tutte le conferme sono obbligatorie.");
             return;
           }
           const res = await submit({
@@ -96,32 +102,43 @@ function Confirm() {
             },
           });
           if (res.ok) setDone(true);
-          else setError("Could not save your confirmation.");
+          else setError("Non è stato possibile salvare la conferma.");
         }}
       >
         <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label="Emergency contact name" required>
+          <Field label="Nome contatto di emergenza" required>
             <input name="emergencyName" required maxLength={120} className={inputClass} />
           </Field>
-          <Field label="Emergency contact phone" required>
+          <Field label="Telefono contatto di emergenza" required>
             <input name="emergencyPhone" required maxLength={40} className={inputClass} />
           </Field>
-          <Field label="Final shoe size" required>
+          <Field label="Taglia scarpa definitiva" required>
             <input name="finalShoeSize" required maxLength={20} className={inputClass} />
           </Field>
         </div>
 
         <div>
-          <CheckRow checked={acks.attending} onChange={(v) => setAcks((a) => ({ ...a, attending: v }))}>
-            I confirm my attendance at the event.
+          <CheckRow
+            checked={acks.attending}
+            onChange={(v) => setAcks((a) => ({ ...a, attending: v }))}
+          >
+            Confermo la mia presenza all&rsquo;evento.
           </CheckRow>
           <CheckRow checked={acks.rules} onChange={(v) => setAcks((a) => ({ ...a, rules: v }))}>
-            I acknowledge the event rules and safety briefing requirements. [PLACEHOLDER — FINAL
-            RULES, REQUIRES LEGAL REVIEW]
+            Dichiaro di aver letto e accettato il{" "}
+            <a
+              href="/regolamento"
+              target="_blank"
+              rel="noreferrer"
+              className="text-jade-soft underline"
+            >
+              Regolamento della Community Trail Run
+            </a>{" "}
+            e di partecipare al briefing di sicurezza.
           </CheckRow>
           <CheckRow checked={acks.image} onChange={(v) => setAcks((a) => ({ ...a, image: v }))}>
-            I accept the image and video release terms for the Arc&rsquo;teryx × VIETTI event
-            storytelling. [PLACEHOLDER — FINAL RELEASE TEXT, REQUIRES LEGAL REVIEW]
+            Accetto la liberatoria per immagini e video ai fini dello storytelling Arc&rsquo;teryx ×
+            VIETTI. [PLACEHOLDER — TESTO DEFINITIVO, RICHIEDE REVISIONE LEGALE]
           </CheckRow>
         </div>
 
@@ -130,7 +147,7 @@ function Confirm() {
           type="submit"
           className="tech w-fit border border-jade bg-jade px-8 py-4 text-primary-foreground hover:jade-glow"
         >
-          CONFIRM PARTICIPATION
+          CONFERMA PARTECIPAZIONE
         </button>
       </form>
     </Shell>

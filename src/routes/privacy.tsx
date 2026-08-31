@@ -4,14 +4,17 @@ import { LegalBlock, LegalPage } from "@/components/site/LegalPage";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Notice — Sylan 2 Trail Run | Arc'teryx × VIETTI" },
+      { title: "Informativa Privacy — Sylan 2 Community Trail Run | Arc'teryx × VIETTI" },
       {
         name: "description",
         content:
-          "Draft privacy notice covering personal data processed for Sylan 2 Trail Run participation requests.",
+          "Informativa privacy ex art. 13 GDPR sui dati personali trattati per le richieste di partecipazione alla Sylan 2 Community Trail Run.",
       },
-      { property: "og:title", content: "Privacy Notice — Sylan 2 Trail Run" },
-      { property: "og:description", content: "How participation-request data is processed." },
+      { property: "og:title", content: "Informativa Privacy — Sylan 2 Community Trail Run" },
+      {
+        property: "og:description",
+        content: "Come vengono trattati i dati delle richieste di partecipazione.",
+      },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "/privacy" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -19,31 +22,58 @@ export const Route = createFileRoute("/privacy")({
     links: [{ rel: "canonical", href: "/privacy" }],
   }),
   component: () => (
-    <LegalPage title="PRIVACY NOTICE">
-      <LegalBlock heading="DATA CONTROLLER">
-        <p>[PLACEHOLDER — insert the legal entity acting as data controller, address and contact.]</p>
-      </LegalBlock>
-      <LegalBlock heading="DATA WE COLLECT">
+    <LegalPage title="INFORMATIVA PRIVACY">
+      <p className="text-xs text-muted-foreground">
+        Informativa resa ai sensi dell&rsquo;art. 13 del Regolamento (UE) 2016/679 (GDPR).
+      </p>
+      <LegalBlock heading="TITOLARE DEL TRATTAMENTO">
         <p>
-          Identification and contact details, city and country, running and trail experience,
-          preferred and alternative dates, footwear sizing, optional Instagram handle and an optional
-          free-text description, plus consent records with timestamps and policy version.
+          [PLACEHOLDER — inserire la ragione sociale del titolare del trattamento, sede, P.IVA e
+          contatti. Eventuale responsabile della protezione dei dati (DPO).]
         </p>
       </LegalBlock>
-      <LegalBlock heading="PURPOSE">
+      <LegalBlock heading="DATI TRATTATI">
         <p>
-          Management and evaluation of participation requests, organisation of the activation and
-          related communication. Marketing communications are sent only with separate, optional
-          consent.
+          Dati identificativi e di contatto (nome, cognome, email, telefono), città, esperienza di
+          running e trail running, passo indicativo, data preferita e altre date disponibili, taglia
+          e fitting della calzatura, profilo Instagram facoltativo, breve descrizione facoltativa,
+          oltre ai registri dei consensi con data, ora e versione dell&rsquo;informativa. Nella fase
+          di richiesta non vengono raccolti dati sanitari.
         </p>
       </LegalBlock>
-      <LegalBlock heading="RETENTION">
-        <p>[PLACEHOLDER — define retention periods for applications, consents and participant data.]</p>
-      </LegalBlock>
-      <LegalBlock heading="YOUR RIGHTS">
+      <LegalBlock heading="FINALITÀ E BASE GIURIDICA">
         <p>
-          [PLACEHOLDER — access, rectification, erasure, restriction, portability, objection and
-          complaint to the supervisory authority. Insert contact address for requests.]
+          Gestione e valutazione delle richieste di partecipazione, organizzazione
+          dell&rsquo;attività e comunicazioni collegate: esecuzione di misure precontrattuali e
+          contrattuali (art. 6.1.b GDPR). Adempimenti di legge: art. 6.1.c GDPR. Comunicazioni
+          marketing: consenso facoltativo e revocabile (art. 6.1.a GDPR).
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="DESTINATARI">
+        <p>
+          [PLACEHOLDER — indicare fornitori di servizi IT, hosting, agenzie e partner che agiscono
+          come responsabili del trattamento, ed eventuali trasferimenti extra UE con relative
+          garanzie.]
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="CONSERVAZIONE">
+        <p>
+          [PLACEHOLDER — definire i tempi di conservazione per richieste, consensi e dati dei
+          partecipanti confermati.]
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="NATURA DEL CONFERIMENTO">
+        <p>
+          Il conferimento dei dati contrassegnati come obbligatori è necessario per gestire la
+          richiesta; il mancato conferimento impedisce la valutazione della partecipazione. I dati
+          facoltativi possono essere omessi liberamente.
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="DIRITTI DELL’INTERESSATO">
+        <p>
+          Accesso, rettifica, cancellazione, limitazione, portabilità, opposizione e revoca del
+          consenso in qualsiasi momento, oltre al diritto di reclamo al Garante per la protezione
+          dei dati personali. [PLACEHOLDER — indirizzo email per l&rsquo;esercizio dei diritti.]
         </p>
       </LegalBlock>
     </LegalPage>

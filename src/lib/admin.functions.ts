@@ -147,6 +147,8 @@ export const updateEventConfig = createServerFn({ method: "POST" })
         privacy_url: z.string().max(300).optional(),
         terms_url: z.string().max(300).optional(),
         cookie_url: z.string().max(300).optional(),
+        rules_url: z.string().max(300).optional(),
+        compliance_checklist: z.record(z.string(), z.boolean()).optional(),
       })
       .parse(input),
   )

@@ -59,7 +59,7 @@ export function DateBoard({
                   >
                     {d.pct}%
                   </div>
-                  <div className="tech-sm mt-1">{d.count} REQ.</div>
+                  <div className="tech-sm mt-1">{d.count} RICHIESTE</div>
                 </div>
               </div>
 
@@ -72,12 +72,18 @@ export function DateBoard({
 
               <div className="mt-4 flex min-h-4 items-center gap-3">
                 {leading ? (
-                  <span className="tech-sm border border-jade px-2 py-1 text-jade-soft">MOST REQUESTED</span>
+                  <span className="tech-sm border border-jade px-2 py-1 text-jade-soft">
+                    DATA ATTUALMENTE PIÙ RICHIESTA
+                  </span>
                 ) : null}
                 {selectable ? (
-                  <span className="tech-sm">{selected ? "SELECTED" : "SELECT AS PREFERRED"}</span>
+                  <span className="tech-sm">
+                    {selected ? "SELEZIONATA" : "SELEZIONA COME PREFERITA"}
+                  </span>
                 ) : (
-                  <span className="tech-sm">{total > 0 ? "VOTING OPEN" : "AWAITING FIRST REQUESTS"}</span>
+                  <span className="tech-sm">
+                    {total > 0 ? "PREFERENZE APERTE" : "IN ATTESA DELLE PRIME RICHIESTE"}
+                  </span>
                 )}
               </div>
 

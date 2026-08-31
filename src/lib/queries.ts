@@ -5,7 +5,7 @@ export const eventQueryOptions = queryOptions({
   queryKey: ["event"],
   queryFn: () => getEventData(),
   staleTime: 60_000,
-  // Weather refresh cadence: at least every 3 hours, plus on tab focus.
+  // Aggiornamento meteo: almeno ogni 3 ore, più al ritorno sulla scheda.
   refetchInterval: 3 * 60 * 60 * 1000,
   refetchIntervalInBackground: false,
   refetchOnWindowFocus: true,
@@ -14,7 +14,7 @@ export const eventQueryOptions = queryOptions({
 export const ROME_TZ = "Europe/Rome";
 
 export function formatRomeDateTime(iso: string) {
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat("it-IT", {
     timeZone: ROME_TZ,
     day: "2-digit",
     month: "short",
@@ -27,20 +27,28 @@ export function formatRomeDateTime(iso: string) {
     .toUpperCase();
 }
 
-export const DAY_NAMES = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+export const DAY_NAMES = [
+  "DOMENICA",
+  "LUNEDÌ",
+  "MARTEDÌ",
+  "MERCOLEDÌ",
+  "GIOVEDÌ",
+  "VENERDÌ",
+  "SABATO",
+];
 export const MONTHS = [
-  "JANUARY",
-  "FEBRUARY",
-  "MARCH",
-  "APRIL",
-  "MAY",
-  "JUNE",
-  "JULY",
-  "AUGUST",
-  "SEPTEMBER",
-  "OCTOBER",
-  "NOVEMBER",
-  "DECEMBER",
+  "GENNAIO",
+  "FEBBRAIO",
+  "MARZO",
+  "APRILE",
+  "MAGGIO",
+  "GIUGNO",
+  "LUGLIO",
+  "AGOSTO",
+  "SETTEMBRE",
+  "OTTOBRE",
+  "NOVEMBRE",
+  "DICEMBRE",
 ];
 
 export function formatDate(iso: string) {

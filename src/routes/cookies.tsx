@@ -4,13 +4,14 @@ import { LegalBlock, LegalPage } from "@/components/site/LegalPage";
 export const Route = createFileRoute("/cookies")({
   head: () => ({
     meta: [
-      { title: "Cookie Policy — Sylan 2 Trail Run | Arc'teryx × VIETTI" },
+      { title: "Cookie Policy — Sylan 2 Community Trail Run | Arc'teryx × VIETTI" },
       {
         name: "description",
-        content: "Draft cookie policy for the Arc'teryx × VIETTI Sylan 2 Trail Run website.",
+        content:
+          "Cookie policy del sito della Community Trail Run Arc'teryx × VIETTI Sylan 2 sul Lago Maggiore.",
       },
-      { property: "og:title", content: "Cookie Policy — Sylan 2 Trail Run" },
-      { property: "og:description", content: "Cookies used on the Sylan 2 Trail Run website." },
+      { property: "og:title", content: "Cookie Policy — Sylan 2 Community Trail Run" },
+      { property: "og:description", content: "Cookie utilizzati sul sito dell'evento." },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "/cookies" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -19,17 +20,24 @@ export const Route = createFileRoute("/cookies")({
   }),
   component: () => (
     <LegalPage title="COOKIE POLICY">
-      <LegalBlock heading="TECHNICAL COOKIES">
+      <LegalBlock heading="COOKIE TECNICI">
         <p>
-          The site uses a strictly necessary session cookie for the organizer dashboard. No
-          advertising cookies are set by default.
+          Il sito utilizza un cookie di sessione strettamente necessario per l&rsquo;area riservata
+          dell&rsquo;organizzazione. Non vengono impostati cookie pubblicitari per impostazione
+          predefinita.
         </p>
       </LegalBlock>
       <LegalBlock heading="ANALYTICS">
-        <p>[PLACEHOLDER — list any analytics or measurement tools before launch.]</p>
+        <p>
+          [PLACEHOLDER — elencare eventuali strumenti di analisi e misurazione prima della
+          pubblicazione.]
+        </p>
       </LegalBlock>
-      <LegalBlock heading="MANAGING COOKIES">
-        <p>[PLACEHOLDER — insert instructions and, if required, a consent management tool.]</p>
+      <LegalBlock heading="GESTIONE DEI COOKIE">
+        <p>
+          [PLACEHOLDER — inserire istruzioni per la gestione dei cookie e, se necessario, uno
+          strumento di consent management.]
+        </p>
       </LegalBlock>
     </LegalPage>
   ),

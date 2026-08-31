@@ -7,22 +7,20 @@ import { EventWeatherPanel } from "@/components/site/Weather";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
 import { SectionLabel, Spec, TopoLines } from "@/components/site/Primitives";
 
+const DESCRIPTION =
+  "Un'esperienza guidata di trail running non competitiva, dedicata alla community e al test della Arc'teryx Sylan 2.";
+
 export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(eventQueryOptions),
   head: () => ({
     meta: [
-      { title: "Arc'teryx × VIETTI — Sylan 2 Trail Run | Lake Maggiore" },
+      { title: "Sylan 2 Community Trail Run — Arc'teryx × VIETTI | Lago Maggiore" },
+      { name: "description", content: DESCRIPTION },
       {
-        name: "description",
-        content:
-          "Request to join a limited Arc'teryx Sylan 2 trail-running experience on Lake Maggiore.",
+        property: "og:title",
+        content: "Sylan 2 Community Trail Run — Arc'teryx × VIETTI | Lago Maggiore",
       },
-      { property: "og:title", content: "Arc'teryx × VIETTI — Sylan 2 Trail Run | Lake Maggiore" },
-      {
-        property: "og:description",
-        content:
-          "Request to join a limited Arc'teryx Sylan 2 trail-running experience on Lake Maggiore.",
-      },
+      { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -33,15 +31,14 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "SportsEvent",
-          name: "Arc'teryx × VIETTI — Sylan 2 Trail Run",
+          "@type": "Event",
+          name: "Arc'teryx × VIETTI — Sylan 2 Community Trail Run",
           location: {
             "@type": "Place",
-            name: "VIETTI — Arona, Lake Maggiore",
-            address: "Arona, Lake Maggiore, IT",
+            name: "VIETTI — Arona, Lago Maggiore",
+            address: "Arona, Lago Maggiore, IT",
           },
-          description:
-            "A limited trail-running experience designed to test the Arc'teryx Sylan 2 on Lake Maggiore.",
+          description: DESCRIPTION,
         }),
       },
     ],
@@ -50,11 +47,14 @@ export const Route = createFileRoute("/")({
 });
 
 const STEPS = [
-  { n: "01", t: "ARRIVAL", d: "Welcome and check-in at VIETTI." },
-  { n: "02", t: "FITTING", d: "Participants receive and fit the Arc'teryx Sylan 2 demo shoes." },
-  { n: "03", t: "TRAIL", d: "Guided trail-running experience in the Lake Maggiore area." },
-  { n: "04", t: "RECOVERY", d: "Post-run refreshments and community moment." },
+  { n: "01", t: "ARRIVO", d: "Accoglienza e check-in da VIETTI." },
+  { n: "02", t: "FITTING", d: "Consegna e prova delle Arc'teryx Sylan 2 in test." },
+  { n: "03", t: "TRAIL", d: "Community trail run guidata e non competitiva sul Lago Maggiore." },
+  { n: "04", t: "RECOVERY", d: "Ristoro post-run e momento di community." },
 ];
+
+const NON_COMPETITIVE =
+  "L'evento è una Community Trail Run guidata e non competitiva. Non sono previsti classifica, cronometraggio ufficiale o premi legati alla performance.";
 
 function Home() {
   const { data } = useSuspenseQuery(eventQueryOptions);
@@ -63,24 +63,27 @@ function Home() {
   return (
     <div className="min-h-screen">
       {/* HERO */}
-      <header className="relative flex min-h-[92svh] flex-col justify-between overflow-hidden">
+      <header className="surface-dark relative flex min-h-[92svh] flex-col justify-between overflow-hidden">
         <img
           src={heroImage}
-          alt="Trail runner on a ridge above Lake Maggiore at dusk"
+          alt="Trail runner su un crinale sopra il Lago Maggiore"
           width={1920}
           height={1280}
           className="absolute inset-0 h-full w-full object-cover opacity-70"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/40 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/45 to-background" />
 
         <nav className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-6 py-6 sm:px-10">
           <span className="tech-sm truncate text-foreground">ARC&rsquo;TERYX × VIETTI</span>
           <div className="flex shrink-0 items-center gap-5">
-            <a href="#experience" className="tech-sm hover:text-jade-soft">
-              EXPERIENCE
+            <a href="#esperienza" className="tech-sm hover:text-jade-soft">
+              ESPERIENZA
             </a>
-            <a href="#apply" className="tech-sm hover:text-jade-soft">
-              REQUEST
+            <a href="#date" className="tech-sm hover:text-jade-soft">
+              DATE
+            </a>
+            <a href="#richiesta" className="tech-sm hover:text-jade-soft">
+              RICHIESTA
             </a>
           </div>
         </nav>
@@ -88,37 +91,38 @@ function Home() {
         <div className="relative px-6 pb-14 sm:px-10">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-end">
             <div className="rise">
-              <h1 className="display text-[15vw] leading-[0.82] sm:text-[10vw] lg:text-[7.5vw]">
+              <h1 className="display text-[13vw] leading-[0.84] sm:text-[9vw] lg:text-[6.6vw]">
                 SYLAN 2
-                <span className="block text-jade-soft">TRAIL RUN</span>
+                <span className="block text-jade-soft">COMMUNITY TRAIL RUN</span>
                 <span className="block text-[0.42em] tracking-technical text-foreground">
-                  LAKE MAGGIORE
+                  LAGO MAGGIORE
                 </span>
               </h1>
-              <p className="mt-8 max-w-md text-sm leading-relaxed text-muted-foreground">
-                A limited trail-running experience designed to test the Sylan 2 where it belongs.
+              <p className="mt-8 max-w-lg text-sm leading-relaxed text-muted-foreground">
+                {DESCRIPTION}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <a
-                  href="#apply"
+                  href="#richiesta"
                   className="tech border border-jade bg-jade px-7 py-4 text-primary-foreground transition-all hover:jade-glow"
                 >
-                  REQUEST TO JOIN
+                  RICHIEDI DI PARTECIPARE
                 </a>
                 <a
-                  href="#experience"
+                  href="#esperienza"
                   className="tech border border-border px-7 py-4 text-foreground transition-colors hover:border-jade-soft"
                 >
-                  DISCOVER THE EXPERIENCE
+                  SCOPRI L&rsquo;ESPERIENZA
                 </a>
               </div>
+              <p className="tech-sm mt-6 text-jade-soft">POSTI LIMITATI</p>
             </div>
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4 lg:grid-cols-1">
               {[
-                ["LOCATION", "LAKE MAGGIORE / IT"],
-                ["DISCIPLINE", "TRAIL RUNNING"],
-                ["ACCESS", "LIMITED PARTICIPATION"],
-                ["SEASON", "2026"],
+                ["LUOGO", "LAGO MAGGIORE / IT"],
+                ["FORMATO", "TRAIL RUN NON COMPETITIVA"],
+                ["ACCESSO", "PARTECIPAZIONE LIMITATA"],
+                ["DATE", "17—19 SETTEMBRE 2026"],
               ].map(([k, v]) => (
                 <div key={k} className="border-t border-border pt-3">
                   <dt className="tech-sm">{k}</dt>
@@ -130,9 +134,16 @@ function Home() {
         </div>
       </header>
 
-      {/* EXPERIENCE */}
-      <section id="experience" className="px-6 py-24 sm:px-10">
-        <SectionLabel index="01">THE EXPERIENCE</SectionLabel>
+      {/* POSIZIONAMENTO */}
+      <section className="px-6 pt-10 sm:px-10">
+        <p className="border-l-2 border-jade bg-card p-6 text-sm leading-relaxed text-foreground sm:p-8">
+          {NON_COMPETITIVE}
+        </p>
+      </section>
+
+      {/* ESPERIENZA */}
+      <section id="esperienza" className="px-6 py-24 sm:px-10">
+        <SectionLabel index="01">L&rsquo;ESPERIENZA</SectionLabel>
         <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s) => (
             <article key={s.n} className="bg-background p-6 sm:p-8">
@@ -142,28 +153,28 @@ function Home() {
             </article>
           ))}
         </div>
-        <p className="mt-8 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Experienced run leaders and pacers accompany the group. Photography and video production
-          are part of the Arc&rsquo;teryx × VIETTI storytelling.
+        <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Guide e pacer esperti accompagnano il gruppo lungo tutto il percorso. Le riprese foto e
+          video fanno parte dello storytelling Arc&rsquo;teryx × VIETTI.
         </p>
       </section>
 
-      {/* ROUTE */}
+      {/* PERCORSO */}
       <section className="relative overflow-hidden px-6 py-24 sm:px-10">
         <TopoLines />
         <div className="relative">
-          <SectionLabel index="02">THE ROUTE</SectionLabel>
+          <SectionLabel index="02">IL PERCORSO</SectionLabel>
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <div className="grid sm:grid-cols-2 lg:grid-cols-1">
-              <Spec label="DISTANCE" value={data.event.distanceKm} mono />
-              <Spec label="ELEVATION" value={data.event.elevationM} mono />
-              <Spec label="SURFACE" value={data.event.surface} />
-              <Spec label="LOCATION" value={data.event.location} />
+              <Spec label="DISTANZA" value={data.event.distanceKm} mono />
+              <Spec label="DISLIVELLO" value={data.event.elevationM} mono />
+              <Spec label="FONDO" value={data.event.surface} />
+              <Spec label="LUOGO" value={data.event.location} />
             </div>
             <div>
               <div className="relative grid aspect-[4/3] place-items-center border border-border bg-card">
                 <TopoLines className="opacity-30" />
-                <span className="tech-sm relative">GPX / TOPOGRAPHIC MAP PLACEHOLDER</span>
+                <span className="tech-sm relative">PLACEHOLDER MAPPA GPX / TOPOGRAFICA</span>
                 <span className="tech-sm absolute bottom-4 left-4 tabular-nums">
                   45.7597° N / 8.5556° E
                 </span>
@@ -174,24 +185,24 @@ function Home() {
         </div>
       </section>
 
-      {/* DATES */}
-      <section id="dates" className="px-6 py-24 sm:px-10">
+      {/* DATE */}
+      <section id="date" className="px-6 py-24 sm:px-10">
         <SectionLabel index="03">
-          {finalDate ? "EVENT DATE CONFIRMED" : "CHOOSE YOUR PREFERRED DATE"}
+          {finalDate ? "DATA DELL’EVENTO CONFERMATA" : "SCEGLI LA TUA DATA PREFERITA"}
         </SectionLabel>
 
         {finalDate ? (
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             <div className="jade-glow bg-card p-8">
-              <div className="tech-sm mb-4 text-jade-soft">CONFIRMED</div>
+              <div className="tech-sm mb-4 text-jade-soft">CONFERMATA</div>
               <div className="display text-5xl sm:text-7xl">{formatDate(finalDate.date).long}</div>
               <div className="mt-10 grid gap-6 sm:grid-cols-2">
                 <div className="border-t border-border pt-3">
-                  <div className="tech-sm">MEETING TIME</div>
+                  <div className="tech-sm">ORARIO DI RITROVO</div>
                   <div className="display mt-2 text-2xl">{data.event.meetingTime}</div>
                 </div>
                 <div className="border-t border-border pt-3">
-                  <div className="tech-sm">MEETING POINT</div>
+                  <div className="tech-sm">PUNTO DI RITROVO</div>
                   <div className="display mt-2 text-2xl">{data.event.meetingPoint}</div>
                 </div>
               </div>
@@ -202,7 +213,7 @@ function Home() {
               ) : null}
             </div>
             <div>
-              <div className="tech-sm mb-4">COMMUNITY PREFERENCE RESULTS</div>
+              <div className="tech-sm mb-4">PREFERENZA DELLA COMMUNITY</div>
               <DateBoard
                 dates={data.dates}
                 leadingDateId={data.leadingDateId}
@@ -215,11 +226,13 @@ function Home() {
         ) : (
           <>
             <div className="mb-8 flex flex-wrap items-center gap-x-8 gap-y-2">
-              <span className="tech-sm border border-border px-3 py-1">PROVISIONAL EVENT DATES</span>
-              <span className="tech-sm">CURRENT COMMUNITY PREFERENCE — {data.total} REQUESTS</span>
+              <span className="tech-sm border border-border px-3 py-1">DATE PROVVISORIE</span>
+              <span className="tech-sm">
+                PREFERENZA DELLA COMMUNITY — {data.total} RICHIESTE
+              </span>
               {data.leadingDateId ? (
                 <span className="tech-sm text-jade-soft">
-                  CURRENT LEADING DATE —{" "}
+                  DATA ATTUALMENTE PIÙ RICHIESTA —{" "}
                   {formatDate(data.dates.find((d) => d.id === data.leadingDateId)!.date).long}
                 </span>
               ) : null}
@@ -232,40 +245,45 @@ function Home() {
               weatherUpdatedAt={data.weatherUpdatedAt}
             />
             <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-              The most requested date will be prioritized. The final event date will be confirmed
-              based on participant availability, weather conditions and operational requirements.
-              Weather information is indicative only.
+              La data più richiesta sarà considerata prioritaria. La data finale verrà confermata in
+              base alla disponibilità dei partecipanti, alle condizioni meteo e alle esigenze
+              organizzative.
             </p>
           </>
         )}
       </section>
 
-      {/* PHOTO / VIDEO */}
+      {/* FOTO / VIDEO */}
       <section className="px-6 sm:px-10">
         <div className="border border-border p-6 sm:p-8">
-          <div className="tech-sm mb-3 text-jade-soft">PHOTO &amp; VIDEO PRODUCTION</div>
+          <div className="tech-sm mb-3 text-jade-soft">PRODUZIONE FOTO E VIDEO</div>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Photography and video production will take place during the event as part of the
-            Arc&rsquo;teryx × VIETTI event storytelling. Final image and video release terms are
-            provided to confirmed participants in a separate confirmation step.
+            Durante l&rsquo;evento sono previste riprese foto e video per lo storytelling
+            Arc&rsquo;teryx × VIETTI. La liberatoria per immagini e video viene raccolta
+            separatamente, solo dai partecipanti accettati, nella fase di conferma.
           </p>
         </div>
       </section>
 
-      {/* APPLY */}
-      <section id="apply" className="px-6 py-24 sm:px-10">
-        <SectionLabel index="04">REQUEST TO JOIN</SectionLabel>
+      {/* RICHIESTA */}
+      <section id="richiesta" className="px-6 py-24 sm:px-10">
+        <SectionLabel index="04">RICHIEDI DI PARTECIPARE</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Spaces are limited. Complete the application below to request participation.
-              Submitting this form does not automatically confirm your place.
+              I posti sono limitati. Compila il modulo per inviare la tua richiesta di
+              partecipazione: l&rsquo;invio non conferma automaticamente il posto.
             </p>
             <div className="mt-8 space-y-2">
-              <div className="tech-sm">LIMITED SPOTS</div>
-              <div className="tech-sm">REQUEST TO JOIN</div>
-              <div className="tech-sm text-jade-soft">PARTICIPATION SUBJECT TO CONFIRMATION</div>
+              <div className="tech-sm">POSTI LIMITATI</div>
+              <div className="tech-sm">RICHIESTA DI PARTECIPAZIONE</div>
+              <div className="tech-sm text-jade-soft">
+                PARTECIPAZIONE SOGGETTA A CONFERMA
+              </div>
             </div>
+            <p className="mt-8 max-w-sm text-xs leading-relaxed text-muted-foreground">
+              {NON_COMPETITIVE}
+            </p>
           </div>
           <ApplicationForm data={data} />
         </div>
@@ -273,15 +291,18 @@ function Home() {
 
       <footer className="grid gap-6 border-t border-border px-6 py-10 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10">
         <div className="tech-sm">
-          ARC&rsquo;TERYX × VIETTI — SYLAN 2 TRAIL RUN / LAKE MAGGIORE / 2026
-          <span className="mt-2 block opacity-60">[LOGO PLACEHOLDER — UPLOAD FINAL ASSETS]</span>
+          ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
+          <span className="mt-2 block opacity-60">[PLACEHOLDER LOGO — CARICARE ASSET FINALI]</span>
         </div>
         <div className="flex flex-wrap gap-5">
+          <Link to="/regolamento" className="tech-sm hover:text-jade-soft">
+            REGOLAMENTO
+          </Link>
           <Link to="/privacy" className="tech-sm hover:text-jade-soft">
-            PRIVACY NOTICE
+            INFORMATIVA PRIVACY
           </Link>
           <Link to="/terms" className="tech-sm hover:text-jade-soft">
-            EVENT TERMS
+            TERMINI DELL&rsquo;EVENTO
           </Link>
           <Link to="/cookies" className="tech-sm hover:text-jade-soft">
             COOKIE POLICY

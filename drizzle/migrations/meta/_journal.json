@@ -8,6 +8,13 @@
       "when": 1788164136037,
       "tag": "0000_create_sylan2_event_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788165332364,
+      "tag": "0001_italian_positioning_and_compliance",
+      "breakpoints": true
     }
   ]
 }
