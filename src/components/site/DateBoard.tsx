@@ -37,8 +37,9 @@ export function DateBoard({
                 ? { type: "button" as const, onClick: () => onSelect?.(d.id), "aria-pressed": selected }
                 : {})}
               className={cn(
-                "relative bg-background p-6 text-left transition-all duration-300 sm:p-8",
-                selectable && "hover:bg-card focus:outline-none focus-visible:bg-card",
+                "relative w-full bg-background p-5 text-left transition-all duration-300 sm:p-8",
+                selectable &&
+                  "cursor-pointer active:scale-[0.99] hover:bg-card focus:outline-none focus-visible:bg-card",
                 selected && "jade-glow bg-card",
               )}
             >
@@ -65,7 +66,10 @@ export function DateBoard({
 
               <div className="mt-6 h-px w-full bg-border">
                 <div
-                  className={cn("h-px transition-all duration-700", leading ? "bg-jade-soft" : "bg-muted-foreground")}
+                  className={cn(
+                    "bar-grow h-px transition-all duration-700",
+                    leading ? "bg-jade-soft" : "bg-muted-foreground",
+                  )}
                   style={{ width: `${Math.max(d.pct, 1)}%` }}
                 />
               </div>
@@ -77,8 +81,21 @@ export function DateBoard({
                   </span>
                 ) : null}
                 {selectable ? (
-                  <span className="tech-sm">
-                    {selected ? "SELEZIONATA" : "SELEZIONA COME PREFERITA"}
+                  <span
+                    className={cn(
+                      "tech-sm inline-flex items-center gap-2 transition-colors",
+                      selected && "text-jade-soft",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "grid h-3.5 w-3.5 shrink-0 place-items-center border transition-all",
+                        selected ? "border-jade bg-jade" : "border-border",
+                      )}
+                    >
+                      {selected ? <span className="block h-1 w-1 bg-primary-foreground" /> : null}
+                    </span>
+                    {selected ? "SELEZIONATA" : "TOCCA PER SELEZIONARE"}
                   </span>
                 ) : (
                   <span className="tech-sm">
