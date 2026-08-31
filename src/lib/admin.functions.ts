@@ -67,7 +67,7 @@ export const getAdminDashboard = createServerFn({ method: "GET" }).handler(async
   const { data: applications } = await supabaseAdmin
     .from("applications")
     .select(
-      "id, created_at, first_name, last_name, email, phone, city, country, preferred_date_id, running_level, trail_experience, pace, shoe_size_system, shoe_size, footwear_fit, instagram_handle, runner_description, status",
+      "id, created_at, first_name, last_name, email, phone, city, country, preferred_date_id, running_level, trail_experience, pace, shoe_size_system, shoe_size, footwear_fit, weekly_volume, longest_run, monthly_elevation, recent_activity, dietary_profile, food_allergies, instagram_handle, runner_description, status",
     )
     .eq("event_id", event!.id)
     .order("created_at", { ascending: false });
@@ -239,6 +239,12 @@ export const exportApplicationsCsv = createServerFn({ method: "POST" }).handler(
     "running_level",
     "trail_experience",
     "pace",
+    "weekly_volume",
+    "longest_run",
+    "monthly_elevation",
+    "recent_activity",
+    "dietary_profile",
+    "food_allergies",
     "shoe_size_system",
     "shoe_size",
     "footwear_fit",
@@ -262,6 +268,12 @@ export const exportApplicationsCsv = createServerFn({ method: "POST" }).handler(
         r.running_level,
         r.trail_experience,
         r.pace,
+        r.weekly_volume,
+        r.longest_run,
+        r.monthly_elevation,
+        r.recent_activity,
+        r.dietary_profile,
+        r.food_allergies,
         r.shoe_size_system,
         r.shoe_size,
         r.footwear_fit,
