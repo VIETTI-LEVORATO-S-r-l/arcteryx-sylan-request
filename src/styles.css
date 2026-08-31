@@ -187,6 +187,10 @@
   letter-spacing: -0.04em;
   line-height: 0.94;
   text-wrap: balance;
+
+  @media (min-width: 768px) {
+    line-height: 0.88;
+  }
   text-transform: uppercase;
   font-feature-settings: "ss01";
 }
