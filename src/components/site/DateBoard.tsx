@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/queries";
 import { WeatherLine, WeatherFooter } from "@/components/site/Weather";
+import { useI18n } from "@/lib/i18n";
 import type { DateStat } from "@/lib/types";
 
 export function DateBoard({
@@ -22,11 +23,12 @@ export function DateBoard({
   selectedId?: string | null;
   onSelect?: (id: string) => void;
 }) {
+  const { t, lang } = useI18n();
   return (
     <div>
       <div className="grid gap-px bg-border md:grid-cols-3">
         {dates.map((d) => {
-          const f = formatDate(d.date);
+          const f = formatDate(d.date, lang);
           const leading = leadingDateId === d.id;
           const selected = selectedId === d.id;
           const Tag = selectable ? "button" : "div";
@@ -64,7 +66,9 @@ export function DateBoard({
                   >
                     {d.pct}%
                   </div>
-                  <div className="tech-sm mt-1">{d.count} RICHIESTE</div>
+                  <div className="tech-sm mt-1">
+                    {d.count} {t("dates.requests")}
+                  </div>
                 </div>
               </div>
 
@@ -81,7 +85,7 @@ export function DateBoard({
               <div className="mt-4 flex min-h-4 items-center gap-3">
                 {leading ? (
                   <span className="tech-sm border border-jade px-2 py-1 text-jade-soft">
-                    DATA ATTUALMENTE PIÙ RICHIESTA
+                    {t("dates.leading")}
                   </span>
                 ) : null}
                 {selectable ? (
@@ -99,11 +103,11 @@ export function DateBoard({
                     >
                       {selected ? <span className="block h-1 w-1 bg-primary-foreground" /> : null}
                     </span>
-                    {selected ? "SELEZIONATA" : "TOCCA PER SELEZIONARE"}
+                    {selected ? t("dates.selected") : t("dates.select")}
                   </span>
                 ) : (
                   <span className="tech-sm">
-                    {total > 0 ? "PREFERENZE APERTE" : "IN ATTESA DELLE PRIME RICHIESTE"}
+                    {total > 0 ? t("dates.open") : t("dates.waiting")}
                   </span>
                 )}
               </div>

@@ -13,6 +13,7 @@ import {
   type EventPayload,
 } from "@/lib/types";
 import { CheckRow, Field, inputClass, selectClass } from "./Primitives";
+import { useI18n } from "@/lib/i18n";
 
 function Step({ n, title, hint }: { n: string; title: string; hint?: string }) {
   return (
@@ -41,6 +42,7 @@ type Consents = {
 };
 
 export function ApplicationForm({ data }: { data: EventPayload }) {
+  const { t, lang } = useI18n();
   const navigate = useNavigate();
   const submit = useServerFn(submitApplication);
   const [preferredDateId, setPreferredDateId] = useState<string | null>(
@@ -67,7 +69,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
     e.preventDefault();
     setError(null);
     if (!preferredDateId) {
-      setError("Seleziona una data preferita.");
+      setError(t("form.errDate"));
       return;
     }
     const required: (keyof Consents)[] = [
@@ -79,7 +81,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       "privacyAck",
     ];
     if (required.some((k) => !consents[k])) {
-      setError("Tutte le dichiarazioni obbligatorie devono essere accettate.");
+      setError(t("form.errConsents"));
       return;
     }
     const fd = new FormData(e.currentTarget);
@@ -128,7 +130,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       }
       await navigate({ to: "/request-received" });
     } catch {
-      setError("Controlla il modulo: alcune informazioni obbligatorie mancano o non sono valide.");
+      setError(t("form.errGeneric"));
       setPending(false);
     }
   }
@@ -136,11 +138,8 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
   if (!data.event.applicationsOpen) {
     return (
       <div className="border border-border p-8">
-        <div className="tech mb-3 text-jade-soft">RICHIESTE CHIUSE</div>
-        <p className="max-w-xl text-sm text-muted-foreground">
-          Le richieste di partecipazione sono attualmente chiuse. Segui VIETTI per le prossime
-          attività Arc&rsquo;teryx.
-        </p>
+        <div className="tech mb-3 text-jade-soft">{t("form.closed")}</div>
+        <p className="max-w-xl text-sm text-muted-foreground">{t("form.closedBody")}</p>
       </div>
     );
   }
@@ -149,37 +148,36 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
     <form onSubmit={onSubmit} className="grid gap-10">
       {data.event.waitlistMode ? (
         <p className="border border-jade/60 p-4 text-xs text-jade-soft">
-          Le richieste hanno superato la capienza iniziale dell&rsquo;evento. Le nuove richieste
-          possono essere inserite in lista d&rsquo;attesa.
+          {t("form.waitlist")}
         </p>
       ) : null}
 
       <div>
-        <Step n="01" title="I TUOI DATI" hint="Servono per contattarti in caso di conferma." />
+        <Step n="01" title={t("form.s1")} hint={t("form.s1h")} />
         <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label="Nome" required>
+          <Field label={t("form.firstName")} required>
             <input name="firstName" required maxLength={80} className={inputClass} />
           </Field>
-          <Field label="Cognome" required>
+          <Field label={t("form.lastName")} required>
             <input name="lastName" required maxLength={80} className={inputClass} />
           </Field>
-          <Field label="Email" required>
+          <Field label={t("form.email")} required>
             <input name="email" type="email" required maxLength={255} className={inputClass} />
           </Field>
-          <Field label="Telefono" required>
+          <Field label={t("form.phone")} required>
             <input name="phone" required maxLength={40} className={inputClass} />
           </Field>
-          <Field label="Città" required>
+          <Field label={t("form.city")} required>
             <input name="city" required maxLength={120} className={inputClass} />
           </Field>
-          <Field label="Instagram">
+          <Field label={t("form.instagram")}>
             <input name="instagramHandle" maxLength={60} placeholder="@" className={inputClass} />
           </Field>
         </div>
       </div>
 
       <div>
-        <Step n="02" title="LA TUA DATA PREFERITA" hint="Tocca una delle tre date. Obbligatorio." />
+        <Step n="02" title={t("form.s2")} hint={t("form.s2h")} />
         <DateBoard
           dates={data.dates}
           leadingDateId={data.leadingDateId}
@@ -193,10 +191,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       </div>
 
       <div>
-        <Step n="03" title="ALTRE DATE DISPONIBILI" hint="Facoltativo — aiuta l'organizzazione." />
+        <Step n="03" title={t("form.s3")} hint={t("form.s3h")} />
         <div className="grid sm:grid-cols-3">
           {data.dates.map((d) => {
-            const f = formatDate(d.date);
+            const f = formatDate(d.date, lang);
             const checked = otherDateIds.includes(d.id);
             return (
               <CheckRow
@@ -214,12 +212,12 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       </div>
 
       <div>
-        <Step n="04" title="PROFILO RUNNING E FITTING SYLAN 2" />
+        <Step n="04" title={t("form.s4")} />
         <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label="Esperienza di running" required>
+          <Field label={t("form.runningLevel")} required>
             <select name="runningLevel" required className={selectClass} defaultValue="">
               <option value="" disabled>
-                Seleziona
+                {t("form.select")}
               </option>
               {RUNNING_LEVELS.map((o) => (
                 <option key={o} value={o}>
@@ -228,10 +226,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               ))}
             </select>
           </Field>
-          <Field label="Esperienza di trail running" required>
+          <Field label={t("form.trailLevel")} required>
             <select name="trailExperience" required className={selectClass} defaultValue="">
               <option value="" disabled>
-                Seleziona
+                {t("form.select")}
               </option>
               {TRAIL_LEVELS.map((o) => (
                 <option key={o} value={o}>
@@ -240,9 +238,9 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               ))}
             </select>
           </Field>
-          <Field label="Passo indicativo">
+          <Field label={t("form.pace")}>
             <select name="pace" className={selectClass} defaultValue="">
-              <option value="">Seleziona un intervallo</option>
+              <option value="">{t("form.selectRange")}</option>
               {PACE_RANGES.map((o) => (
                 <option key={o} value={o}>
                   {o}
@@ -250,10 +248,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               ))}
             </select>
           </Field>
-          <Field label="Volume settimanale medio" required>
+          <Field label={t("form.weeklyVolume")} required>
             <select name="weeklyVolume" required className={selectClass} defaultValue="">
               <option value="" disabled>
-                Seleziona
+                {t("form.select")}
               </option>
               {WEEKLY_VOLUME.map((o) => (
                 <option key={o} value={o}>
@@ -262,10 +260,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               ))}
             </select>
           </Field>
-          <Field label="Uscita più lunga negli ultimi 3 mesi" required>
+          <Field label={t("form.longestRun")} required>
             <select name="longestRun" required className={selectClass} defaultValue="">
               <option value="" disabled>
-                Seleziona
+                {t("form.select")}
               </option>
               {LONGEST_RUN.map((o) => (
                 <option key={o} value={o}>
@@ -274,10 +272,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               ))}
             </select>
           </Field>
-          <Field label="Dislivello positivo mensile" required>
+          <Field label={t("form.monthlyElevation")} required>
             <select name="monthlyElevation" required className={selectClass} defaultValue="">
               <option value="" disabled>
-                Seleziona
+                {t("form.select")}
               </option>
               {MONTHLY_ELEVATION.map((o) => (
                 <option key={o} value={o}>
@@ -287,30 +285,30 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
             </select>
           </Field>
           <Field
-            label="Attività recenti significative"
-            hint="Es. percorsi, dislivelli o uscite lunghe degli ultimi mesi."
+            label={t("form.recentActivity")}
+            hint={t("form.recentActivityHint")}
           >
             <input name="recentActivity" maxLength={300} className={inputClass} />
           </Field>
-          <Field label="Sistema taglie" required>
+          <Field label={t("form.sizeSystem")} required>
             <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
               <option value="EU">EU</option>
               <option value="UK">UK</option>
             </select>
           </Field>
-          <Field label="Taglia scarpa" required>
+          <Field label={t("form.shoeSize")} required>
             <input name="shoeSize" required maxLength={10} className={inputClass} />
           </Field>
-          <Field label="Fitting Sylan 2" required>
+          <Field label={t("form.fit")} required>
             <select name="footwearFit" required className={selectClass} defaultValue="MEN'S">
-              <option value="MEN'S">UOMO</option>
-              <option value="WOMEN'S">DONNA</option>
+              <option value="MEN'S">{t("form.fitMen")}</option>
+              <option value="WOMEN'S">{t("form.fitWomen")}</option>
             </select>
           </Field>
         </div>
       </div>
 
-      <Field label="Breve descrizione della tua esperienza" hint={`${description.length}/300`}>
+      <Field label={t("form.description")} hint={`${description.length}/300`}>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value.slice(0, 300))}
@@ -332,14 +330,14 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       <div>
         <Step
           n="05"
-          title="LUNCH BOX ED ESIGENZE ALIMENTARI"
-          hint="Al termine dell'esperienza è previsto un lunch box. Indica eventuali esigenze per permetterci di prepararlo correttamente."
+          title={t("form.s5")}
+          hint={t("form.s5h")}
         />
         <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label="Profilo alimentare" required>
+          <Field label={t("form.dietary")} required>
             <select name="dietaryProfile" required className={selectClass} defaultValue="">
               <option value="" disabled>
-                Seleziona
+                {t("form.select")}
               </option>
               {DIETARY_PROFILES.map((o) => (
                 <option key={o} value={o}>
@@ -349,8 +347,8 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
             </select>
           </Field>
           <Field
-            label="Allergie o intolleranze alimentari"
-            hint="Indica solo le informazioni necessarie alla preparazione del lunch box."
+            label={t("form.allergies")}
+            hint={t("form.allergiesHint")}
           >
             <input name="foodAllergies" maxLength={300} className={inputClass} />
           </Field>
@@ -358,53 +356,46 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       </div>
 
       <div>
-        <Step n="06" title="DICHIARAZIONI OBBLIGATORIE" />
+        <Step n="06" title={t("form.s6")} />
         <CheckRow checked={consents.isAdult} onChange={setConsent("isAdult")}>
-          Dichiaro di avere 18 anni compiuti.
+          {t("form.c.adult")}
         </CheckRow>
         <CheckRow checked={consents.terrainAck} onChange={setConsent("terrainAck")}>
-          Sono consapevole che si tratta di una Community Trail Run guidata e non competitiva, che
-          si svolge su terreno naturale e sconnesso e richiede un adeguato livello di preparazione
-          fisica.
+          {t("form.c.terrain")}
         </CheckRow>
         <CheckRow checked={consents.fitnessAck} onChange={setConsent("fitnessAck")}>
-          Dichiaro di essere in condizioni fisiche idonee a prendere parte all&rsquo;attività
-          proposta.
+          {t("form.c.fitness")}
         </CheckRow>
         <CheckRow checked={consents.rulesAck} onChange={setConsent("rulesAck")}>
-          Ho letto e accetto il{" "}
+          {t("form.c.rulesA")}{" "}
           <a
             href="/regolamento"
             target="_blank"
             rel="noreferrer"
             className="text-jade-soft underline"
           >
-            Regolamento della Community Trail Run
+            {t("form.c.rulesLink")}
           </a>{" "}
-          e mi impegno a seguire le indicazioni delle guide.
+          {t("form.c.rulesB")}
         </CheckRow>
         <CheckRow checked={consents.noGuaranteeAck} onChange={setConsent("noGuaranteeAck")}>
-          Sono consapevole che l&rsquo;invio della richiesta non garantisce la partecipazione, che
-          resta soggetta a conferma da parte dell&rsquo;organizzazione.
+          {t("form.c.noGuarantee")}
         </CheckRow>
         <CheckRow checked={consents.privacyAck} onChange={setConsent("privacyAck")}>
-          Ho letto l&rsquo;
+          {t("form.c.privacyA")}{" "}
           <a href="/privacy" target="_blank" rel="noreferrer" className="text-jade-soft underline">
-            Informativa Privacy
+            {t("form.c.privacyLink")}
           </a>{" "}
-          relativa al trattamento dei miei dati personali per la gestione della richiesta di
-          partecipazione.
+          {t("form.c.privacyB")}
         </CheckRow>
 
-        <div className="tech-sm mt-8 mb-2">FACOLTATIVO — MARKETING</div>
+        <div className="tech-sm mt-8 mb-2">{t("form.optional")}</div>
         <CheckRow checked={consents.marketingVietti} onChange={setConsent("marketingVietti")}>
-          Desidero ricevere novità e comunicazioni marketing da VIETTI.
+          {t("form.c.mkVietti")}
         </CheckRow>
         <CheckRow checked={consents.marketingArcteryx} onChange={setConsent("marketingArcteryx")}>
-          Desidero ricevere novità e comunicazioni marketing da Arc&rsquo;teryx.
-          <span className="block opacity-60">
-            [CONFIGURABILE — ATTIVARE SOLO SE PREVISTO E APPROVATO]
-          </span>
+          {t("form.c.mkArcteryx")}
+          <span className="block opacity-60">{t("form.c.mkNote")}</span>
         </CheckRow>
       </div>
 
@@ -419,14 +410,14 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
 
       <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="tech-sm max-w-md normal-case tracking-normal">
-          L&rsquo;invio del modulo non conferma automaticamente il posto.
+          {t("form.disclaimer")}
         </p>
         <button
           type="submit"
           disabled={pending}
           className="cta cta-solid w-full disabled:pointer-events-none disabled:opacity-50 sm:w-auto"
         >
-          {pending ? "INVIO IN CORSO…" : "RICHIEDI DI PARTECIPARE"}
+          {pending ? t("form.submitting") : t("form.submit")}
           <span className="cta-arrow" aria-hidden>
             →
           </span>

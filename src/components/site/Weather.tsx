@@ -10,7 +10,52 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRomeDateTime } from "@/lib/queries";
+import { useI18n } from "@/lib/i18n";
 import type { DayWeather } from "@/lib/types";
+
+/** Etichette WMO in inglese: la condizione arriva dal server in italiano. */
+function conditionEn(code?: number): string {
+  const c = code ?? 0;
+  if (c === 0) return "CLEAR SKY";
+  if (c <= 2) return "PARTLY CLOUDY";
+  if (c === 3) return "OVERCAST";
+  if (c === 45 || c === 48) return "FOG";
+  if (c >= 51 && c <= 57) return "DRIZZLE";
+  if (c >= 61 && c <= 67) return "RAIN";
+  if (c >= 71 && c <= 77) return "SNOW";
+  if (c >= 80 && c <= 82) return "RAIN SHOWERS";
+  if (c >= 95) return "THUNDERSTORM";
+  return "RAIN";
+}
+
+function useWeatherLabels() {
+  const { lang, t } = useI18n();
+  const en = lang === "en";
+  return {
+    lang,
+    t,
+    en,
+    condition: (w: DayWeather) => (en ? conditionEn(w.code) : w.condition),
+    l: {
+      rain: en ? "RAIN" : "PIOGGIA",
+      wind: en ? "WIND" : "VENTO",
+      title: en ? "EVENT WEATHER" : "METEO DELL\u2019EVENTO",
+      temp: en ? "TEMPERATURE" : "TEMPERATURA",
+      apparent: en ? "FEELS LIKE" : "PERCEPITA",
+      rainProb: en ? "PRECIPITATION PROBABILITY" : "PROBABILIT\u00c0 DI PIOGGIA",
+      rainSum: en ? "EXPECTED PRECIPITATION" : "PRECIPITAZIONI PREVISTE",
+      gusts: en ? "GUSTS" : "RAFFICHE",
+      clouds: en ? "CLOUD COVER" : "COPERTURA NUVOLOSA",
+      updated: en ? "LAST WEATHER UPDATE" : "ULTIMO AGGIORNAMENTO METEO",
+      source: en
+        ? "SOURCE \u2014 OPEN-METEO / ARONA, PIEDMONT, IT"
+        : "FONTE \u2014 OPEN-METEO / ARONA, PIEMONTE, IT",
+      soon: en
+        ? "Weather data will appear automatically as the event approaches."
+        : "I dati meteo compariranno automaticamente con l\u2019avvicinarsi dell\u2019evento.",
+    },
+  };
+}
 
 export const WEATHER_DISCLAIMER =
   "Le previsioni possono cambiare. Le condizioni finali dell'evento e le decisioni relative alla sicurezza restano soggette alla valutazione dell'organizzazione.";
@@ -37,13 +82,14 @@ export function WeatherIcon({ code, className }: { code?: number | undefined; cl
 }
 
 export function ConfidenceTag({ w }: { w: DayWeather }) {
+  const { t } = useI18n();
   if (!w.confidence) return null;
   const label =
     w.confidence === "LOW"
-      ? "AFFIDABILITÀ BASSA"
+      ? t("w.low")
       : w.confidence === "MEDIUM"
-        ? "AFFIDABILITÀ MEDIA"
-        : "AFFIDABILITÀ ALTA";
+        ? t("w.medium")
+        : t("w.high");
   return (
     <span
       className={cn(
@@ -59,13 +105,12 @@ export function ConfidenceTag({ w }: { w: DayWeather }) {
 }
 
 export function UnavailableWeather({ compact }: { compact?: boolean }) {
+  const { t, l } = useWeatherLabels();
   return (
     <div>
-      <span className="tech-sm">PREVISIONI DISPONIBILI PIÙ VICINO ALLA DATA DELL&rsquo;EVENTO</span>
+      <span className="tech-sm">{t("w.unavailable")}</span>
       {compact ? null : (
-        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          I dati meteo compariranno automaticamente con l&rsquo;avvicinarsi dell&rsquo;evento.
-        </p>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{l.soon}</p>
       )}
     </div>
   );
@@ -73,19 +118,24 @@ export function UnavailableWeather({ compact }: { compact?: boolean }) {
 
 /** Riga meteo compatta usata nelle card delle date provvisorie. */
 export function WeatherLine({ w }: { w: DayWeather }) {
+  const { condition, l } = useWeatherLabels();
   if (!w.available) return <UnavailableWeather compact />;
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
         <WeatherIcon code={w.code} />
-        <span className="tech-sm text-foreground">{w.condition}</span>
+        <span className="tech-sm text-foreground">{condition(w)}</span>
       </div>
       <div className="tech-sm flex flex-wrap gap-x-4 gap-y-1 tabular-nums">
         <span>
           {w.tempMin}° / {w.tempMax}°C
         </span>
-        <span>PIOGGIA {w.precipitationProbability ?? 0}%</span>
-        <span>VENTO {w.windMax ?? 0} KM/H</span>
+        <span>
+          {l.rain} {w.precipitationProbability ?? 0}%
+        </span>
+        <span>
+          {l.wind} {w.windMax ?? 0} KM/H
+        </span>
       </div>
       <ConfidenceTag w={w} />
     </div>
@@ -109,10 +159,11 @@ export function EventWeatherPanel({
   w: DayWeather;
   updatedAt: string | null;
 }) {
+  const { condition, l } = useWeatherLabels();
   return (
     <div className="border border-border bg-card p-6 sm:p-8">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-        <h3 className="tech text-jade-soft">METEO DELL&rsquo;EVENTO</h3>
+        <h3 className="tech text-jade-soft">{l.title}</h3>
         <div className="flex shrink-0 items-center gap-3">
           <WeatherIcon code={w.code} className="h-6 w-6" />
           <ConfidenceTag w={w} />
@@ -125,18 +176,18 @@ export function EventWeatherPanel({
         </div>
       ) : (
         <>
-          <div className="display mt-6 text-4xl sm:text-5xl">{w.condition}</div>
+          <div className="display mt-6 text-4xl sm:text-5xl">{condition(w)}</div>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Metric label="TEMPERATURA" value={`${w.tempMin}° / ${w.tempMax}°C`} />
+            <Metric label={l.temp} value={`${w.tempMin}° / ${w.tempMax}°C`} />
             {w.apparentMax != null ? (
-              <Metric label="PERCEPITA" value={`${w.apparentMin}° / ${w.apparentMax}°C`} />
+              <Metric label={l.apparent} value={`${w.apparentMin}° / ${w.apparentMax}°C`} />
             ) : null}
-            <Metric label="PROBABILITÀ DI PIOGGIA" value={`${w.precipitationProbability ?? 0}%`} />
-            <Metric label="PRECIPITAZIONI PREVISTE" value={`${w.precipitationSum ?? 0} MM`} />
-            <Metric label="VENTO" value={`${w.windMax ?? 0} KM/H`} />
-            <Metric label="RAFFICHE" value={`${w.windGusts ?? 0} KM/H`} />
+            <Metric label={l.rainProb} value={`${w.precipitationProbability ?? 0}%`} />
+            <Metric label={l.rainSum} value={`${w.precipitationSum ?? 0} MM`} />
+            <Metric label={l.wind} value={`${w.windMax ?? 0} KM/H`} />
+            <Metric label={l.gusts} value={`${w.windGusts ?? 0} KM/H`} />
             {w.cloudCover != null ? (
-              <Metric label="COPERTURA NUVOLOSA" value={`${w.cloudCover}%`} />
+              <Metric label={l.clouds} value={`${w.cloudCover}%`} />
             ) : null}
           </div>
         </>
@@ -148,17 +199,18 @@ export function EventWeatherPanel({
 }
 
 export function WeatherFooter({ updatedAt }: { updatedAt: string | null }) {
+  const { t, l, lang } = useWeatherLabels();
   return (
     <div className="mt-6 border-t border-border pt-4">
       {updatedAt ? (
         <div className="tech-sm">
-          ULTIMO AGGIORNAMENTO METEO — {formatRomeDateTime(updatedAt)} (ROMA)
+          {l.updated} — {formatRomeDateTime(updatedAt, lang)} ({lang === "en" ? "ROME" : "ROMA"})
         </div>
       ) : null}
       <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-        {WEATHER_DISCLAIMER}
+        {t("w.disclaimer")}
       </p>
-      <p className="tech-sm mt-2">FONTE — OPEN-METEO / ARONA, PIEMONTE, IT</p>
+      <p className="tech-sm mt-2">{l.source}</p>
     </div>
   );
 }
