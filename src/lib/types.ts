@@ -35,6 +35,8 @@ export type EventPayload = {
     elevationM: string;
     surface: string;
     routeNotes: string;
+    latitude: number;
+    longitude: number;
     weatherEnabled: boolean;
     applicationsOpen: boolean;
     waitlistMode: boolean;
@@ -48,6 +50,7 @@ export type EventPayload = {
   leadingDateId: string | null;
   weatherUpdatedAt: string | null;
 };
+
 
 export const RUNNING_LEVELS = [
   "Corro per passione, saltuariamente",
