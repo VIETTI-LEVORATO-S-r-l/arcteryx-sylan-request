@@ -86,11 +86,11 @@ function Home() {
               RICHIESTA
             </a>
           </div>
-          <a
-            href="#richiesta"
-            className="action tech-sm shrink-0 border border-jade-soft px-3 py-2 text-jade-soft sm:hidden"
-          >
+          <a href="#richiesta" className="cta cta-sm cta-ghost shrink-0 sm:hidden">
             RICHIEDI
+            <span className="cta-arrow" aria-hidden>
+              →
+            </span>
           </a>
         </nav>
 
