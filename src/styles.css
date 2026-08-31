@@ -622,7 +622,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.28;
   background-image:
     repeating-linear-gradient(
       0deg,
@@ -648,8 +648,8 @@
   pointer-events: none;
   background: radial-gradient(
     120% 90% at 50% 40%,
-    transparent 40%,
-    color-mix(in oklab, var(--black) 45%, transparent) 100%
+    transparent 45%,
+    color-mix(in oklab, var(--black) 22%, transparent) 100%
   );
 }
 
