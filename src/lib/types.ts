@@ -71,6 +71,37 @@ export const PACE_RANGES = [
   "Oltre 7:00 min/km",
 ] as const;
 
+export const WEEKLY_VOLUME = [
+  "Meno di 15 km a settimana",
+  "15 – 30 km a settimana",
+  "30 – 50 km a settimana",
+  "50 – 80 km a settimana",
+  "Oltre 80 km a settimana",
+] as const;
+
+export const LONGEST_RUN = [
+  "Fino a 10 km",
+  "10 – 20 km",
+  "20 – 30 km",
+  "Oltre 30 km",
+] as const;
+
+export const MONTHLY_ELEVATION = [
+  "Meno di 500 m D+ al mese",
+  "500 – 1500 m D+ al mese",
+  "1500 – 3000 m D+ al mese",
+  "Oltre 3000 m D+ al mese",
+] as const;
+
+export const DIETARY_PROFILES = [
+  "Nessuna esigenza particolare",
+  "Vegetariano",
+  "Vegano",
+  "Senza glutine",
+  "Senza lattosio",
+  "Altro (specificare)",
+] as const;
+
 export const WEATHER_CODES: Record<number, string> = {
   0: "Sereno",
   1: "Prevalentemente sereno",
