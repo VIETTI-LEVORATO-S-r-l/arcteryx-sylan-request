@@ -148,8 +148,9 @@ function Home() {
       </section>
 
       {/* ESPERIENZA */}
-      <section id="esperienza" className="px-5 py-16 sm:px-10 sm:py-24">
+      <section id="esperienza" className="band mt-10">
         <SectionLabel index="01">{t("exp.title")}</SectionLabel>
+
         <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
           {STEP_NUMBERS.map((n, i) => (
             <Reveal as="article" delay={i * 90} key={n} className="bg-background p-6 sm:p-8">
