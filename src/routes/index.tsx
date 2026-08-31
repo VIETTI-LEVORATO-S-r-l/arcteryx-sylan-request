@@ -107,13 +107,13 @@ function Home() {
                 {DESCRIPTION}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <a href="#richiesta" className="cta cta-solid w-full sm:w-auto sm:min-w-[19rem]">
+                <a href="#richiesta" className="cta cta-solid w-full sm:w-auto">
                   RICHIEDI DI PARTECIPARE
                   <span className="cta-arrow" aria-hidden>
                     →
                   </span>
                 </a>
-                <a href="#esperienza" className="cta cta-ghost w-full sm:w-auto sm:min-w-[15rem]">
+                <a href="#esperienza" className="cta cta-ghost w-full sm:w-auto">
                   SCOPRI L&rsquo;ESPERIENZA
                   <span className="cta-arrow" aria-hidden>
                     ↓
