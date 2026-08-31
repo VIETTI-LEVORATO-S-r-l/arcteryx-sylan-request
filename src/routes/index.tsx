@@ -57,7 +57,7 @@ function Home() {
   return (
     <div className="min-h-screen">
       {/* HERO */}
-      <header className="surface-dark relative flex min-h-[92svh] flex-col justify-between overflow-hidden">
+      <header className="surface-dark grain vignette relative flex min-h-[92svh] flex-col justify-between overflow-hidden">
         <img
           src={heroImage}
           alt={t("hero.alt")}
@@ -175,7 +175,7 @@ function Home() {
 
 
       {/* PERCORSO */}
-      <section className="band band-soft overflow-hidden">
+      <section className="band band-soft band-depth overflow-hidden">
         <TopoLines />
         <div className="relative">
           <SectionLabel index="02">{t("route.title")}</SectionLabel>
@@ -187,7 +187,7 @@ function Home() {
               <Spec label={t("route.place")} value={data.event.location} />
             </div>
             <div>
-              <div className="relative grid aspect-[4/3] place-items-center border border-border bg-card">
+              <div className="corner-ticks panel panel-raised relative grid aspect-[4/3] place-items-center">
                 <TopoLines className="opacity-30" />
                 <span className="tech-sm relative">{t("route.map")}</span>
                 <span className="tech-sm absolute bottom-4 left-4 tabular-nums">
@@ -268,7 +268,7 @@ function Home() {
 
       {/* FOTO / VIDEO */}
       <section className="px-5 pb-4 sm:px-10">
-        <div className="callout p-6 sm:p-8">
+        <div className="callout panel-raised p-6 sm:p-8">
           <span className="badge badge-outline mb-3">{t("media.title")}</span>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             {t("media.body")}
@@ -277,7 +277,7 @@ function Home() {
       </section>
 
       {/* RICHIESTA */}
-      <section id="richiesta" className="band band-soft">
+      <section id="richiesta" className="band band-soft band-depth">
 
         <SectionLabel index="04">{t("req.title")}</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
@@ -306,7 +306,7 @@ function Home() {
         </a>
       </div>
 
-      <footer className="grid gap-6 border-t border-border px-5 pb-28 pt-10 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-10">
+      <footer className="surface-ink grain grid gap-6 px-5 pb-28 pt-14 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-12 sm:pt-16">
         <div className="tech-sm">
           ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
           <span className="mt-2 block opacity-60">{t("footer.logo")}</span>

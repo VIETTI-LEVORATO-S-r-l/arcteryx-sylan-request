@@ -610,3 +610,114 @@
     font-size: 1.1875rem;
   }
 }
+
+/* ——— Profondità e texture ————————————————————————————————— */
+
+/* Grana fine: rompe le superfici piatte senza introdurre colore. */
+@utility grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--black) 5%, transparent) 0 1px,
+      transparent 1px 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--black) 4%, transparent) 0 1px,
+      transparent 1px 4px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* Vignettatura per blocchi cinematografici e placeholder mappa. */
+@utility vignette {
+  position: relative;
+}
+.vignette::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 90% at 50% 40%,
+    transparent 45%,
+    color-mix(in oklab, var(--black) 22%, transparent) 100%
+  );
+}
+
+/* Fascia con gradiente verticale: evita il campo piatto sulle sezioni chiare. */
+@utility band-depth {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--black) 5%, transparent) 0,
+    transparent 22%,
+    transparent 78%,
+    color-mix(in oklab, var(--black) 4%, transparent) 100%
+  );
+}
+
+/* Hairline sfumata: separatore meno meccanico del bordo pieno. */
+@utility rule-fade {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    to right,
+    var(--color-foreground) 0,
+    color-mix(in oklab, var(--color-foreground) 25%, transparent) 32%,
+    transparent 100%
+  );
+}
+
+/* Riga spec: rilievo al passaggio, ancoraggio a sinistra. */
+@utility spec-row {
+  position: relative;
+  transition:
+    background-color 0.35s ease,
+    padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.spec-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  height: 2px;
+  width: 0;
+  background: var(--color-foreground);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.spec-row:hover::before {
+  width: 2.5rem;
+}
+.spec-row:hover {
+  background-color: color-mix(in oklab, var(--color-foreground) 3%, transparent);
+  padding-left: 0.75rem;
+}
+
+/* Segni d'angolo tecnici per riquadri (mappa, media). */
+@utility corner-ticks {
+  position: relative;
+}
+.corner-ticks::after {
+  content: "";
+  position: absolute;
+  inset: 0.5rem;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 0 0 / 14px 1px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 0 0 / 1px 14px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 100% 0 / 14px 1px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 100% 0 / 1px 14px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 0 100% / 14px 1px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 0 100% / 1px 14px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 100% 100% / 14px 1px no-repeat,
+    linear-gradient(var(--color-foreground), var(--color-foreground)) 100% 100% / 1px 14px no-repeat;
+  opacity: 0.45;
+}
