@@ -15,7 +15,7 @@ import { useI18n } from "@/lib/i18n";
 
 function Step({ n, title, hint }: { n: string; title: string; hint?: string }) {
   return (
-    <div className="mb-5 grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-3 border-t border-border pt-4">
+    <div className="mb-4 grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-3 border-t border-border pt-4">
       <span className="tech-sm text-jade-soft">{n}</span>
       <div className="min-w-0">
         <div className="tech text-foreground">{title}</div>
@@ -147,7 +147,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-10">
+    <form onSubmit={onSubmit} className="grid gap-7">
       {data.event.waitlistMode ? (
         <p className="border border-jade/60 p-4 text-xs text-jade-soft">
           {t("form.waitlist")}
@@ -156,7 +156,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
 
       <div>
         <Step n="01" title={t("form.s1")} hint={t("form.s1h")} />
-        <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+        <div className="grid gap-x-12 gap-y-4 sm:grid-cols-2">
           <Field label={t("form.firstName")} required>
             <input name="firstName" required maxLength={80} className={inputClass} />
           </Field>
@@ -195,7 +195,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
 
       <div>
         <Step n="03" title={t("form.s3")} hint={t("form.s3h")} />
-        <div className="grid sm:grid-cols-3">
+        <div className="grid gap-y-4 sm:grid-cols-3">
           {data.dates.map((d) => {
             const f = formatDate(d.date, lang);
             const checked = otherDateIds.includes(d.id);
@@ -216,7 +216,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
 
       <div>
         <Step n="04" title={t("form.s4")} />
-        <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
+        <div className="grid gap-x-12 gap-y-4 sm:grid-cols-2">
           <Field label={t("form.trailLevel")} required>
             <select name="trailExperience" required className={selectClass} defaultValue="">
               <option value="" disabled>
@@ -290,7 +290,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value.slice(0, 300))}
-          rows={4}
+          rows={3}
           maxLength={300}
           className={cn(inputClass, "resize-none border border-border px-3 pt-3 pb-3")}
         />
