@@ -1,22 +1,7 @@
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/queries";
+import { WeatherLine, WeatherFooter } from "@/components/site/Weather";
 import type { DateStat } from "@/lib/types";
-
-function WeatherLine({ w }: { w: DateStat["weather"] }) {
-  if (!w.available) {
-    return <span className="tech-sm">FORECAST AVAILABLE CLOSER TO THE EVENT</span>;
-  }
-  return (
-    <div className="tech-sm flex flex-wrap gap-x-4 gap-y-1 normal-case tracking-normal">
-      <span className="uppercase tracking-technical">{w.condition}</span>
-      <span className="tabular-nums">
-        {w.tempMin}° / {w.tempMax}°C
-      </span>
-      <span className="tabular-nums">PRECIP {w.precipitationProbability ?? 0}%</span>
-      <span className="tabular-nums">WIND {w.windMax} KM/H</span>
-    </div>
-  );
-}
 
 export function DateBoard({
   dates,
@@ -105,11 +90,7 @@ export function DateBoard({
           );
         })}
       </div>
-      {weatherEnabled && weatherUpdatedAt ? (
-        <div className="tech-sm mt-4 text-right">
-          LAST UPDATED — {new Date(weatherUpdatedAt).toUTCString()}
-        </div>
-      ) : null}
+      {weatherEnabled ? <WeatherFooter updatedAt={weatherUpdatedAt} /> : null}
     </div>
   );
 }

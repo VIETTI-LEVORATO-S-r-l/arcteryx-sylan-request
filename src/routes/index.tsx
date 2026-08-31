@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import heroImage from "@/assets/hero-trail.jpg";
 import { eventQueryOptions, formatDate } from "@/lib/queries";
 import { DateBoard } from "@/components/site/DateBoard";
+import { EventWeatherPanel } from "@/components/site/Weather";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
 import { SectionLabel, Spec, TopoLines } from "@/components/site/Primitives";
 
@@ -194,6 +195,11 @@ function Home() {
                   <div className="display mt-2 text-2xl">{data.event.meetingPoint}</div>
                 </div>
               </div>
+              {data.event.weatherEnabled ? (
+                <div className="mt-10">
+                  <EventWeatherPanel w={finalDate.weather} updatedAt={data.weatherUpdatedAt} />
+                </div>
+              ) : null}
             </div>
             <div>
               <div className="tech-sm mb-4">COMMUNITY PREFERENCE RESULTS</div>
