@@ -3,10 +3,10 @@ import { cn } from "@/lib/utils";
 
 export function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
   return (
-    <div className="section-sticky -mx-5 mb-8 border-b border-border px-5 py-3 sm:mx-0 sm:mb-12 sm:border-b-0 sm:border-t sm:px-0 sm:pb-0 sm:pt-4">
-      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-4">
-        <span className="tech-sm text-jade-soft tabular-nums">{index}</span>
-        <h2 className="tech truncate tracking-technical text-foreground sm:whitespace-normal">
+    <div className="section-sticky -mx-5 mb-8 border-b border-border px-5 py-3 sm:mx-0 sm:mb-12 sm:border-b-0 sm:border-t-2 sm:border-t-foreground sm:px-0 sm:pb-0 sm:pt-4">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4">
+        <span className="index-chip">{index}</span>
+        <h2 className="tech truncate font-semibold tracking-technical text-foreground sm:whitespace-normal">
           {children}
         </h2>
       </div>
@@ -18,11 +18,12 @@ export function SectionLabel({ index, children }: { index: string; children: Rea
 export function Spec({ label, value, mono }: { label: string; value: ReactNode; mono?: boolean }) {
   return (
     <div className="border-t border-border py-5">
-      <div className="tech-sm mb-3">{label}</div>
-      <div className={cn("display text-2xl sm:text-3xl", mono && "tabular-nums")}>{value}</div>
+      <div className="badge border-0 p-0">{label}</div>
+      <div className={cn("display mt-3 text-3xl sm:text-4xl", mono && "tabular-nums")}>{value}</div>
     </div>
   );
 }
+
 
 export function Rule() {
   return <div className="h-px w-full bg-border" />;
