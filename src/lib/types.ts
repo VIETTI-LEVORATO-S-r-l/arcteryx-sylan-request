@@ -35,6 +35,8 @@ export type EventPayload = {
     elevationM: string;
     surface: string;
     routeNotes: string;
+    latitude: number;
+    longitude: number;
     weatherEnabled: boolean;
     applicationsOpen: boolean;
     waitlistMode: boolean;
@@ -48,6 +50,7 @@ export type EventPayload = {
   leadingDateId: string | null;
   weatherUpdatedAt: string | null;
 };
+
 
 export const RUNNING_LEVELS = [
   "Corro per passione, saltuariamente",
@@ -125,3 +128,60 @@ export const WEATHER_CODES: Record<number, string> = {
   96: "Temporale con grandine",
   99: "Temporale con grandine",
 };
+
+/**
+ * Etichette inglesi per i valori dei select.
+ * Il valore inviato resta sempre quello italiano, così admin e CSV non cambiano.
+ */
+export const OPTION_LABELS_EN: Record<string, string> = {
+  // TRAIL_LEVELS
+  "Prima esperienza di trail running": "First trail running experience",
+  Occasionale: "Occasional",
+  Regolare: "Regular",
+  Esperto: "Experienced",
+  // WEEKLY_VOLUME
+  "Meno di 15 km a settimana": "Less than 15 km per week",
+  "15 – 30 km a settimana": "15 – 30 km per week",
+  "30 – 50 km a settimana": "30 – 50 km per week",
+  "50 – 80 km a settimana": "50 – 80 km per week",
+  "Oltre 80 km a settimana": "More than 80 km per week",
+  // LONGEST_RUN
+  "Fino a 10 km": "Up to 10 km",
+  "10 – 20 km": "10 – 20 km",
+  "20 – 30 km": "20 – 30 km",
+  "Oltre 30 km": "More than 30 km",
+  // DIETARY_PROFILES
+  "Nessuna esigenza particolare": "No particular requirement",
+  Vegetariano: "Vegetarian",
+  Vegano: "Vegan",
+  "Senza glutine": "Gluten free",
+  "Senza lattosio": "Lactose free",
+  "Altro (specificare)": "Other (please specify)",
+};
+
+export function optionLabel(value: string, lang: "it" | "en") {
+  return lang === "en" ? (OPTION_LABELS_EN[value] ?? value) : value;
+}
+
+function halfSteps(from: number, to: number) {
+  const out: string[] = [];
+  for (let v = from * 2; v <= to * 2; v++) {
+    out.push(v % 2 === 0 ? String(v / 2) : `${Math.floor(v / 2)}.5`);
+  }
+  return out;
+}
+
+export const SHOE_SIZES: Record<"EU" | "UK", string[]> = {
+  EU: halfSteps(35, 48),
+  UK: halfSteps(2, 13),
+};
+
+/** Codici di errore restituiti da submitApplication, tradotti lato client. */
+export type SubmitErrorCode =
+  | "INVALID_SUBMISSION"
+  | "EVENT_UNAVAILABLE"
+  | "APPLICATIONS_CLOSED"
+  | "MAX_APPLICATIONS"
+  | "DUPLICATE_EMAIL"
+  | "RATE_LIMITED"
+  | "SAVE_FAILED";

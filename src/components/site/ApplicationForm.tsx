@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { submitApplication } from "@/lib/event.functions";
 import {
-  DIETARY_PROFILES,
   LONGEST_RUN,
+  SHOE_SIZES,
   TRAIL_LEVELS,
   WEEKLY_VOLUME,
+  optionLabel,
   type EventPayload,
 } from "@/lib/types";
 import { CheckRow, Field, inputClass, selectClass } from "./Primitives";
@@ -59,6 +60,16 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [description, setDescription] = useState("");
+  const [shoeSystem, setShoeSystem] = useState<"EU" | "UK">("EU");
+  const errorRef = useRef<HTMLParagraphElement | null>(null);
+
+  const fail = (msg: string) => {
+    setError(msg);
+    requestAnimationFrame(() => {
+      errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      errorRef.current?.focus();
+    });
+  };
 
   const setConsent = (k: keyof Consents) => (v: boolean) => setConsents((c) => ({ ...c, [k]: v }));
 
@@ -66,7 +77,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
     e.preventDefault();
     setError(null);
     if (!preferredDateId) {
-      setError(t("form.errDate"));
+      fail(t("form.errDate"));
       return;
     }
     const required: (keyof Consents)[] = [
@@ -78,7 +89,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       "privacyAck",
     ];
     if (required.some((k) => !consents[k])) {
-      setError(t("form.errConsents"));
+      fail(t("form.errConsents"));
       return;
     }
     const fd = new FormData(e.currentTarget);
@@ -98,8 +109,6 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           trailExperience: v("trailExperience"),
           weeklyVolume: v("weeklyVolume"),
           longestRun: v("longestRun"),
-          dietaryProfile: v("dietaryProfile"),
-          foodAllergies: v("foodAllergies"),
           shoeSizeSystem: v("shoeSizeSystem") as "EU" | "UK",
           shoeSize: v("shoeSize"),
           footwearFit: v("footwearFit") as "MEN'S" | "WOMEN'S",
@@ -117,13 +126,13 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         },
       });
       if (!res.ok) {
-        setError(res.error);
+        fail(t(`err.${res.error}` as const));
         setPending(false);
         return;
       }
       await navigate({ to: "/request-received" });
     } catch {
-      setError(t("form.errGeneric"));
+      fail(t("form.errNetwork"));
       setPending(false);
     }
   }
@@ -214,7 +223,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               </option>
               {TRAIL_LEVELS.map((o) => (
                 <option key={o} value={o}>
-                  {o}
+                  {optionLabel(o, lang)}
                 </option>
               ))}
             </select>
@@ -226,7 +235,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               </option>
               {WEEKLY_VOLUME.map((o) => (
                 <option key={o} value={o}>
-                  {o}
+                  {optionLabel(o, lang)}
                 </option>
               ))}
             </select>
@@ -238,19 +247,34 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
               </option>
               {LONGEST_RUN.map((o) => (
                 <option key={o} value={o}>
-                  {o}
+                  {optionLabel(o, lang)}
                 </option>
               ))}
             </select>
           </Field>
           <Field label={t("form.sizeSystem")} required>
-            <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
+            <select
+              name="shoeSizeSystem"
+              required
+              className={selectClass}
+              value={shoeSystem}
+              onChange={(e) => setShoeSystem(e.target.value as "EU" | "UK")}
+            >
               <option value="EU">EU</option>
               <option value="UK">UK</option>
             </select>
           </Field>
           <Field label={t("form.shoeSize")} required>
-            <input name="shoeSize" required maxLength={10} className={inputClass} />
+            <select key={shoeSystem} name="shoeSize" required className={selectClass} defaultValue="">
+              <option value="" disabled>
+                {t("form.select")}
+              </option>
+              {SHOE_SIZES[shoeSystem].map((sz) => (
+                <option key={sz} value={sz}>
+                  {shoeSystem} {sz}
+                </option>
+              ))}
+            </select>
           </Field>
           <Field label={t("form.fit")} required>
             <select name="footwearFit" required className={selectClass} defaultValue="MEN'S">
@@ -281,35 +305,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       />
 
       <div>
-        <Step
-          n="05"
-          title={t("form.s5")}
-          hint={t("form.s5h")}
-        />
-        <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label={t("form.dietary")} required>
-            <select name="dietaryProfile" required className={selectClass} defaultValue="">
-              <option value="" disabled>
-                {t("form.select")}
-              </option>
-              {DIETARY_PROFILES.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field
-            label={t("form.allergies")}
-            hint={t("form.allergiesHint")}
-          >
-            <input name="foodAllergies" maxLength={300} className={inputClass} />
-          </Field>
-        </div>
-      </div>
-
-      <div>
-        <Step n="06" title={t("form.s6")} />
+        <Step n="05" title={t("form.s6")} />
         <CheckRow checked={consents.isAdult} onChange={setConsent("isAdult")}>
           {t("form.c.adult")}
         </CheckRow>
@@ -348,12 +344,13 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
         </CheckRow>
         <CheckRow checked={consents.marketingArcteryx} onChange={setConsent("marketingArcteryx")}>
           {t("form.c.mkArcteryx")}
-          <span className="block opacity-60">{t("form.c.mkNote")}</span>
         </CheckRow>
       </div>
 
       {error ? (
         <p
+          ref={errorRef}
+          tabIndex={-1}
           role="alert"
           className="border-l-2 border-destructive bg-card p-4 text-xs leading-relaxed text-destructive"
         >

@@ -32,8 +32,12 @@ export const submitConfirmation = createServerFn({ method: "POST" })
         emergencyName: z.string().trim().min(1).max(120),
         emergencyPhone: z.string().trim().min(6).max(40),
         finalShoeSize: z.string().trim().min(1).max(20),
+        dietaryProfile: z.string().trim().min(1).max(80),
+        foodAllergies: z.string().trim().max(300).optional().or(z.literal("")),
+        dietaryConsent: z.literal(true),
         rulesAck: z.literal(true),
         imageRelease: z.literal(true),
+
       })
       .parse(input),
   )
@@ -54,9 +58,13 @@ export const submitConfirmation = createServerFn({ method: "POST" })
         emergency_contact_name: data.emergencyName,
         emergency_contact_phone: data.emergencyPhone,
         final_shoe_size: data.finalShoeSize,
+        dietary_profile: data.dietaryProfile,
+        food_allergies: data.foodAllergies || null,
+        dietary_consent: true,
         rules_acknowledged: true,
         image_release_accepted: true,
         confirmed_at: new Date().toISOString(),
+
       },
       { onConflict: "application_id" },
     );

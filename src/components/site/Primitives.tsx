@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
+
 
 export function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
   return (
@@ -61,17 +63,23 @@ export function Field({
   children: ReactNode;
   required?: boolean;
 }) {
+  const { t } = useI18n();
   return (
     <label className="block border-t border-border pt-4">
       <span className="tech-sm flex items-center gap-2">
         {label}
-        {required ? <span className="text-jade-soft">*</span> : <span>FACOLTATIVO</span>}
+        {required ? (
+          <span className="text-jade-soft">*</span>
+        ) : (
+          <span>{t("form.optionalTag")}</span>
+        )}
       </span>
       <div className="mt-3">{children}</div>
       {hint ? <span className="tech-sm mt-2 block normal-case tracking-normal">{hint}</span> : null}
     </label>
   );
 }
+
 
 export const inputClass =
   "w-full min-h-11 border-0 border-b border-border bg-transparent px-0 pb-3 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-jade-soft";
@@ -87,25 +95,40 @@ export function CheckRow({
   onChange: (v: boolean) => void;
   children: ReactNode;
 }) {
+  // Non usiamo <label>: i link interni (Regolamento, Privacy) non devono attivare la spunta.
+  const textId = useId();
   return (
-    <label className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60">
+    <div
+      className="grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-4 border-t border-border py-4 transition-colors hover:bg-card/60"
+      onClick={(e) => {
+        if ((e.target as HTMLElement).closest("a")) return;
+        onChange(!checked);
+      }}
+    >
       <span
         className={cn(
           "mt-0.5 grid h-4 w-4 shrink-0 place-items-center border transition-all",
           checked ? "border-jade bg-jade jade-glow" : "border-border",
         )}
+        aria-hidden
       >
         {checked ? <span className="block h-1.5 w-1.5 bg-primary-foreground" /> : null}
       </span>
-      <span className="text-xs leading-relaxed text-muted-foreground">{children}</span>
-      <input
-        type="checkbox"
-        className="sr-only"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-    </label>
+      <span id={textId} className="text-xs leading-relaxed text-muted-foreground">
+        <input
+          type="checkbox"
+          className="sr-only"
+          aria-labelledby={textId}
+          checked={checked}
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        {children}
+      </span>
+    </div>
   );
+
+
 }
 
 export function Reveal({

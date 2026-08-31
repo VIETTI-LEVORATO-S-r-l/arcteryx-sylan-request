@@ -19,8 +19,6 @@ const applicationSchema = z.object({
   longestRun: z.string().trim().min(1).max(80),
   monthlyElevation: z.string().trim().max(80).optional().or(z.literal("")),
   recentActivity: z.string().trim().max(300).optional().or(z.literal("")),
-  dietaryProfile: z.string().trim().min(1).max(80),
-  foodAllergies: z.string().trim().max(300).optional().or(z.literal("")),
   shoeSizeSystem: z.enum(["EU", "UK"]),
   shoeSize: z.string().trim().min(1).max(10),
   footwearFit: z.enum(["MEN'S", "WOMEN'S"]),
@@ -89,6 +87,8 @@ export const getEventData = createServerFn({ method: "GET" }).handler(
         elevationM: event.elevation_m,
         surface: event.surface,
         routeNotes: event.route_notes,
+        latitude: event.latitude,
+        longitude: event.longitude,
         weatherEnabled: event.weather_enabled,
         applicationsOpen: event.applications_open,
         waitlistMode: event.waitlist_mode,
@@ -108,7 +108,7 @@ export const getEventData = createServerFn({ method: "GET" }).handler(
 export const submitApplication = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => applicationSchema.parse(input))
   .handler(async ({ data }) => {
-    if (data.website) return { ok: false as const, error: "Invio non valido." };
+    if (data.website) return { ok: false as const, error: "INVALID_SUBMISSION" as const };
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { EVENT_SLUG } = await import("./supabase-public.server");
@@ -118,9 +118,9 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select("id, applications_open, max_applications, privacy_version, capacity")
       .eq("slug", EVENT_SLUG)
       .maybeSingle();
-    if (!event) return { ok: false as const, error: "Evento non disponibile." };
+    if (!event) return { ok: false as const, error: "EVENT_UNAVAILABLE" as const };
     if (!event.applications_open) {
-      return { ok: false as const, error: "Le richieste di partecipazione sono attualmente chiuse." };
+      return { ok: false as const, error: "APPLICATIONS_CLOSED" as const };
     }
 
     const { count } = await supabaseAdmin
@@ -128,7 +128,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select("id", { count: "exact", head: true })
       .eq("event_id", event.id);
     if ((count ?? 0) >= event.max_applications) {
-      return { ok: false as const, error: "È stato raggiunto il numero massimo di richieste." };
+      return { ok: false as const, error: "MAX_APPLICATIONS" as const };
     }
 
     const email = data.email.toLowerCase();
@@ -139,7 +139,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .eq("email", email)
       .maybeSingle();
     if (existing) {
-      return { ok: false as const, error: "Una richiesta è già stata inviata con questa email." };
+      return { ok: false as const, error: "DUPLICATE_EMAIL" as const };
     }
 
     const ip = getRequestHeader("x-forwarded-for") ?? "";
@@ -157,7 +157,7 @@ export const submitApplication = createServerFn({ method: "POST" })
         .eq("ip_hash", ipHash)
         .gte("created_at", since);
       if ((recent ?? 0) >= 3) {
-        return { ok: false as const, error: "Troppe richieste. Riprova più tardi." };
+        return { ok: false as const, error: "RATE_LIMITED" as const };
       }
     }
 
@@ -180,8 +180,6 @@ export const submitApplication = createServerFn({ method: "POST" })
         longest_run: data.longestRun,
         monthly_elevation: data.monthlyElevation || "N/D",
         recent_activity: data.recentActivity || null,
-        dietary_profile: data.dietaryProfile,
-        food_allergies: data.foodAllergies || null,
         shoe_size_system: data.shoeSizeSystem,
         shoe_size: data.shoeSize,
         footwear_fit: data.footwearFit,
@@ -193,7 +191,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select("id")
       .single();
 
-    if (error || !inserted) return { ok: false as const, error: "Non è stato possibile salvare la richiesta." };
+    if (error || !inserted) return { ok: false as const, error: "SAVE_FAILED" as const };
 
     const others = data.otherDateIds.filter((id) => id !== data.preferredDateId);
     if (others.length) {
