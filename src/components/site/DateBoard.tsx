@@ -26,7 +26,7 @@ export function DateBoard({
   const { t, lang } = useI18n();
   return (
     <div>
-      <div className="grid gap-px bg-border md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3">
         {dates.map((d) => {
           const f = formatDate(d.date, lang);
           const leading = leadingDateId === d.id;
@@ -43,12 +43,14 @@ export function DateBoard({
                   }
                 : {})}
               className={cn(
-                "relative w-full bg-background p-5 text-left transition-all duration-300 sm:p-8",
+                "panel relative w-full p-5 text-left transition-all duration-300 sm:p-7",
                 selectable &&
-                  "cursor-pointer active:scale-[0.99] hover:bg-card focus:outline-none focus-visible:bg-card",
-                selected && "jade-glow bg-card",
+                  "panel-hover cursor-pointer active:scale-[0.99] focus:outline-none focus-visible:border-foreground",
+                leading && "border-foreground/40",
+                selected && "panel-raised border-2 border-foreground",
               )}
             >
+
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="display text-5xl tabular-nums sm:text-6xl">{f.day}</div>
