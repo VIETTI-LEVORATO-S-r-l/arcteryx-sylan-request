@@ -485,3 +485,128 @@
   font-size: 0.625rem;
   letter-spacing: 0.18em;
 }
+
+/* ——— Gerarchia dei contenuti ————————————————————————————— */
+
+:root {
+  --elev-1: 0 1px 2px -1px color-mix(in oklab, var(--black) 14%, transparent);
+  --elev-2:
+    0 2px 4px -2px color-mix(in oklab, var(--black) 12%, transparent),
+    0 18px 34px -26px color-mix(in oklab, var(--black) 40%, transparent);
+  --elev-3:
+    0 3px 6px -3px color-mix(in oklab, var(--black) 16%, transparent),
+    0 32px 60px -34px color-mix(in oklab, var(--black) 55%, transparent);
+}
+
+/* Blocco invertito: massima priorità visiva (statement, data confermata). */
+@utility surface-ink {
+  --background: var(--black);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.24 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.76 0 0);
+  --border: oklch(0.36 0 0);
+  --jade-soft: oklch(0.82 0 0);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Pannello di primo livello: superficie chiara + elevazione + hairline. */
+@utility panel {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--elev-1);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+@utility panel-raised {
+  box-shadow: var(--elev-2);
+}
+
+.panel-hover:hover {
+  box-shadow: var(--elev-2);
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--color-foreground) 35%, var(--color-border));
+}
+
+/* Callout: nota di secondo livello con montante spesso. */
+@utility callout {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-foreground);
+  background-color: color-mix(in oklab, var(--color-foreground) 4%, var(--color-card));
+}
+
+/* Badge tecnico: metadati e stati. */
+@utility badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted-foreground);
+}
+
+@utility badge-solid {
+  background-color: var(--color-foreground);
+  border-color: var(--color-foreground);
+  color: var(--color-background);
+}
+
+@utility badge-outline {
+  border-color: color-mix(in oklab, var(--color-foreground) 55%, transparent);
+  color: var(--color-foreground);
+}
+
+/* Numero di sezione/step: pesante, non decorativo. */
+@utility index-chip {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 0.4rem;
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Evidenziazione inline su testo corrente. */
+@utility ink-mark {
+  background-image: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--color-foreground) 16%, transparent) 0 0.5em,
+    transparent 0.5em
+  );
+  font-weight: 650;
+  color: var(--color-foreground);
+}
+
+/* Testo di apertura con più peso rispetto al corpo. */
+@utility lead-strong {
+  font-size: 1.0625rem;
+  font-weight: 550;
+  line-height: 1.5;
+  letter-spacing: -0.012em;
+  color: var(--color-foreground);
+  text-wrap: pretty;
+}
+
+@media (min-width: 640px) {
+  .lead-strong {
+    font-size: 1.1875rem;
+  }
+}
