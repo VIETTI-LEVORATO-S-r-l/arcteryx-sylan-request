@@ -45,7 +45,7 @@ export function DateBoard({
                   }
                 : {})}
               className={cn(
-                "panel relative w-full p-5 text-left transition-all duration-300 sm:p-7",
+                "panel relative w-full p-5 text-left transition-all duration-300 sm:p-6",
                 selectable &&
                   "panel-hover cursor-pointer active:scale-[0.99] focus:outline-none focus-visible:border-foreground",
                 leading && "border-foreground/40",

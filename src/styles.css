@@ -288,18 +288,18 @@
   border-top: var(--rule);
 }
 
-/* Macro-block: generous vertical rhythm + hairline separation between sections. */
+/* Macro-block: compact vertical rhythm + hairline separation between sections. */
 @utility band {
   position: relative;
   padding-inline: 1.25rem;
-  padding-block: 4rem;
+  padding-block: 2.5rem;
   border-top: 1px solid var(--color-border);
   background-color: var(--background);
 }
 @media (min-width: 640px) {
   .band {
     padding-inline: 2.5rem;
-    padding-block: 7rem;
+    padding-block: 4rem;
   }
 }
 
