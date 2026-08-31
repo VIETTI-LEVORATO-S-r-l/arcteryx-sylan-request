@@ -472,6 +472,23 @@ function Admin() {
                     {a.running_level}
                     <br />
                     {a.trail_experience}
+                    <br />
+                    <span className="tech-sm">
+                      {[a.weekly_volume, a.longest_run, a.monthly_elevation]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                    {a.recent_activity ? (
+                      <>
+                        <br />
+                        {a.recent_activity}
+                      </>
+                    ) : null}
+                    <br />
+                    <span className="tech-sm text-foreground">
+                      LUNCH BOX: {a.dietary_profile ?? "—"}
+                      {a.food_allergies ? ` · ALLERGIE: ${a.food_allergies}` : ""}
+                    </span>
                   </td>
                   <td className="p-3 tabular-nums">
                     {a.shoe_size_system} {a.shoe_size} {a.footwear_fit}
