@@ -47,8 +47,10 @@
   --color-fogstone: var(--fogstone);
   --color-solitude: var(--kasumi);
   --color-graphite: var(--graphite);
-  --font-sans: "Söhne", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --tracking-technical: 0.18em;
+  --font-sans: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Sora", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --tracking-technical: 0.16em;
 }
 
 :root {
