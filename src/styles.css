@@ -120,6 +120,14 @@
     font-feature-settings: "tnum", "cv05";
   }
 
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
   ::selection {
     background: color-mix(in oklab, var(--larch) 60%, transparent);
   }
