@@ -219,6 +219,43 @@
   border-top: var(--rule);
 }
 
+/* Macro-block: generous vertical rhythm + hairline separation between sections. */
+@utility band {
+  position: relative;
+  padding-inline: 1.25rem;
+  padding-block: 4rem;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--background);
+}
+@media (min-width: 640px) {
+  .band {
+    padding-inline: 2.5rem;
+    padding-block: 7rem;
+  }
+}
+
+/* Alternate surface tone; redefines --background so sticky labels inherit it. */
+@utility band-soft {
+  --background: oklch(0.995 0 0);
+}
+
+/* Sticky per-section mini header on mobile. */
+@utility section-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background-color: color-mix(in oklab, var(--background) 90%, transparent);
+  backdrop-filter: blur(10px);
+}
+@media (min-width: 640px) {
+  .section-sticky {
+    position: static;
+    backdrop-filter: none;
+    background-color: transparent;
+  }
+}
+
+
 @utility topo {
   background-image: repeating-radial-gradient(
     circle at 30% 60%,

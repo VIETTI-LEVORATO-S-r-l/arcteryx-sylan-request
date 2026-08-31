@@ -148,8 +148,9 @@ function Home() {
       </section>
 
       {/* ESPERIENZA */}
-      <section id="esperienza" className="px-5 py-16 sm:px-10 sm:py-24">
+      <section id="esperienza" className="band mt-10">
         <SectionLabel index="01">{t("exp.title")}</SectionLabel>
+
         <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
           {STEP_NUMBERS.map((n, i) => (
             <Reveal as="article" delay={i * 90} key={n} className="bg-background p-6 sm:p-8">
@@ -167,7 +168,7 @@ function Home() {
       </section>
 
       {/* PERCORSO */}
-      <section className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-24">
+      <section className="band band-soft overflow-hidden">
         <TopoLines />
         <div className="relative">
           <SectionLabel index="02">{t("route.title")}</SectionLabel>
@@ -193,7 +194,7 @@ function Home() {
       </section>
 
       {/* DATE */}
-      <section id="date" className="px-5 py-16 sm:px-10 sm:py-24">
+      <section id="date" className="band">
         <SectionLabel index="03">
           {finalDate ? t("dates.titleConfirmed") : t("dates.titleChoose")}
         </SectionLabel>
@@ -259,7 +260,7 @@ function Home() {
       </section>
 
       {/* FOTO / VIDEO */}
-      <section className="px-5 sm:px-10">
+      <section className="px-5 pb-4 sm:px-10">
         <div className="border border-border p-6 sm:p-8">
           <div className="tech-sm mb-3 text-jade-soft">{t("media.title")}</div>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
@@ -269,7 +270,8 @@ function Home() {
       </section>
 
       {/* RICHIESTA */}
-      <section id="richiesta" className="px-5 py-16 sm:px-10 sm:py-24">
+      <section id="richiesta" className="band band-soft">
+
         <SectionLabel index="04">{t("req.title")}</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>

@@ -3,12 +3,17 @@ import { cn } from "@/lib/utils";
 
 export function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
   return (
-    <div className="mb-10 grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-4 border-t border-border pt-4">
-      <span className="tech-sm text-jade-soft">{index}</span>
-      <h2 className="tech tracking-technical text-foreground">{children}</h2>
+    <div className="section-sticky -mx-5 mb-8 border-b border-border px-5 py-3 sm:mx-0 sm:mb-12 sm:border-b-0 sm:border-t sm:px-0 sm:pb-0 sm:pt-4">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-4">
+        <span className="tech-sm text-jade-soft tabular-nums">{index}</span>
+        <h2 className="tech truncate tracking-technical text-foreground sm:whitespace-normal">
+          {children}
+        </h2>
+      </div>
     </div>
   );
 }
+
 
 export function Spec({ label, value, mono }: { label: string; value: ReactNode; mono?: boolean }) {
   return (
