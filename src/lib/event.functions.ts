@@ -9,7 +9,7 @@ const applicationSchema = z.object({
   email: z.string().trim().email().max(255),
   phone: z.string().trim().min(6).max(40),
   city: z.string().trim().min(1).max(120),
-  country: z.string().trim().min(1).max(120),
+  country: z.string().trim().max(120).optional().or(z.literal("")),
   preferredDateId: z.string().uuid(),
   otherDateIds: z.array(z.string().uuid()).max(10).default([]),
   runningLevel: z.string().trim().min(1).max(80),
@@ -23,6 +23,7 @@ const applicationSchema = z.object({
   isAdult: z.literal(true),
   terrainAck: z.literal(true),
   fitnessAck: z.literal(true),
+  rulesAck: z.literal(true),
   noGuaranteeAck: z.literal(true),
   privacyAck: z.literal(true),
   marketingVietti: z.boolean().default(false),
@@ -101,7 +102,7 @@ export const getEventData = createServerFn({ method: "GET" }).handler(
 export const submitApplication = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => applicationSchema.parse(input))
   .handler(async ({ data }) => {
-    if (data.website) return { ok: false as const, error: "Invalid submission." };
+    if (data.website) return { ok: false as const, error: "Invio non valido." };
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { EVENT_SLUG } = await import("./supabase-public.server");
@@ -111,9 +112,9 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select("id, applications_open, max_applications, privacy_version, capacity")
       .eq("slug", EVENT_SLUG)
       .maybeSingle();
-    if (!event) return { ok: false as const, error: "Event unavailable." };
+    if (!event) return { ok: false as const, error: "Evento non disponibile." };
     if (!event.applications_open) {
-      return { ok: false as const, error: "Applications are currently closed." };
+      return { ok: false as const, error: "Le richieste di partecipazione sono attualmente chiuse." };
     }
 
     const { count } = await supabaseAdmin
@@ -121,7 +122,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select("id", { count: "exact", head: true })
       .eq("event_id", event.id);
     if ((count ?? 0) >= event.max_applications) {
-      return { ok: false as const, error: "The maximum number of requests has been reached." };
+      return { ok: false as const, error: "È stato raggiunto il numero massimo di richieste." };
     }
 
     const email = data.email.toLowerCase();
@@ -132,7 +133,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .eq("email", email)
       .maybeSingle();
     if (existing) {
-      return { ok: false as const, error: "A request has already been submitted with this email." };
+      return { ok: false as const, error: "Una richiesta è già stata inviata con questa email." };
     }
 
     const ip = getRequestHeader("x-forwarded-for") ?? "";
@@ -150,7 +151,7 @@ export const submitApplication = createServerFn({ method: "POST" })
         .eq("ip_hash", ipHash)
         .gte("created_at", since);
       if ((recent ?? 0) >= 3) {
-        return { ok: false as const, error: "Too many requests. Please try again later." };
+        return { ok: false as const, error: "Troppe richieste. Riprova più tardi." };
       }
     }
 
@@ -163,7 +164,7 @@ export const submitApplication = createServerFn({ method: "POST" })
         email,
         phone: data.phone,
         city: data.city,
-        country: data.country,
+        country: data.country || "Italia",
         is_adult: true,
         preferred_date_id: data.preferredDateId,
         running_level: data.runningLevel,
@@ -180,7 +181,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       .select("id")
       .single();
 
-    if (error || !inserted) return { ok: false as const, error: "Could not save your request." };
+    if (error || !inserted) return { ok: false as const, error: "Non è stato possibile salvare la richiesta." };
 
     const others = data.otherDateIds.filter((id) => id !== data.preferredDateId);
     if (others.length) {
@@ -194,6 +195,7 @@ export const submitApplication = createServerFn({ method: "POST" })
       { application_id: inserted.id, consent_key: "AGE_18_PLUS", granted: true, policy_version: version },
       { application_id: inserted.id, consent_key: "TERRAIN_ACK", granted: true, policy_version: version },
       { application_id: inserted.id, consent_key: "FITNESS_ACK", granted: true, policy_version: version },
+      { application_id: inserted.id, consent_key: "RULES_ACK", granted: true, policy_version: version },
       { application_id: inserted.id, consent_key: "NO_GUARANTEE_ACK", granted: true, policy_version: version },
       { application_id: inserted.id, consent_key: "PRIVACY_NOTICE", granted: true, policy_version: version },
       {

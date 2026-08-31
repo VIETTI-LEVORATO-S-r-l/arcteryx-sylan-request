@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RegolamentoRouteImport } from './routes/regolamento'
 import { Route as RequestReceivedRouteImport } from './routes/request-received'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ConfirmTokenRouteImport } from './routes/confirm.$token'
@@ -37,6 +38,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegolamentoRoute = RegolamentoRouteImport.update({
+  id: '/regolamento',
+  path: '/regolamento',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RequestReceivedRoute = RequestReceivedRouteImport.update({
   id: '/request-received',
   path: '/request-received',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/cookies': typeof CookiesRoute
   '/privacy': typeof PrivacyRoute
+  '/regolamento': typeof RegolamentoRoute
   '/request-received': typeof RequestReceivedRoute
   '/terms': typeof TermsRoute
   '/confirm/$token': typeof ConfirmTokenRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/cookies': typeof CookiesRoute
   '/privacy': typeof PrivacyRoute
+  '/regolamento': typeof RegolamentoRoute
   '/request-received': typeof RequestReceivedRoute
   '/terms': typeof TermsRoute
   '/confirm/$token': typeof ConfirmTokenRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/cookies': typeof CookiesRoute
   '/privacy': typeof PrivacyRoute
+  '/regolamento': typeof RegolamentoRoute
   '/request-received': typeof RequestReceivedRoute
   '/terms': typeof TermsRoute
   '/confirm/$token': typeof ConfirmTokenRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/cookies'
     | '/privacy'
+    | '/regolamento'
     | '/request-received'
     | '/terms'
     | '/confirm/$token'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/cookies'
     | '/privacy'
+    | '/regolamento'
     | '/request-received'
     | '/terms'
     | '/confirm/$token'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/cookies'
     | '/privacy'
+    | '/regolamento'
     | '/request-received'
     | '/terms'
     | '/confirm/$token'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   CookiesRoute: typeof CookiesRoute
   PrivacyRoute: typeof PrivacyRoute
+  RegolamentoRoute: typeof RegolamentoRoute
   RequestReceivedRoute: typeof RequestReceivedRoute
   TermsRoute: typeof TermsRoute
   ConfirmTokenRoute: typeof ConfirmTokenRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regolamento': {
+      id: '/regolamento'
+      path: '/regolamento'
+      fullPath: '/regolamento'
+      preLoaderRoute: typeof RegolamentoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/request-received': {
       id: '/request-received'
       path: '/request-received'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   CookiesRoute: CookiesRoute,
   PrivacyRoute: PrivacyRoute,
+  RegolamentoRoute: RegolamentoRoute,
   RequestReceivedRoute: RequestReceivedRoute,
   TermsRoute: TermsRoute,
   ConfirmTokenRoute: ConfirmTokenRoute,

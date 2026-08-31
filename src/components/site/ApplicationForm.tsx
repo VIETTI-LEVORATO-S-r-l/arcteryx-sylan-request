@@ -12,6 +12,7 @@ type Consents = {
   isAdult: boolean;
   terrainAck: boolean;
   fitnessAck: boolean;
+  rulesAck: boolean;
   noGuaranteeAck: boolean;
   privacyAck: boolean;
   marketingVietti: boolean;
@@ -29,6 +30,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
     isAdult: false,
     terrainAck: false,
     fitnessAck: false,
+    rulesAck: false,
     noGuaranteeAck: false,
     privacyAck: false,
     marketingVietti: false,
@@ -44,18 +46,19 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
     e.preventDefault();
     setError(null);
     if (!preferredDateId) {
-      setError("Select one preferred date.");
+      setError("Seleziona una data preferita.");
       return;
     }
     const required: (keyof Consents)[] = [
       "isAdult",
       "terrainAck",
       "fitnessAck",
+      "rulesAck",
       "noGuaranteeAck",
       "privacyAck",
     ];
     if (required.some((k) => !consents[k])) {
-      setError("All required declarations must be accepted.");
+      setError("Tutte le dichiarazioni obbligatorie devono essere accettate.");
       return;
     }
     const fd = new FormData(e.currentTarget);
@@ -69,7 +72,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           email: v("email"),
           phone: v("phone"),
           city: v("city"),
-          country: v("country"),
+          country: "",
           preferredDateId,
           otherDateIds,
           runningLevel: v("runningLevel"),
@@ -83,6 +86,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           isAdult: true,
           terrainAck: true,
           fitnessAck: true,
+          rulesAck: true,
           noGuaranteeAck: true,
           privacyAck: true,
           marketingVietti: consents.marketingVietti,
@@ -97,7 +101,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       }
       await navigate({ to: "/request-received" });
     } catch {
-      setError("Please review the form: some required information is missing or invalid.");
+      setError("Controlla il modulo: alcune informazioni obbligatorie mancano o non sono valide.");
       setPending(false);
     }
   }
@@ -105,9 +109,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
   if (!data.event.applicationsOpen) {
     return (
       <div className="border border-border p-8">
-        <div className="tech mb-3 text-jade-soft">APPLICATIONS CLOSED</div>
+        <div className="tech mb-3 text-jade-soft">RICHIESTE CHIUSE</div>
         <p className="max-w-xl text-sm text-muted-foreground">
-          Requests to join are currently closed. Follow VIETTI for future Arc'teryx activations.
+          Le richieste di partecipazione sono attualmente chiuse. Segui VIETTI per le prossime
+          attività Arc&rsquo;teryx.
         </p>
       </div>
     );
@@ -117,34 +122,34 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
     <form onSubmit={onSubmit} className="grid gap-10">
       {data.event.waitlistMode ? (
         <p className="border border-jade/60 p-4 text-xs text-jade-soft">
-          Applications have exceeded the initial event capacity. New requests may be placed on the
-          waiting list.
+          Le richieste hanno superato la capienza iniziale dell&rsquo;evento. Le nuove richieste
+          possono essere inserite in lista d&rsquo;attesa.
         </p>
       ) : null}
 
       <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-        <Field label="First name" required>
+        <Field label="Nome" required>
           <input name="firstName" required maxLength={80} className={inputClass} />
         </Field>
-        <Field label="Last name" required>
+        <Field label="Cognome" required>
           <input name="lastName" required maxLength={80} className={inputClass} />
         </Field>
         <Field label="Email" required>
           <input name="email" type="email" required maxLength={255} className={inputClass} />
         </Field>
-        <Field label="Mobile phone" required>
+        <Field label="Telefono" required>
           <input name="phone" required maxLength={40} className={inputClass} />
         </Field>
-        <Field label="City" required>
+        <Field label="Città" required>
           <input name="city" required maxLength={120} className={inputClass} />
         </Field>
-        <Field label="Country" required>
-          <input name="country" required maxLength={120} className={inputClass} />
+        <Field label="Instagram">
+          <input name="instagramHandle" maxLength={60} placeholder="@" className={inputClass} />
         </Field>
       </div>
 
       <div>
-        <div className="tech-sm mb-4">PREFERRED DATE — SELECT ONE (REQUIRED)</div>
+        <div className="tech-sm mb-4">DATA PREFERITA — SELEZIONANE UNA (OBBLIGATORIO)</div>
         <DateBoard
           dates={data.dates}
           leadingDateId={data.leadingDateId}
@@ -158,7 +163,7 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       </div>
 
       <div>
-        <div className="tech-sm mb-2">OTHER DATES I COULD ATTEND — OPTIONAL</div>
+        <div className="tech-sm mb-2">ALTRE DATE IN CUI SEI DISPONIBILE — FACOLTATIVO</div>
         <div className="grid sm:grid-cols-3">
           {data.dates.map((d) => {
             const f = formatDate(d.date);
@@ -179,10 +184,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       </div>
 
       <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-        <Field label="Running experience" required>
+        <Field label="Esperienza di running" required>
           <select name="runningLevel" required className={selectClass} defaultValue="">
             <option value="" disabled>
-              Select
+              Seleziona
             </option>
             {RUNNING_LEVELS.map((o) => (
               <option key={o} value={o}>
@@ -191,10 +196,10 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
             ))}
           </select>
         </Field>
-        <Field label="Trail running experience" required>
+        <Field label="Esperienza di trail running" required>
           <select name="trailExperience" required className={selectClass} defaultValue="">
             <option value="" disabled>
-              Select
+              Seleziona
             </option>
             {TRAIL_LEVELS.map((o) => (
               <option key={o} value={o}>
@@ -203,9 +208,9 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
             ))}
           </select>
         </Field>
-        <Field label="Comfortable running pace">
+        <Field label="Passo indicativo">
           <select name="pace" className={selectClass} defaultValue="">
-            <option value="">Select a range</option>
+            <option value="">Seleziona un intervallo</option>
             {PACE_RANGES.map((o) => (
               <option key={o} value={o}>
                 {o}
@@ -213,27 +218,24 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
             ))}
           </select>
         </Field>
-        <Field label="Instagram handle">
-          <input name="instagramHandle" maxLength={60} placeholder="@" className={inputClass} />
-        </Field>
-        <Field label="Footwear size system" required>
+        <Field label="Sistema taglie" required>
           <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
             <option value="EU">EU</option>
             <option value="UK">UK</option>
           </select>
         </Field>
-        <Field label="Shoe size" required>
+        <Field label="Taglia scarpa" required>
           <input name="shoeSize" required maxLength={10} className={inputClass} />
         </Field>
-        <Field label="Footwear fit" required>
+        <Field label="Fitting Sylan 2" required>
           <select name="footwearFit" required className={selectClass} defaultValue="MEN'S">
-            <option value="MEN'S">MEN&rsquo;S</option>
-            <option value="WOMEN'S">WOMEN&rsquo;S</option>
+            <option value="MEN'S">UOMO</option>
+            <option value="WOMEN'S">DONNA</option>
           </select>
         </Field>
       </div>
 
-      <Field label="Tell us briefly about your running experience" hint={`${description.length}/300`}>
+      <Field label="Breve descrizione della tua esperienza" hint={`${description.length}/300`}>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value.slice(0, 300))}
@@ -253,38 +255,52 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       />
 
       <div>
-        <div className="tech-sm mb-2">REQUIRED DECLARATIONS</div>
+        <div className="tech-sm mb-2">DICHIARAZIONI OBBLIGATORIE</div>
         <CheckRow checked={consents.isAdult} onChange={setConsent("isAdult")}>
-          I confirm that I am 18 years of age or older.
+          Dichiaro di avere 18 anni compiuti.
         </CheckRow>
         <CheckRow checked={consents.terrainAck} onChange={setConsent("terrainAck")}>
-          I understand that this is a trail-running activity taking place on natural and uneven
-          outdoor terrain and requires an appropriate level of physical preparation.
+          Sono consapevole che si tratta di una Community Trail Run guidata e non competitiva, che si
+          svolge su terreno naturale e sconnesso e richiede un adeguato livello di preparazione
+          fisica.
         </CheckRow>
         <CheckRow checked={consents.fitnessAck} onChange={setConsent("fitnessAck")}>
-          I confirm that I am physically able to take part in the proposed activity.
+          Dichiaro di essere in condizioni fisiche idonee a prendere parte all&rsquo;attività
+          proposta.
+        </CheckRow>
+        <CheckRow checked={consents.rulesAck} onChange={setConsent("rulesAck")}>
+          Ho letto e accetto il{" "}
+          <a
+            href="/regolamento"
+            target="_blank"
+            rel="noreferrer"
+            className="text-jade-soft underline"
+          >
+            Regolamento della Community Trail Run
+          </a>{" "}
+          e mi impegno a seguire le indicazioni delle guide.
         </CheckRow>
         <CheckRow checked={consents.noGuaranteeAck} onChange={setConsent("noGuaranteeAck")}>
-          I understand that submitting this request does not guarantee participation and that
-          participation is subject to confirmation by the organizers.
+          Sono consapevole che l&rsquo;invio della richiesta non garantisce la partecipazione, che
+          resta soggetta a conferma da parte dell&rsquo;organizzazione.
         </CheckRow>
         <CheckRow checked={consents.privacyAck} onChange={setConsent("privacyAck")}>
-          I have read the{" "}
+          Ho letto l&rsquo;
           <a href="/privacy" target="_blank" rel="noreferrer" className="text-jade-soft underline">
-            Privacy Notice
+            Informativa Privacy
           </a>{" "}
-          regarding the processing of my personal data for the management of my participation
-          request.
+          relativa al trattamento dei miei dati personali per la gestione della richiesta di
+          partecipazione.
         </CheckRow>
 
-        <div className="tech-sm mt-8 mb-2">OPTIONAL — MARKETING</div>
+        <div className="tech-sm mt-8 mb-2">FACOLTATIVO — MARKETING</div>
         <CheckRow checked={consents.marketingVietti} onChange={setConsent("marketingVietti")}>
-          I would like to receive news and marketing communications from VIETTI.
+          Desidero ricevere novità e comunicazioni marketing da VIETTI.
         </CheckRow>
         <CheckRow checked={consents.marketingArcteryx} onChange={setConsent("marketingArcteryx")}>
-          I would like to receive news and marketing communications from Arc&rsquo;teryx.
+          Desidero ricevere novità e comunicazioni marketing da Arc&rsquo;teryx.
           <span className="block opacity-60">
-            [CONFIGURABLE — ENABLE ONLY IF LEGALLY REQUIRED AND APPROVED]
+            [CONFIGURABILE — ATTIVARE SOLO SE PREVISTO E APPROVATO]
           </span>
         </CheckRow>
       </div>
@@ -293,14 +309,14 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
 
       <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="tech-sm max-w-md normal-case tracking-normal">
-          Submitting this form does not automatically confirm your place.
+          L&rsquo;invio del modulo non conferma automaticamente il posto.
         </p>
         <button
           type="submit"
           disabled={pending}
           className="tech border border-jade bg-jade px-8 py-4 text-primary-foreground transition-all hover:jade-glow disabled:opacity-50"
         >
-          {pending ? "SENDING…" : "SUBMIT REQUEST"}
+          {pending ? "INVIO IN CORSO…" : "RICHIEDI DI PARTECIPARE"}
         </button>
       </div>
     </form>

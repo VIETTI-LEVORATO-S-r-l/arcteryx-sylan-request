@@ -75,7 +75,7 @@ export type Database = {
         Insert: {
           city: string
           confirmation_token?: string
-          country: string
+          country?: string
           created_at?: string
           email: string
           event_id: string
@@ -243,6 +243,7 @@ export type Database = {
         Row: {
           applications_open: boolean
           capacity: number
+          compliance_checklist: Json
           cookie_url: string
           created_at: string
           distance_km: string
@@ -258,6 +259,7 @@ export type Database = {
           privacy_url: string
           privacy_version: string
           route_notes: string
+          rules_url: string
           slug: string
           surface: string
           terms_url: string
@@ -269,6 +271,7 @@ export type Database = {
         Insert: {
           applications_open?: boolean
           capacity?: number
+          compliance_checklist?: Json
           cookie_url?: string
           created_at?: string
           distance_km?: string
@@ -284,6 +287,7 @@ export type Database = {
           privacy_url?: string
           privacy_version?: string
           route_notes?: string
+          rules_url?: string
           slug: string
           surface?: string
           terms_url?: string
@@ -295,6 +299,7 @@ export type Database = {
         Update: {
           applications_open?: boolean
           capacity?: number
+          compliance_checklist?: Json
           cookie_url?: string
           created_at?: string
           distance_km?: string
@@ -310,6 +315,7 @@ export type Database = {
           privacy_url?: string
           privacy_version?: string
           route_notes?: string
+          rules_url?: string
           slug?: string
           surface?: string
           terms_url?: string

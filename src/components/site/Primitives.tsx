@@ -59,7 +59,7 @@ export function Field({
     <label className="block border-t border-border pt-4">
       <span className="tech-sm flex items-center gap-2">
         {label}
-        {required ? <span className="text-jade-soft">*</span> : <span>OPTIONAL</span>}
+        {required ? <span className="text-jade-soft">*</span> : <span>FACOLTATIVO</span>}
       </span>
       <div className="mt-3">{children}</div>
       {hint ? <span className="tech-sm mt-2 block normal-case tracking-normal">{hint}</span> : null}

@@ -4,14 +4,17 @@ import { LegalBlock, LegalPage } from "@/components/site/LegalPage";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Event Terms — Sylan 2 Trail Run | Arc'teryx × VIETTI" },
+      { title: "Termini dell'evento — Sylan 2 Community Trail Run | Arc'teryx × VIETTI" },
       {
         name: "description",
         content:
-          "Draft event terms for the Arc'teryx × VIETTI Sylan 2 Trail Run participation process on Lake Maggiore.",
+          "Termini di partecipazione alla Community Trail Run guidata e non competitiva Arc'teryx × VIETTI Sylan 2 sul Lago Maggiore.",
       },
-      { property: "og:title", content: "Event Terms — Sylan 2 Trail Run" },
-      { property: "og:description", content: "Participation terms for the Sylan 2 Trail Run." },
+      { property: "og:title", content: "Termini dell'evento — Sylan 2 Community Trail Run" },
+      {
+        property: "og:description",
+        content: "Termini di partecipazione alla Sylan 2 Community Trail Run.",
+      },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "/terms" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -19,29 +22,43 @@ export const Route = createFileRoute("/terms")({
     links: [{ rel: "canonical", href: "/terms" }],
   }),
   component: () => (
-    <LegalPage title="EVENT TERMS">
-      <LegalBlock heading="PARTICIPATION">
+    <LegalPage title="TERMINI DELL’EVENTO">
+      <LegalBlock heading="NATURA DELL’ATTIVITÀ">
         <p>
-          Submitting a request does not guarantee participation. Places are limited and participation
-          is subject to confirmation by the organizers.
+          L&rsquo;evento è una Community Trail Run guidata e non competitiva. Non sono previsti
+          classifica, cronometraggio ufficiale o premi legati alla performance.
         </p>
       </LegalBlock>
-      <LegalBlock heading="ACTIVITY AND TERRAIN">
+      <LegalBlock heading="PARTECIPAZIONE">
         <p>
-          The activity takes place on natural, uneven outdoor terrain and requires an appropriate
-          level of physical preparation. [PLACEHOLDER — insert final safety and liability terms.]
+          L&rsquo;invio della richiesta non garantisce la partecipazione. I posti sono limitati e la
+          partecipazione è soggetta a conferma da parte dell&rsquo;organizzazione.
         </p>
       </LegalBlock>
-      <LegalBlock heading="DATES AND CHANGES">
+      <LegalBlock heading="TERRENO E PREPARAZIONE">
         <p>
-          Provisional dates may change. The final date is confirmed based on participant
-          availability, weather conditions and operational requirements.
+          L&rsquo;attività si svolge su terreno naturale e sconnesso e richiede un adeguato livello
+          di preparazione fisica. [PLACEHOLDER — inserire termini finali di sicurezza e
+          responsabilità.]
         </p>
       </LegalBlock>
-      <LegalBlock heading="IMAGE AND VIDEO">
+      <LegalBlock heading="DATE E MODIFICHE">
         <p>
-          Final image and video release terms are provided to confirmed participants in a separate
-          confirmation step. [PLACEHOLDER — insert final release wording.]
+          Le date indicate sono provvisorie. La data finale viene confermata in base alla
+          disponibilità dei partecipanti, alle condizioni meteo e alle esigenze organizzative.
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="IMMAGINI E VIDEO">
+        <p>
+          La liberatoria definitiva per immagini e video viene fornita ai soli partecipanti
+          accettati in una fase di conferma separata. [PLACEHOLDER — testo definitivo della
+          liberatoria.]
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="REGOLAMENTO">
+        <p>
+          La partecipazione è soggetta al Regolamento della Community Trail Run disponibile alla
+          pagina /regolamento.
         </p>
       </LegalBlock>
     </LegalPage>

@@ -13,7 +13,7 @@ import { formatRomeDateTime } from "@/lib/queries";
 import type { DayWeather } from "@/lib/types";
 
 export const WEATHER_DISCLAIMER =
-  "Forecasts may change. Final event conditions and safety decisions remain subject to organizer assessment.";
+  "Le previsioni possono cambiare. Le condizioni finali dell'evento e le decisioni relative alla sicurezza restano soggette alla valutazione dell'organizzazione.";
 
 export function WeatherIcon({ code, className }: { code?: number | undefined; className?: string }) {
   const c = code ?? 0;
@@ -40,10 +40,10 @@ export function ConfidenceTag({ w }: { w: DayWeather }) {
   if (!w.confidence) return null;
   const label =
     w.confidence === "LOW"
-      ? "LOW CONFIDENCE"
+      ? "AFFIDABILITÀ BASSA"
       : w.confidence === "MEDIUM"
-        ? "MEDIUM CONFIDENCE"
-        : "HIGHER CONFIDENCE";
+        ? "AFFIDABILITÀ MEDIA"
+        : "AFFIDABILITÀ ALTA";
   return (
     <span
       className={cn(
@@ -61,17 +61,17 @@ export function ConfidenceTag({ w }: { w: DayWeather }) {
 export function UnavailableWeather({ compact }: { compact?: boolean }) {
   return (
     <div>
-      <span className="tech-sm">FORECAST AVAILABLE CLOSER TO THE EVENT</span>
+      <span className="tech-sm">PREVISIONI DISPONIBILI PIÙ VICINO ALLA DATA DELL&rsquo;EVENTO</span>
       {compact ? null : (
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-          Weather data will automatically appear as the event approaches.
+          I dati meteo compariranno automaticamente con l&rsquo;avvicinarsi dell&rsquo;evento.
         </p>
       )}
     </div>
   );
 }
 
-/** Condensed weather line used inside provisional date cards. */
+/** Riga meteo compatta usata nelle card delle date provvisorie. */
 export function WeatherLine({ w }: { w: DayWeather }) {
   if (!w.available) return <UnavailableWeather compact />;
   return (
@@ -84,8 +84,8 @@ export function WeatherLine({ w }: { w: DayWeather }) {
         <span>
           {w.tempMin}° / {w.tempMax}°C
         </span>
-        <span>RAIN {w.precipitationProbability ?? 0}%</span>
-        <span>WIND {w.windMax ?? 0} KM/H</span>
+        <span>PIOGGIA {w.precipitationProbability ?? 0}%</span>
+        <span>VENTO {w.windMax ?? 0} KM/H</span>
       </div>
       <ConfidenceTag w={w} />
     </div>
@@ -101,7 +101,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
-/** Prominent panel used once the organizer confirms the final event date. */
+/** Pannello prominente usato quando l'organizzazione conferma la data finale. */
 export function EventWeatherPanel({
   w,
   updatedAt,
@@ -112,7 +112,7 @@ export function EventWeatherPanel({
   return (
     <div className="border border-border bg-card p-6 sm:p-8">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-        <h3 className="tech text-jade-soft">EVENT WEATHER</h3>
+        <h3 className="tech text-jade-soft">METEO DELL&rsquo;EVENTO</h3>
         <div className="flex shrink-0 items-center gap-3">
           <WeatherIcon code={w.code} className="h-6 w-6" />
           <ConfidenceTag w={w} />
@@ -127,16 +127,16 @@ export function EventWeatherPanel({
         <>
           <div className="display mt-6 text-4xl sm:text-5xl">{w.condition}</div>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Metric label="TEMPERATURE" value={`${w.tempMin}° / ${w.tempMax}°C`} />
+            <Metric label="TEMPERATURA" value={`${w.tempMin}° / ${w.tempMax}°C`} />
             {w.apparentMax != null ? (
-              <Metric label="FEELS LIKE" value={`${w.apparentMin}° / ${w.apparentMax}°C`} />
+              <Metric label="PERCEPITA" value={`${w.apparentMin}° / ${w.apparentMax}°C`} />
             ) : null}
-            <Metric label="RAIN PROBABILITY" value={`${w.precipitationProbability ?? 0}%`} />
-            <Metric label="EXPECTED PRECIPITATION" value={`${w.precipitationSum ?? 0} MM`} />
-            <Metric label="WIND" value={`${w.windMax ?? 0} KM/H`} />
-            <Metric label="WIND GUSTS" value={`${w.windGusts ?? 0} KM/H`} />
+            <Metric label="PROBABILITÀ DI PIOGGIA" value={`${w.precipitationProbability ?? 0}%`} />
+            <Metric label="PRECIPITAZIONI PREVISTE" value={`${w.precipitationSum ?? 0} MM`} />
+            <Metric label="VENTO" value={`${w.windMax ?? 0} KM/H`} />
+            <Metric label="RAFFICHE" value={`${w.windGusts ?? 0} KM/H`} />
             {w.cloudCover != null ? (
-              <Metric label="CLOUD COVER" value={`${w.cloudCover}%`} />
+              <Metric label="COPERTURA NUVOLOSA" value={`${w.cloudCover}%`} />
             ) : null}
           </div>
         </>
@@ -152,13 +152,13 @@ export function WeatherFooter({ updatedAt }: { updatedAt: string | null }) {
     <div className="mt-6 border-t border-border pt-4">
       {updatedAt ? (
         <div className="tech-sm">
-          LAST WEATHER UPDATE — {formatRomeDateTime(updatedAt)} (ROME)
+          ULTIMO AGGIORNAMENTO METEO — {formatRomeDateTime(updatedAt)} (ROMA)
         </div>
       ) : null}
       <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground">
         {WEATHER_DISCLAIMER}
       </p>
-      <p className="tech-sm mt-2">SOURCE — OPEN-METEO / ARONA, PIEDMONT, IT</p>
+      <p className="tech-sm mt-2">FONTE — OPEN-METEO / ARONA, PIEMONTE, IT</p>
     </div>
   );
 }
