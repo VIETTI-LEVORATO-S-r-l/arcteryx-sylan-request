@@ -236,7 +236,7 @@
 
 /* Alternate surface tone; redefines --background so sticky labels inherit it. */
 @utility band-soft {
-  --background: oklch(0.955 0 0);
+  --background: oklch(0.995 0 0);
 }
 
 /* Sticky per-section mini header on mobile. */
