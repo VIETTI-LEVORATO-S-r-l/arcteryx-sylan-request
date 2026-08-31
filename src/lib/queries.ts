@@ -13,8 +13,8 @@ export const eventQueryOptions = queryOptions({
 
 export const ROME_TZ = "Europe/Rome";
 
-export function formatRomeDateTime(iso: string) {
-  return new Intl.DateTimeFormat("it-IT", {
+export function formatRomeDateTime(iso: string, lang: "it" | "en" = "it") {
+  return new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "it-IT", {
     timeZone: ROME_TZ,
     day: "2-digit",
     month: "short",
@@ -51,13 +51,39 @@ export const MONTHS = [
   "DICEMBRE",
 ];
 
-export function formatDate(iso: string) {
+export const DAY_NAMES_EN = [
+  "SUNDAY",
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+];
+export const MONTHS_EN = [
+  "JANUARY",
+  "FEBRUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+];
+
+export function formatDate(iso: string, lang: "it" | "en" = "it") {
   const d = new Date(`${iso}T12:00:00`);
+  const months = lang === "en" ? MONTHS_EN : MONTHS;
+  const days = lang === "en" ? DAY_NAMES_EN : DAY_NAMES;
   return {
     day: String(d.getDate()).padStart(2, "0"),
-    month: MONTHS[d.getMonth()]!,
-    weekday: DAY_NAMES[d.getDay()]!,
+    month: months[d.getMonth()]!,
+    weekday: days[d.getDay()]!,
     year: d.getFullYear(),
-    long: `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`,
+    long: `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`,
   };
 }

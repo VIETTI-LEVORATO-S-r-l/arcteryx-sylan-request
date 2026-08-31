@@ -6,6 +6,7 @@ import { DateBoard } from "@/components/site/DateBoard";
 import { EventWeatherPanel } from "@/components/site/Weather";
 import { ApplicationForm } from "@/components/site/ApplicationForm";
 import { SectionLabel, Spec, TopoLines, Reveal } from "@/components/site/Primitives";
+import { useI18n, LangSwitch } from "@/lib/i18n";
 
 const DESCRIPTION =
   "Un'esperienza guidata di trail running non competitiva, dedicata alla community e al test della Arc'teryx Sylan 2.";
@@ -46,17 +47,10 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const STEPS = [
-  { n: "01", t: "ARRIVO", d: "Accoglienza e check-in da VIETTI." },
-  { n: "02", t: "FITTING", d: "Consegna e prova delle Arc'teryx Sylan 2 in test." },
-  { n: "03", t: "TRAIL", d: "Community trail run guidata e non competitiva sul Lago Maggiore." },
-  { n: "04", t: "RECOVERY", d: "Ristoro post-run e momento di community." },
-];
-
-const NON_COMPETITIVE =
-  "L'evento è una Community Trail Run guidata e non competitiva. Non sono previsti classifica, cronometraggio ufficiale o premi legati alla performance.";
+const STEP_NUMBERS = ["01", "02", "03", "04"] as const;
 
 function Home() {
+  const { t, lang } = useI18n();
   const { data } = useSuspenseQuery(eventQueryOptions);
   const finalDate = data.dates.find((d) => d.id === data.event.finalDateId) ?? null;
 
@@ -66,7 +60,7 @@ function Home() {
       <header className="surface-dark relative flex min-h-[92svh] flex-col justify-between overflow-hidden">
         <img
           src={heroImage}
-          alt="Trail runner su un crinale sopra il Lago Maggiore"
+          alt={t("hero.alt")}
           width={1920}
           height={1280}
           className="slow-zoom absolute inset-0 h-full w-full object-cover opacity-70"
@@ -77,21 +71,25 @@ function Home() {
           <span className="tech-sm truncate text-foreground">ARC&rsquo;TERYX × VIETTI</span>
           <div className="hidden shrink-0 items-center gap-5 sm:flex">
             <a href="#esperienza" className="tech-sm transition-colors hover:text-jade-soft">
-              ESPERIENZA
+              {t("nav.experience")}
             </a>
             <a href="#date" className="tech-sm transition-colors hover:text-jade-soft">
-              DATE
+              {t("nav.dates")}
             </a>
             <a href="#richiesta" className="tech-sm transition-colors hover:text-jade-soft">
-              RICHIESTA
+              {t("nav.request")}
+            </a>
+            <LangSwitch className="flex items-center gap-1 border-l border-border pl-4" />
+          </div>
+          <div className="flex shrink-0 items-center gap-2 sm:hidden">
+            <LangSwitch className="flex items-center gap-0.5" />
+            <a href="#richiesta" className="cta cta-sm cta-ghost">
+              {t("nav.requestShort")}
+              <span className="cta-arrow" aria-hidden>
+                →
+              </span>
             </a>
           </div>
-          <a href="#richiesta" className="cta cta-sm cta-ghost shrink-0 sm:hidden">
-            RICHIEDI
-            <span className="cta-arrow" aria-hidden>
-              →
-            </span>
-          </a>
         </nav>
 
         <div className="relative px-5 pb-16 sm:px-10 sm:pb-14">
@@ -104,17 +102,17 @@ function Home() {
                 </span>
               </h1>
               <p className="mt-8 max-w-lg text-sm leading-relaxed text-muted-foreground">
-                {DESCRIPTION}
+                {t("hero.description")}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a href="#richiesta" className="cta cta-solid w-full sm:w-auto">
-                  RICHIEDI DI PARTECIPARE
+                  {t("hero.cta")}
                   <span className="cta-arrow" aria-hidden>
                     →
                   </span>
                 </a>
                 <a href="#esperienza" className="cta cta-ghost w-full sm:w-auto">
-                  SCOPRI L&rsquo;ESPERIENZA
+                  {t("hero.ctaSecondary")}
                   <span className="cta-arrow" aria-hidden>
                     ↓
                   </span>
@@ -122,15 +120,15 @@ function Home() {
               </div>
               <p className="tech-sm mt-6 flex items-center gap-2">
                 <span className="inline-block h-1.5 w-1.5 bg-foreground" aria-hidden />
-                POSTI LIMITATI
+                {t("hero.limited")}
               </p>
             </div>
             <dl className="grid grid-cols-2 gap-x-6 gap-y-4 lg:grid-cols-1">
               {[
-                ["LUOGO", "LAGO MAGGIORE / IT"],
-                ["FORMATO", "TRAIL RUN NON COMPETITIVA"],
-                ["ACCESSO", "PARTECIPAZIONE LIMITATA"],
-                ["DATE", "17—19 SETTEMBRE 2026"],
+                [t("hero.k.place"), t("hero.v.place")],
+                [t("hero.k.format"), t("hero.v.format")],
+                [t("hero.k.access"), t("hero.v.access")],
+                [t("hero.k.dates"), t("hero.v.dates")],
               ].map(([k, v]) => (
                 <div key={k} className="border-t border-border pt-3">
                   <dt className="tech-sm">{k}</dt>
@@ -145,25 +143,26 @@ function Home() {
       {/* POSIZIONAMENTO */}
       <section className="px-5 pt-10 sm:px-10">
         <Reveal className="border-l-2 border-jade bg-card p-6 text-sm leading-relaxed text-foreground sm:p-8">
-          {NON_COMPETITIVE}
+          {t("nonCompetitive")}
         </Reveal>
       </section>
 
       {/* ESPERIENZA */}
       <section id="esperienza" className="px-5 py-16 sm:px-10 sm:py-24">
-        <SectionLabel index="01">L&rsquo;ESPERIENZA</SectionLabel>
+        <SectionLabel index="01">{t("exp.title")}</SectionLabel>
         <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((s, i) => (
-            <Reveal as="article" delay={i * 90} key={s.n} className="bg-background p-6 sm:p-8">
-              <span className="tech-sm text-jade-soft">{s.n}</span>
-              <h3 className="display mt-6 text-2xl">{s.t}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
+          {STEP_NUMBERS.map((n, i) => (
+            <Reveal as="article" delay={i * 90} key={n} className="bg-background p-6 sm:p-8">
+              <span className="tech-sm text-jade-soft">{n}</span>
+              <h3 className="display mt-6 text-2xl">{t(`exp.${n}.t` as const)}</h3>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                {t(`exp.${n}.d` as const)}
+              </p>
             </Reveal>
           ))}
         </div>
         <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Guide e pacer esperti accompagnano il gruppo lungo tutto il percorso. Le riprese foto e
-          video fanno parte dello storytelling Arc&rsquo;teryx × VIETTI.
+          {t("exp.note")}
         </p>
       </section>
 
@@ -171,18 +170,18 @@ function Home() {
       <section className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-24">
         <TopoLines />
         <div className="relative">
-          <SectionLabel index="02">IL PERCORSO</SectionLabel>
+          <SectionLabel index="02">{t("route.title")}</SectionLabel>
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
             <div className="grid sm:grid-cols-2 lg:grid-cols-1">
-              <Spec label="DISTANZA" value={data.event.distanceKm} mono />
-              <Spec label="DISLIVELLO" value={data.event.elevationM} mono />
-              <Spec label="FONDO" value={data.event.surface} />
-              <Spec label="LUOGO" value={data.event.location} />
+              <Spec label={t("route.distance")} value={data.event.distanceKm} mono />
+              <Spec label={t("route.elevation")} value={data.event.elevationM} mono />
+              <Spec label={t("route.surface")} value={data.event.surface} />
+              <Spec label={t("route.place")} value={data.event.location} />
             </div>
             <div>
               <div className="relative grid aspect-[4/3] place-items-center border border-border bg-card">
                 <TopoLines className="opacity-30" />
-                <span className="tech-sm relative">PLACEHOLDER MAPPA GPX / TOPOGRAFICA</span>
+                <span className="tech-sm relative">{t("route.map")}</span>
                 <span className="tech-sm absolute bottom-4 left-4 tabular-nums">
                   45.7597° N / 8.5556° E
                 </span>
@@ -196,21 +195,21 @@ function Home() {
       {/* DATE */}
       <section id="date" className="px-5 py-16 sm:px-10 sm:py-24">
         <SectionLabel index="03">
-          {finalDate ? "DATA DELL’EVENTO CONFERMATA" : "SCEGLI LA TUA DATA PREFERITA"}
+          {finalDate ? t("dates.titleConfirmed") : t("dates.titleChoose")}
         </SectionLabel>
 
         {finalDate ? (
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
             <div className="jade-glow bg-card p-8">
-              <div className="tech-sm mb-4 text-jade-soft">CONFERMATA</div>
-              <div className="display text-5xl sm:text-7xl">{formatDate(finalDate.date).long}</div>
+              <div className="tech-sm mb-4 text-jade-soft">{t("dates.confirmed")}</div>
+              <div className="display text-5xl sm:text-7xl">{formatDate(finalDate.date, lang).long}</div>
               <div className="mt-10 grid gap-6 sm:grid-cols-2">
                 <div className="border-t border-border pt-3">
-                  <div className="tech-sm">ORARIO DI RITROVO</div>
+                  <div className="tech-sm">{t("dates.meetingTime")}</div>
                   <div className="display mt-2 text-2xl">{data.event.meetingTime}</div>
                 </div>
                 <div className="border-t border-border pt-3">
-                  <div className="tech-sm">PUNTO DI RITROVO</div>
+                  <div className="tech-sm">{t("dates.meetingPoint")}</div>
                   <div className="display mt-2 text-2xl">{data.event.meetingPoint}</div>
                 </div>
               </div>
@@ -221,7 +220,7 @@ function Home() {
               ) : null}
             </div>
             <div>
-              <div className="tech-sm mb-4">PREFERENZA DELLA COMMUNITY</div>
+              <div className="tech-sm mb-4">{t("dates.communityPreference")}</div>
               <DateBoard
                 dates={data.dates}
                 leadingDateId={data.leadingDateId}
@@ -234,12 +233,14 @@ function Home() {
         ) : (
           <>
             <div className="mb-8 flex flex-wrap items-center gap-x-8 gap-y-2">
-              <span className="tech-sm border border-border px-3 py-1">DATE PROVVISORIE</span>
-              <span className="tech-sm">PREFERENZA DELLA COMMUNITY — {data.total} RICHIESTE</span>
+              <span className="tech-sm border border-border px-3 py-1">{t("dates.provisional")}</span>
+              <span className="tech-sm">
+                {t("dates.communityPreference")} — {data.total} {t("dates.requests")}
+              </span>
               {data.leadingDateId ? (
                 <span className="tech-sm text-jade-soft">
-                  DATA ATTUALMENTE PIÙ RICHIESTA —{" "}
-                  {formatDate(data.dates.find((d) => d.id === data.leadingDateId)!.date).long}
+                  {t("dates.leading")} —{" "}
+                  {formatDate(data.dates.find((d) => d.id === data.leadingDateId)!.date, lang).long}
                 </span>
               ) : null}
             </div>
@@ -251,9 +252,7 @@ function Home() {
               weatherUpdatedAt={data.weatherUpdatedAt}
             />
             <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-              La data più richiesta sarà considerata prioritaria. La data finale verrà confermata in
-              base alla disponibilità dei partecipanti, alle condizioni meteo e alle esigenze
-              organizzative.
+              {t("dates.note")}
             </p>
           </>
         )}
@@ -262,31 +261,28 @@ function Home() {
       {/* FOTO / VIDEO */}
       <section className="px-5 sm:px-10">
         <div className="border border-border p-6 sm:p-8">
-          <div className="tech-sm mb-3 text-jade-soft">PRODUZIONE FOTO E VIDEO</div>
+          <div className="tech-sm mb-3 text-jade-soft">{t("media.title")}</div>
           <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Durante l&rsquo;evento sono previste riprese foto e video per lo storytelling
-            Arc&rsquo;teryx × VIETTI. La liberatoria per immagini e video viene raccolta
-            separatamente, solo dai partecipanti accettati, nella fase di conferma.
+            {t("media.body")}
           </p>
         </div>
       </section>
 
       {/* RICHIESTA */}
       <section id="richiesta" className="px-5 py-16 sm:px-10 sm:py-24">
-        <SectionLabel index="04">RICHIEDI DI PARTECIPARE</SectionLabel>
+        <SectionLabel index="04">{t("req.title")}</SectionLabel>
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-              I posti sono limitati. Compila il modulo per inviare la tua richiesta di
-              partecipazione: l&rsquo;invio non conferma automaticamente il posto.
+              {t("req.body")}
             </p>
             <div className="mt-8 space-y-2">
-              <div className="tech-sm">POSTI LIMITATI</div>
-              <div className="tech-sm">RICHIESTA DI PARTECIPAZIONE</div>
-              <div className="tech-sm text-jade-soft">PARTECIPAZIONE SOGGETTA A CONFERMA</div>
+              <div className="tech-sm">{t("req.tag1")}</div>
+              <div className="tech-sm">{t("req.tag2")}</div>
+              <div className="tech-sm text-jade-soft">{t("req.tag3")}</div>
             </div>
             <p className="mt-8 max-w-sm text-xs leading-relaxed text-muted-foreground">
-              {NON_COMPETITIVE}
+              {t("nonCompetitive")}
             </p>
           </div>
           <ApplicationForm data={data} />
@@ -299,7 +295,7 @@ function Home() {
           href="#richiesta"
           className="cta cta-solid pointer-events-auto w-full shadow-[0_18px_40px_-24px_var(--color-foreground)]"
         >
-          RICHIEDI DI PARTECIPARE
+          {t("hero.cta")}
           <span className="cta-arrow" aria-hidden>
             →
           </span>
@@ -309,20 +305,20 @@ function Home() {
       <footer className="grid gap-6 border-t border-border px-5 pb-28 pt-10 sm:grid-cols-[minmax(0,1fr)_auto] sm:px-10 sm:pb-10">
         <div className="tech-sm">
           ARC&rsquo;TERYX × VIETTI — SYLAN 2 COMMUNITY TRAIL RUN / LAGO MAGGIORE / 2026
-          <span className="mt-2 block opacity-60">[PLACEHOLDER LOGO — CARICARE ASSET FINALI]</span>
+          <span className="mt-2 block opacity-60">{t("footer.logo")}</span>
         </div>
         <div className="flex flex-wrap gap-5">
           <Link to="/regolamento" className="tech-sm hover:text-jade-soft">
-            REGOLAMENTO
+            {t("footer.rules")}
           </Link>
           <Link to="/privacy" className="tech-sm hover:text-jade-soft">
-            INFORMATIVA PRIVACY
+            {t("footer.privacy")}
           </Link>
           <Link to="/terms" className="tech-sm hover:text-jade-soft">
-            TERMINI DELL&rsquo;EVENTO
+            {t("footer.terms")}
           </Link>
           <Link to="/cookies" className="tech-sm hover:text-jade-soft">
-            COOKIE POLICY
+            {t("footer.cookies")}
           </Link>
         </div>
       </footer>
