@@ -74,22 +74,19 @@ export function DateBoard({
                 </div>
               </div>
 
-              <div className="mt-6 h-px w-full bg-border">
+              <div className="mt-6 h-1.5 w-full bg-muted">
                 <div
                   className={cn(
-                    "bar-grow h-px transition-all duration-700",
-                    leading ? "bg-jade-soft" : "bg-muted-foreground",
+                    "bar-grow h-1.5 transition-all duration-700",
+                    leading ? "bg-foreground" : "bg-muted-foreground/60",
                   )}
                   style={{ width: `${Math.max(d.pct, 1)}%` }}
                 />
               </div>
 
-              <div className="mt-4 flex min-h-4 items-center gap-3">
-                {leading ? (
-                  <span className="tech-sm border border-jade px-2 py-1 text-jade-soft">
-                    {t("dates.leading")}
-                  </span>
-                ) : null}
+              <div className="mt-4 flex min-h-4 flex-wrap items-center gap-2">
+                {leading ? <span className="badge badge-solid">{t("dates.leading")}</span> : null}
+
                 {selectable ? (
                   <span
                     className={cn(
