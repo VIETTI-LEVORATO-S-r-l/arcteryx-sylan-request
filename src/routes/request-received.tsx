@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { eventQueryOptions, formatDate } from "@/lib/queries";
 import { DateBoard } from "@/components/site/DateBoard";
+import { useI18n } from "@/lib/i18n";
+import { SITE_URL } from "@/routes/__root";
 
 export const Route = createFileRoute("/request-received")({
   loader: ({ context }) => context.queryClient.ensureQueryData(eventQueryOptions),
@@ -19,16 +21,17 @@ export const Route = createFileRoute("/request-received")({
         content: "Richiesta di partecipazione ricevuta e in attesa di conferma.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/request-received" },
+      { property: "og:url", content: `${SITE_URL}/request-received` },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "robots", content: "noindex" },
     ],
-    links: [{ rel: "canonical", href: "/request-received" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/request-received` }],
   }),
   component: RequestReceived,
 });
 
 function RequestReceived() {
+  const { t, lang } = useI18n();
   const { data } = useSuspenseQuery(eventQueryOptions);
   const finalDate = data.dates.find((d) => d.id === data.event.finalDateId) ?? null;
 
@@ -51,19 +54,16 @@ function RequestReceived() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-24">
       <Link to="/" className="tech-sm hover:text-jade-soft">
-        ← ARC&rsquo;TERYX × VIETTI
+        ← {t("rr.back")}
       </Link>
       <h1 className="display mt-10 text-5xl sm:text-7xl">
-        RICHIESTA
-        <span className="block text-jade-soft">RICEVUTA</span>
+        {t("rr.title1")}
+        <span className="block text-jade-soft">{t("rr.title2")}</span>
       </h1>
-      <p className="mt-8 max-w-lg text-sm leading-relaxed text-muted-foreground">
-        Grazie. La tua partecipazione non è ancora confermata. Ti contatteremo una volta definiti la
-        data dell&rsquo;evento e il gruppo dei partecipanti.
-      </p>
+      <p className="mt-8 max-w-lg text-sm leading-relaxed text-muted-foreground">{t("rr.body")}</p>
 
       <div className="mt-16">
-        <div className="tech-sm mb-6">PREFERENZA DELLA COMMUNITY</div>
+        <div className="tech-sm mb-6">{t("dates.communityPreference")}</div>
         <DateBoard
           dates={data.dates}
           leadingDateId={data.leadingDateId}
@@ -73,13 +73,12 @@ function RequestReceived() {
         />
         {data.leadingDateId ? (
           <p className="tech-sm mt-6 text-jade-soft">
-            DATA ATTUALMENTE PIÙ RICHIESTA —{" "}
-            {formatDate(data.dates.find((d) => d.id === data.leadingDateId)!.date).long}
+            {t("dates.leading")} —{" "}
+            {formatDate(data.dates.find((d) => d.id === data.leadingDateId)!.date, lang).long}
           </p>
         ) : null}
         <p className="mt-6 max-w-2xl text-xs leading-relaxed text-muted-foreground">
-          La data più richiesta sarà considerata prioritaria. La data finale verrà confermata in base
-          alla disponibilità dei partecipanti, alle condizioni meteo e alle esigenze organizzative.
+          {t("rr.note")}
         </p>
       </div>
 
@@ -89,12 +88,10 @@ function RequestReceived() {
           download="sylan-2-community-trail-run.ics"
           className="tech mt-12 inline-block border border-jade bg-jade px-7 py-4 text-primary-foreground hover:jade-glow"
         >
-          AGGIUNGI AL CALENDARIO — {formatDate(finalDate.date).long}
+          {t("rr.calendar")} — {formatDate(finalDate.date, lang).long}
         </a>
       ) : (
-        <p className="tech-sm mt-12 border border-border px-4 py-3">
-          AGGIUNTA AL CALENDARIO DISPONIBILE DOPO LA CONFERMA DELLA DATA FINALE
-        </p>
+        <p className="tech-sm mt-12 border border-border px-4 py-3">{t("rr.calendarSoon")}</p>
       )}
     </main>
   );
