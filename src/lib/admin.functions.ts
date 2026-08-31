@@ -154,9 +154,13 @@ export const updateEventConfig = createServerFn({ method: "POST" })
     await requireAdmin();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { EVENT_SLUG } = await import("./supabase-public.server");
+    const patch = Object.fromEntries(
+      Object.entries(data).filter(([, v]) => v !== undefined),
+    ) as Record<string, unknown>;
+    patch["updated_at"] = new Date().toISOString();
     await supabaseAdmin
       .from("events")
-      .update({ ...data, updated_at: new Date().toISOString() })
+      .update(patch as never)
       .eq("slug", EVENT_SLUG);
     return { ok: true as const };
   });

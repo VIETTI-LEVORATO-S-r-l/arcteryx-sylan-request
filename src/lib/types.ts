@@ -1,11 +1,11 @@
 export type DayWeather = {
   available: boolean;
-  tempMin?: number;
-  tempMax?: number;
-  precipitationProbability?: number;
-  windMax?: number;
-  code?: number;
-  condition?: string;
+  tempMin?: number | undefined;
+  tempMax?: number | undefined;
+  precipitationProbability?: number | undefined;
+  windMax?: number | undefined;
+  code?: number | undefined;
+  condition?: string | undefined;
 };
 
 export type DateStat = {

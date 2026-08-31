@@ -134,8 +134,8 @@ function Admin() {
   ).sort();
   const confirmedCount = data.applications.filter((a) => a.status === "CONFIRMED").length;
 
-  const patch = async (payload: Parameters<typeof saveConfig>[0]["data"]) => {
-    await saveConfig({ data: payload });
+  const patch = async (payload: Record<string, unknown>) => {
+    await saveConfig({ data: payload as never });
     await refresh();
     setNotice("Saved.");
   };
@@ -226,7 +226,7 @@ function Admin() {
                 <input
                   defaultValue={String(data.event[key] ?? "")}
                   className={inputClass}
-                  onBlur={(e) => patch({ [key]: e.target.value } as never)}
+                  onBlur={(e) => patch({ [key]: e.target.value })}
                 />
               </label>
             ))}
@@ -280,7 +280,7 @@ function Admin() {
             ).map(([key, label]) => (
               <button
                 key={key}
-                onClick={() => patch({ [key]: !data.event[key] } as never)}
+                onClick={() => patch({ [key]: !data.event[key] })}
                 className={cn(
                   "tech-sm border px-4 py-2",
                   data.event[key] ? "border-jade text-jade-soft" : "border-border",
