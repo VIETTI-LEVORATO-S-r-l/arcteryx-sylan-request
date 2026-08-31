@@ -58,9 +58,13 @@ export const submitConfirmation = createServerFn({ method: "POST" })
         emergency_contact_name: data.emergencyName,
         emergency_contact_phone: data.emergencyPhone,
         final_shoe_size: data.finalShoeSize,
+        dietary_profile: data.dietaryProfile,
+        food_allergies: data.foodAllergies || null,
+        dietary_consent: true,
         rules_acknowledged: true,
         image_release_accepted: true,
         confirmed_at: new Date().toISOString(),
+
       },
       { onConflict: "application_id" },
     );
