@@ -6,7 +6,14 @@ import {
   CloudRain,
   CloudSnow,
   CloudSun,
+  Cloudy,
+  Droplets,
   Sun,
+  Thermometer,
+  ThermometerSun,
+  Umbrella,
+  Wind,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatRomeDateTime } from "@/lib/queries";
@@ -46,6 +53,8 @@ function useWeatherLabels() {
       rainSum: en ? "EXPECTED PRECIPITATION" : "PRECIPITAZIONI PREVISTE",
       gusts: en ? "GUSTS" : "RAFFICHE",
       clouds: en ? "CLOUD COVER" : "COPERTURA NUVOLOSA",
+      min: en ? "MIN" : "MIN",
+      max: en ? "MAX" : "MAX",
       updated: en ? "LAST WEATHER UPDATE" : "ULTIMO AGGIORNAMENTO METEO",
       source: en
         ? "SOURCE \u2014 OPEN-METEO / ARONA, PIEDMONT, IT"
@@ -90,15 +99,28 @@ export function ConfidenceTag({ w }: { w: DayWeather }) {
       : w.confidence === "MEDIUM"
         ? t("w.medium")
         : t("w.high");
+  const level = w.confidence === "HIGHER" ? 3 : w.confidence === "MEDIUM" ? 2 : 1;
   return (
     <span
       className={cn(
-        "tech-sm border px-2 py-1",
+        "tech-sm inline-flex items-center gap-2 border px-2 py-1",
         w.confidence === "HIGHER"
           ? "border-jade text-jade-soft"
           : "border-border text-muted-foreground",
       )}
     >
+      <span aria-hidden className="flex items-end gap-[2px]">
+        {[1, 2, 3].map((i) => (
+          <span
+            key={i}
+            className={cn(
+              "w-[3px] bg-current",
+              i === 1 ? "h-[5px]" : i === 2 ? "h-[8px]" : "h-[11px]",
+              i > level && "opacity-25",
+            )}
+          />
+        ))}
+      </span>
       {label}
     </span>
   );
@@ -116,6 +138,27 @@ export function UnavailableWeather({ compact }: { compact?: boolean }) {
   );
 }
 
+function Chip({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}) {
+  return (
+    <span
+      className="tech-sm inline-flex items-center gap-1.5 border border-border px-2 py-1 tabular-nums"
+      title={label}
+    >
+      <Icon aria-hidden className="h-3.5 w-3.5 shrink-0 text-jade-soft" strokeWidth={1.5} />
+      <span className="sr-only">{label}: </span>
+      {value}
+    </span>
+  );
+}
+
 /** Riga meteo compatta usata nelle card delle date provvisorie. */
 export function WeatherLine({ w }: { w: DayWeather }) {
   const { condition, l } = useWeatherLabels();
@@ -126,27 +169,49 @@ export function WeatherLine({ w }: { w: DayWeather }) {
         <WeatherIcon code={w.code} />
         <span className="tech-sm text-foreground">{condition(w)}</span>
       </div>
-      <div className="tech-sm flex flex-wrap gap-x-4 gap-y-1 tabular-nums">
-        <span>
-          {w.tempMin}° / {w.tempMax}°C
-        </span>
-        <span>
-          {l.rain} {w.precipitationProbability ?? 0}%
-        </span>
-        <span>
-          {l.wind} {w.windMax ?? 0} KM/H
-        </span>
+      <div className="flex flex-wrap gap-1.5">
+        <Chip
+          icon={Thermometer}
+          label={l.temp}
+          value={`${w.tempMin}° / ${w.tempMax}°C`}
+        />
+        <Chip icon={Umbrella} label={l.rainProb} value={`${w.precipitationProbability ?? 0}%`} />
+        <Chip icon={Wind} label={l.wind} value={`${w.windMax ?? 0} KM/H`} />
       </div>
       <ConfidenceTag w={w} />
     </div>
   );
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({
+  icon: Icon,
+  label,
+  value,
+  hint,
+  bar,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  hint?: string;
+  bar?: number;
+}) {
   return (
     <div className="border-t border-border pt-3">
-      <div className="tech-sm">{label}</div>
+      <div className="tech-sm flex items-center gap-2">
+        <Icon aria-hidden className="h-3.5 w-3.5 shrink-0 text-jade-soft" strokeWidth={1.5} />
+        {label}
+      </div>
       <div className="display mt-2 text-2xl tabular-nums">{value}</div>
+      {hint ? <div className="tech-sm mt-1 text-muted-foreground">{hint}</div> : null}
+      {bar != null ? (
+        <div className="mt-2 h-[3px] w-full bg-border" aria-hidden>
+          <div
+            className="h-full bg-jade-soft transition-[width] duration-700"
+            style={{ width: `${Math.max(0, Math.min(100, bar))}%` }}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -165,7 +230,6 @@ export function EventWeatherPanel({
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
         <h3 className="tech text-jade-soft">{l.title}</h3>
         <div className="flex shrink-0 items-center gap-3">
-          <WeatherIcon code={w.code} className="h-6 w-6" />
           <ConfidenceTag w={w} />
         </div>
       </div>
@@ -176,18 +240,49 @@ export function EventWeatherPanel({
         </div>
       ) : (
         <>
-          <div className="display mt-6 text-4xl sm:text-5xl">{condition(w)}</div>
+          <div className="mt-6 flex items-center gap-5">
+            <WeatherIcon code={w.code} className="h-14 w-14 sm:h-16 sm:w-16" />
+            <div className="min-w-0">
+              <div className="display text-3xl sm:text-5xl">{condition(w)}</div>
+              <div className="tech-sm mt-2 tabular-nums text-muted-foreground">
+                {l.min} {w.tempMin}°C · {l.max} {w.tempMax}°C
+              </div>
+            </div>
+          </div>
+
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Metric label={l.temp} value={`${w.tempMin}° / ${w.tempMax}°C`} />
+            <Metric
+              icon={Thermometer}
+              label={l.temp}
+              value={`${w.tempMin}° / ${w.tempMax}°C`}
+            />
             {w.apparentMax != null ? (
-              <Metric label={l.apparent} value={`${w.apparentMin}° / ${w.apparentMax}°C`} />
+              <Metric
+                icon={ThermometerSun}
+                label={l.apparent}
+                value={`${w.apparentMin}° / ${w.apparentMax}°C`}
+              />
             ) : null}
-            <Metric label={l.rainProb} value={`${w.precipitationProbability ?? 0}%`} />
-            <Metric label={l.rainSum} value={`${w.precipitationSum ?? 0} MM`} />
-            <Metric label={l.wind} value={`${w.windMax ?? 0} KM/H`} />
-            <Metric label={l.gusts} value={`${w.windGusts ?? 0} KM/H`} />
+            <Metric
+              icon={Umbrella}
+              label={l.rainProb}
+              value={`${w.precipitationProbability ?? 0}%`}
+              bar={w.precipitationProbability ?? 0}
+            />
+            <Metric icon={Droplets} label={l.rainSum} value={`${w.precipitationSum ?? 0} MM`} />
+            <Metric
+              icon={Wind}
+              label={l.wind}
+              value={`${w.windMax ?? 0} KM/H`}
+              hint={`${l.gusts} ${w.windGusts ?? 0} KM/H`}
+            />
             {w.cloudCover != null ? (
-              <Metric label={l.clouds} value={`${w.cloudCover}%`} />
+              <Metric
+                icon={Cloudy}
+                label={l.clouds}
+                value={`${w.cloudCover}%`}
+                bar={w.cloudCover}
+              />
             ) : null}
           </div>
         </>
