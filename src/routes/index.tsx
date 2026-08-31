@@ -168,7 +168,7 @@ function Home() {
       </section>
 
       {/* PERCORSO */}
-      <section className="relative overflow-hidden px-5 py-16 sm:px-10 sm:py-24">
+      <section className="band band-soft overflow-hidden">
         <TopoLines />
         <div className="relative">
           <SectionLabel index="02">{t("route.title")}</SectionLabel>
