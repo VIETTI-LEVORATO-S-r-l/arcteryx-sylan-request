@@ -50,10 +50,24 @@ export const Route = createFileRoute("/")({
 
 const STEP_NUMBERS = ["01", "02", "03", "04"] as const;
 
+const isPlaceholder = (v: string) => /^\s*\[.*\]\s*$/.test(v);
+
 function Home() {
   const { t, lang } = useI18n();
   const { data } = useSuspenseQuery(eventQueryOptions);
   const finalDate = data.dates.find((d) => d.id === data.event.finalDateId) ?? null;
+
+  // Etichetta date derivata dalle date attive dell'evento.
+  const datesLabel = (() => {
+    if (data.dates.length === 0) return "—";
+    const parts = data.dates.map((d) => formatDate(d.date, lang));
+    const days = parts.map((p) => p.day).join("—");
+    const last = parts[parts.length - 1]!;
+    return `${days} ${last.month} ${last.year}`;
+  })();
+  const coords = `${Math.abs(data.event.latitude).toFixed(4)}° ${data.event.latitude >= 0 ? "N" : "S"} / ${Math.abs(data.event.longitude).toFixed(4)}° ${data.event.longitude >= 0 ? "E" : "W"}`;
+
+
 
   return (
     <div className="min-h-screen">
