@@ -5,9 +5,6 @@ import { submitApplication } from "@/lib/event.functions";
 import {
   DIETARY_PROFILES,
   LONGEST_RUN,
-  MONTHLY_ELEVATION,
-  PACE_RANGES,
-  RUNNING_LEVELS,
   TRAIL_LEVELS,
   WEEKLY_VOLUME,
   type EventPayload,
@@ -98,13 +95,9 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
           country: "",
           preferredDateId,
           otherDateIds,
-          runningLevel: v("runningLevel"),
           trailExperience: v("trailExperience"),
-          pace: v("pace"),
           weeklyVolume: v("weeklyVolume"),
           longestRun: v("longestRun"),
-          monthlyElevation: v("monthlyElevation"),
-          recentActivity: v("recentActivity"),
           dietaryProfile: v("dietaryProfile"),
           foodAllergies: v("foodAllergies"),
           shoeSizeSystem: v("shoeSizeSystem") as "EU" | "UK",
@@ -214,34 +207,12 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
       <div>
         <Step n="04" title={t("form.s4")} />
         <div className="grid gap-x-12 gap-y-6 sm:grid-cols-2">
-          <Field label={t("form.runningLevel")} required>
-            <select name="runningLevel" required className={selectClass} defaultValue="">
-              <option value="" disabled>
-                {t("form.select")}
-              </option>
-              {RUNNING_LEVELS.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
-          </Field>
           <Field label={t("form.trailLevel")} required>
             <select name="trailExperience" required className={selectClass} defaultValue="">
               <option value="" disabled>
                 {t("form.select")}
               </option>
               {TRAIL_LEVELS.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label={t("form.pace")}>
-            <select name="pace" className={selectClass} defaultValue="">
-              <option value="">{t("form.selectRange")}</option>
-              {PACE_RANGES.map((o) => (
                 <option key={o} value={o}>
                   {o}
                 </option>
@@ -271,24 +242,6 @@ export function ApplicationForm({ data }: { data: EventPayload }) {
                 </option>
               ))}
             </select>
-          </Field>
-          <Field label={t("form.monthlyElevation")} required>
-            <select name="monthlyElevation" required className={selectClass} defaultValue="">
-              <option value="" disabled>
-                {t("form.select")}
-              </option>
-              {MONTHLY_ELEVATION.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field
-            label={t("form.recentActivity")}
-            hint={t("form.recentActivityHint")}
-          >
-            <input name="recentActivity" maxLength={300} className={inputClass} />
           </Field>
           <Field label={t("form.sizeSystem")} required>
             <select name="shoeSizeSystem" required className={selectClass} defaultValue="EU">
